@@ -33,10 +33,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Images\3Dots.png" />
+    <None Remove="Images\fail.png" />
+    <None Remove="Images\pass.png" />
+    <None Remove="Images\Remove.png" />
+    <None Remove="Images\RestService.png" />
+    <None Remove="Images\Settings.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Remove="Screen\ucTestCase.xaml" />
     <Page Remove="Screen\ucTestClient.xaml" />
     <Page Remove="Screen\ucTestSuite.xaml" />
     <Page Remove="Screen\ucValidations.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\3Dots.png" />
+    <Resource Include="Images\fail.png" />
+    <Resource Include="Images\pass.png" />
+    <Resource Include="Images\Remove.png" />
+    <Resource Include="Images\RestService.png" />
+    <Resource Include="Images\Settings.png" />
   </ItemGroup>
 
   <ItemGroup>
