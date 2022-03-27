@@ -337,7 +337,7 @@ namespace RestClientLibrary.ViewModel
         /// Gets or sets the MainViewModel
         /// </summary>
         [XmlIgnore]
-        public MainViewModel MainViewModel
+        public WorkspaceViewModel MainViewModel
         {
             get; set;
         }

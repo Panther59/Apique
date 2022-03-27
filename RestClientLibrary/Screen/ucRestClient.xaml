@@ -34,13 +34,13 @@
         </Grid.RowDefinitions>
         <Grid.Resources>
             <baseComm:BindingProxy x:Key="RestClientProxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" />
-            <baseComm:BindingProxy x:Key="MainProxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucMain}}" />
+            <baseComm:BindingProxy x:Key="MainProxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
             <x:Static x:Key="emptyString" Member="sys:String.Empty" />
             <sys:Boolean x:Key="TrueValue">true</sys:Boolean>
             <sys:Boolean x:Key="FalseValue">false</sys:Boolean>
             <base:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-            <CollectionViewSource x:Key="UseVariableMenus" Source="{Binding DataContext.UseVariableMenus, RelativeSource={RelativeSource AncestorType=local:ucMain}}" />
-            <CollectionViewSource x:Key="SetMenus" Source="{Binding DataContext.SetMenus, RelativeSource={RelativeSource AncestorType=local:ucMain}}" />
+            <CollectionViewSource x:Key="UseVariableMenus" Source="{Binding DataContext.UseVariableMenus, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
+            <CollectionViewSource x:Key="SetMenus" Source="{Binding DataContext.SetMenus, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
             <ContextMenu x:Key="CustomVariableContextMenus">
                 <ContextMenu.ItemsSource>
                     <CompositeCollection>

@@ -50,14 +50,14 @@
                 {
                     // open code completion after the user has pressed dot:
                     completionWindow = new CompletionWindow(editor);
-                    var ucMain = this.TryFindParent<ucMain>();
-                    if (ucMain != null && ucMain.Parent != null && ucMain.Parent is Grid)
+                    var ucWorkspace = this.TryFindParent<ucWorkspace>();
+                    if (ucWorkspace != null && ucWorkspace.Parent != null && ucWorkspace.Parent is Grid)
                     {
-                        completionWindow.Resources = (ucMain.Parent as Grid).Resources;
+                        completionWindow.Resources = (ucWorkspace.Parent as Grid).Resources;
                     }
 
                     // provide AvalonEdit with the data:
-                    IEnumerable<MyCompletionData> data = ucMain.ViewModel.SelectedRestClient.GetVariablesForSuggestion();
+                    IEnumerable<MyCompletionData> data = ucWorkspace.ViewModel.SelectedRestClient.GetVariablesForSuggestion();
                     var originalData = completionWindow.CompletionList.CompletionData;
                     if (data != null)
                     {

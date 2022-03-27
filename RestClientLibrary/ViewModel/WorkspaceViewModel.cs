@@ -19,9 +19,9 @@ namespace RestClientLibrary.ViewModel
     //using Outlook = Microsoft.Office.Interop.Outlook;
 
     /// <summary>
-    /// Defines the <see cref="MainViewModel" />
+    /// Defines the <see cref="WorkspaceViewModel" />
     /// </summary>
-    public class MainViewModel : BaseViewModel
+    public class WorkspaceViewModel : BaseViewModel
     {
         #region Fields
 
@@ -53,7 +53,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Defines the 
         /// </summary>
-        private View.IMainView _view;
+        private View.IWorkspaceView _view;
 
         /// <summary>
         /// Defines the 
@@ -179,9 +179,9 @@ namespace RestClientLibrary.ViewModel
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
+        /// Initializes a new instance of the <see cref="WorkspaceViewModel"/> class.
         /// </summary>
-        public MainViewModel()
+        public WorkspaceViewModel()
         {
             MasterEventHandler.SaveSession += MasterEventHandler_SaveSession;
             MasterEventHandler.RemoveSession += MasterEventHandler_RemoveSession;
@@ -191,10 +191,10 @@ namespace RestClientLibrary.ViewModel
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
+        /// Initializes a new instance of the <see cref="WorkspaceViewModel"/> class.
         /// </summary>
-        /// <param name="mainView">The <see cref="View.IMainView"/></param>
-        public MainViewModel(View.IMainView mainView)
+        /// <param name="mainView">The <see cref="View.IWorkspaceView"/></param>
+        public WorkspaceViewModel(View.IWorkspaceView mainView)
             : this()
         {
             this._view = mainView;

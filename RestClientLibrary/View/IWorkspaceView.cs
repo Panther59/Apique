@@ -13,9 +13,9 @@ namespace RestClientLibrary.View
     #region Interfaces
 
     /// <summary>
-    /// Defines the <see cref="IMainView" />
+    /// Defines the <see cref="IWorkspaceView" />
     /// </summary>
-    public interface IMainView : IBaseView
+    public interface IWorkspaceView : IBaseView
     {
         #region Properties
 

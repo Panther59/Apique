@@ -645,7 +645,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets the ParentViewModel
 		/// </summary>
-		public MainViewModel ParentViewModel { get; set; }
+		public WorkspaceViewModel ParentViewModel { get; set; }
 
 		/// <summary>
 		/// Gets or sets the PostScript

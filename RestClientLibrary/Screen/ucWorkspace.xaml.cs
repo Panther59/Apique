@@ -1,4 +1,4 @@
-﻿// <copyright file="ucMain.xaml.cs" company="Accenture">
+﻿// <copyright file="ucWorkspace.xaml.cs" company="Accenture">
 // Copyright (c) 2017 All Rights Reserved
 // </copyright>
 // <author>DIR\utkarsh.chauhan</author>
@@ -18,30 +18,30 @@ namespace RestClientLibrary.Screen
     using System.Windows.Controls;
 
     /// <summary>
-    /// Interaction logic for ucMain.xaml
+    /// Interaction logic for ucWorkspace.xaml
     /// </summary>
-    public partial class ucMain : BaseUserControl, IMainView
+    public partial class ucWorkspace : BaseUserControl, IWorkspaceView
     {
         #region Fields
 
         /// <summary>
         /// Defines the 
         /// </summary>
-        private MainViewModel _viewModel;
+        private WorkspaceViewModel _viewModel;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ucMain"/> class.
+        /// Initializes a new instance of the <see cref="ucWorkspace"/> class.
         /// </summary>
-        public ucMain()
+        public ucWorkspace()
         {
             InitializeComponent();
             WindowServiceHandler.ConfirmationBox += this.WindowServiceHandler_ConfirmationBox;
             WindowServiceHandler.MessageBox += this.WindowServiceHandler_MessageBox;
-            this.Loaded += ucMain_Loaded;
+            this.Loaded += ucWorkspace_Loaded;
         }
 
         #endregion
@@ -59,7 +59,7 @@ namespace RestClientLibrary.Screen
         /// <summary>
         /// Gets or sets the ViewModel
         /// </summary>
-        public MainViewModel ViewModel { get => this._viewModel; set => this._viewModel = value; }
+        public WorkspaceViewModel ViewModel { get => this._viewModel; set => this._viewModel = value; }
 
         #endregion
 
@@ -179,15 +179,15 @@ namespace RestClientLibrary.Screen
         #region Private Methods
 
         /// <summary>
-        /// The ucMain_Loaded
+        /// The ucWorkspace_Loaded
         /// </summary>
         /// <param name="sender">The <see cref="object"/></param>
         /// <param name="e">The <see cref="RoutedEventArgs"/></param>
-        private void ucMain_Loaded(object sender, RoutedEventArgs e)
+        private void ucWorkspace_Loaded(object sender, RoutedEventArgs e)
         {
             if (ViewModel == null)
             {
-                ViewModel = new MainViewModel((IMainView)this);
+                ViewModel = new WorkspaceViewModel((IWorkspaceView)this);
             }
             this.DataContext = ViewModel;
         }

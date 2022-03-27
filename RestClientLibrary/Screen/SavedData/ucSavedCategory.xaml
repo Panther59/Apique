@@ -20,7 +20,7 @@
     </UserControl.Resources>
     <Grid Name="catGrid">
         <Grid.Resources>
-            <baseComm:BindingProxy x:Key="Proxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucMain}}" />
+            <baseComm:BindingProxy x:Key="Proxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
             <DataTemplate DataType="{x:Type data:TransactionViewModel}">
                 <saveUI:ucSavedRequest DataContext="{Binding}" />
             </DataTemplate>

@@ -31,6 +31,6 @@
 				</Style>
 			</ava:TextEditor.Style>
 		</ava:TextEditor>-->
-		<rc:ucMain />
+		<rc:ucWorkspace />
 	</Grid>
 </Window>

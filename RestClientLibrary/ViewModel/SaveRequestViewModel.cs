@@ -192,7 +192,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the ParentViewModel
         /// </summary>
-        public MainViewModel ParentViewModel
+        public WorkspaceViewModel ParentViewModel
         {
             get; set;
         }

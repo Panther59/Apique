@@ -85,7 +85,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingsViewModel"/> class.
         /// </summary>
-        /// <param name="view">The <see cref="IMainView"/></param>
+        /// <param name="view">The <see cref="IWorkspaceView"/></param>
         public SettingsViewModel(ISettingsView view)
             : this()
         {
@@ -151,7 +151,7 @@ namespace RestClientLibrary.ViewModel
         /// Gets or sets the ParentViewModel
         /// </summary>
         [XmlIgnore]
-        public MainViewModel ParentViewModel { get; set; }
+        public WorkspaceViewModel ParentViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether SearchInHeaders
@@ -269,7 +269,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// The AttachView
         /// </summary>
-        /// <param name="view">The <see cref="IMainView"/></param>
+        /// <param name="view">The <see cref="IWorkspaceView"/></param>
         public void AttachView(ISettingsView view)
         {
             _view = view;

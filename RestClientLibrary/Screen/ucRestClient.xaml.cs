@@ -52,10 +52,10 @@ namespace RestClientLibrary.Screen
                 {
                     // open code completion after the user has pressed dot:
                    completionWindow = new CompletionWindow(editor);
-                    var ucMain = this.TryFindParent<ucMain>();
-                    if (ucMain != null && ucMain.Parent != null && ucMain.Parent is Grid)
+                    var ucWorkspace = this.TryFindParent<ucWorkspace>();
+                    if (ucWorkspace != null && ucWorkspace.Parent != null && ucWorkspace.Parent is Grid)
                     {
-                        completionWindow.Resources = (ucMain.Parent as Grid).Resources;
+                        completionWindow.Resources = (ucWorkspace.Parent as Grid).Resources;
                     }
                     // provide AvalonEdit with the data:
                     IEnumerable<MyCompletionData> data = _viewModel.GetVariablesForSuggestion();
@@ -89,10 +89,10 @@ namespace RestClientLibrary.Screen
         public bool? OpenSaveRequestWindow(RestClientLibrary.ViewModel.SaveRequestViewModel data)
         {
             SaveRequestWindow window = new SaveRequestWindow();
-            var ucMain = this.TryFindParent<ucMain>();
-            if (ucMain != null && ucMain.Parent != null && ucMain.Parent is Grid)
+            var ucWorkspace = this.TryFindParent<ucWorkspace>();
+            if (ucWorkspace != null && ucWorkspace.Parent != null && ucWorkspace.Parent is Grid)
             {
-                window.Resources = (ucMain.Parent as Grid).Resources;
+                window.Resources = (ucWorkspace.Parent as Grid).Resources;
             }
             window.LoadData(data);
             return window.ShowDialog(this);

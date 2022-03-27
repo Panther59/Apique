@@ -192,7 +192,7 @@ namespace RestClientLibrary.ViewModel
         }
 
         [XmlIgnore]
-        public MainViewModel MainViewModel { get; set; }
+        public WorkspaceViewModel MainViewModel { get; set; }
 
         private void RemoveSession()
         {
