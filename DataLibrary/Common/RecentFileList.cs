@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace DataLibrary
 {
-    public class RecentFileList
+    public class List
     {
         public interface IPersist
         {
@@ -49,7 +49,7 @@ namespace DataLibrary
 
         List<RecentFile> _RecentFiles = null;
 
-        public RecentFileList()
+        public List()
         {
             Persister = new XmlPersister(); ;
 

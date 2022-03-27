@@ -37,18 +37,22 @@ namespace RestClientLibrary.Model
         /// </summary>
         public string Thumbprint { get; set; }
 
-        #endregion
+		public string CertificateFilePath { get; set; }
 
-        #region Methods
+		public string CertificateFilePassword { get; set; }
 
-        #region Public Methods
+		#endregion
 
-        /// <summary>
-        /// The Parse
-        /// </summary>
-        /// <param name="inputList">The <see cref="System.Collections.ObjectModel.ObservableCollection{CertificateViewModel}"/></param>
-        /// <returns>The <see cref="List{CertificateModel}"/></returns>
-        public static List<CertificateModel> Parse(System.Collections.ObjectModel.ObservableCollection<CertificateViewModel> inputList)
+		#region Methods
+
+		#region Public Methods
+
+		/// <summary>
+		/// The Parse
+		/// </summary>
+		/// <param name="inputList">The <see cref="System.Collections.ObjectModel.ObservableCollection{CertificateViewModel}"/></param>
+		/// <returns>The <see cref="List{CertificateModel}"/></returns>
+		public static List<CertificateModel> Parse(System.Collections.ObjectModel.ObservableCollection<CertificateViewModel> inputList)
         {
             if (inputList == null)
             {

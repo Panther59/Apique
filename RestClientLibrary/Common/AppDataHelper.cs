@@ -12,7 +12,9 @@ namespace RestClientLibrary.Common
     using System.Linq;
     using System.Threading.Tasks;
     using DataLibrary;
-    using RestClientLibrary.Model;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Serialization;
+	using RestClientLibrary.Model;
     using RestClientLibrary.ViewModel;
 
     /// <summary>
@@ -20,12 +22,13 @@ namespace RestClientLibrary.Common
     /// </summary>
     public static class AppDataHelper
     {
-        #region Constructors
+		private static readonly JsonSerializerSettings jsonSettings;
+		#region Constructors
 
-        /// <summary>
-        /// Initializes static members of the <see cref = "AppDataHelper"/> class.
-        /// </summary>
-        static AppDataHelper()
+		/// <summary>
+		/// Initializes static members of the <see cref = "AppDataHelper"/> class.
+		/// </summary>
+		static AppDataHelper()
         {
             string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             OldAppDataDirectory = baseDir + "\\VSPackage\\RestClient";
@@ -39,6 +42,11 @@ namespace RestClientLibrary.Common
             TestRunsFilePath = AppDataDirectory + "\\TestRuns.trr";
 
             MoveDataToNewDirectory(OldAppDataDirectory, AppDataDirectory);
+
+            jsonSettings = new Newtonsoft.Json.JsonSerializerSettings();
+            jsonSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            jsonSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            jsonSettings.Formatting = Formatting.None;
         }
 
         #endregion
@@ -399,8 +407,8 @@ namespace RestClientLibrary.Common
                 if (File.Exists(path))
                 {
                     StreamReader reader = new StreamReader(path);
-                    string xml = reader.ReadToEnd();
-                    output = XMLHelper.DeserializeFromXml<T>(xml);
+                    string json = reader.ReadToEnd();
+                    output = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json, jsonSettings);
                     reader.Close();
                     reader.Dispose();
                 }
@@ -434,9 +442,9 @@ namespace RestClientLibrary.Common
                         Directory.CreateDirectory(AppDataDirectory);
                     }
 
-                    string outxml = XMLHelper.SerializeToXml<T>(data);
+                    string outJson = Newtonsoft.Json.JsonConvert.SerializeObject(data, jsonSettings);
                     StreamWriter writer = System.IO.File.CreateText(path);
-                    writer.Write(outxml);
+                    writer.Write(outJson);
                     writer.Flush();
                     writer.Dispose();
                 }

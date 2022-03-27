@@ -121,6 +121,7 @@ namespace RestClientLibrary.Common
 ";
 
         public const string ExportImportFilter = "Rest Client Data|*.rcd";
+        public const string ImportCertFilter = "Certificate|*.p12;*.pfx";
 
         #endregion
 

@@ -38,6 +38,8 @@ namespace RestClientLibrary.ViewModel
         /// The thumbprint field
         /// </summary>
         private string thumbprint;
+        private string filePath;
+        private string filePassword;
 
         #endregion
 
@@ -111,6 +113,34 @@ namespace RestClientLibrary.ViewModel
             }
         }
 
+        public string FilePath
+        {
+            get
+            {
+                return this.filePath;
+            }
+
+            set
+            {
+                this.filePath = value;
+                this.OnPropertyChanged("FilePath");
+            }
+        }
+
+        public string FilePassword
+        {
+            get
+            {
+                return this.filePassword;
+            }
+
+            set
+            {
+                this.filePassword = value;
+                this.OnPropertyChanged("FilePassword");
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -128,7 +158,9 @@ namespace RestClientLibrary.ViewModel
                 FriendlyName = this.FriendlyName,
                 Name = this.Name,
                 Subject = this.Subject,
-                Thumbprint = this.Thumbprint
+                Thumbprint = this.Thumbprint,
+                CertificateFilePath = this.FilePath,
+                CertificateFilePassword = this.FilePassword
             };
         }
 
@@ -151,6 +183,8 @@ namespace RestClientLibrary.ViewModel
                 Name = certificate.Name,
                 Subject = certificate.Subject,
                 Thumbprint = certificate.Thumbprint,
+                FilePath = certificate.CertificateFilePath,
+                FilePassword = certificate.CertificateFilePassword
             };
         }
 

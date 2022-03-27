@@ -7,13 +7,14 @@
 namespace RestClientLibrary.View
 {
     using DataLibrary;
+	using RestClientLibrary.ViewModel;
 
-    #region Interfaces
+	#region Interfaces
 
-    /// <summary>
-    /// Defines the <see cref="ISettingsView" />
-    /// </summary>
-    public interface ISettingsView : IBaseView
+	/// <summary>
+	/// Defines the <see cref="ISettingsView" />
+	/// </summary>
+	public interface ISettingsView : IBaseView
     {
         #region Methods
 
@@ -35,6 +36,8 @@ namespace RestClientLibrary.View
         /// <param name="path">The <see cref="string"/></param>
         /// <returns>The <see cref="bool"/></returns>
         bool OpenImportWindow(string path);
+
+        CertificateViewModel AddNewCertificate(bool file);
 
         #endregion
     }

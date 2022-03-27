@@ -12,65 +12,70 @@
     d:DesignHeight="139"
     d:DesignWidth="500"
     mc:Ignorable="d">
-    <Grid>
-        <Grid.Resources>
-            <ObjectDataProvider
+	<Grid>
+		<Grid.Resources>
+			<base:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+			<base:ToggleBoolToVisibilityConverter x:Key="ToggleBoolToVisibilityConverter" />
+		</Grid.Resources>
+		<Grid Visibility="{Binding IsFile,Converter={StaticResource ToggleBoolToVisibilityConverter}}">
+			<Grid.Resources>
+				<ObjectDataProvider
                 x:Key="SearchByFromEnum"
                 MethodName="GetValues"
                 ObjectType="{x:Type System:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="enums:SearchCertificateBy" />
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <ListView
+					<ObjectDataProvider.MethodParameters>
+						<x:Type TypeName="enums:SearchCertificateBy" />
+					</ObjectDataProvider.MethodParameters>
+				</ObjectDataProvider>
+			</Grid.Resources>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<ListView
             Grid.ColumnSpan="2"
             Margin="3"
             ItemContainerStyle="{DynamicResource GridViewListViewItem}"
             ItemsSource="{Binding Certificates}"
             SelectedItem="{Binding SelectedCertificate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Subject}" Header="Subject" />
-                    <GridViewColumn DisplayMemberBinding="{Binding FriendlyName}" Header="Friendly Name" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Thumbprint}" Header="Thunbprint" />
-                    <GridViewColumn DisplayMemberBinding="{Binding SerialNumber}" Header="Serial Number" />
-                    <GridViewColumn DisplayMemberBinding="{Binding NotAfter}" Header="Expiration Date" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <TextBlock
+				<ListView.View>
+					<GridView>
+						<GridViewColumn DisplayMemberBinding="{Binding Subject}" Header="Subject" />
+						<GridViewColumn DisplayMemberBinding="{Binding FriendlyName}" Header="Friendly Name" />
+						<GridViewColumn DisplayMemberBinding="{Binding Thumbprint}" Header="Thunbprint" />
+						<GridViewColumn DisplayMemberBinding="{Binding SerialNumber}" Header="Serial Number" />
+						<GridViewColumn DisplayMemberBinding="{Binding NotAfter}" Header="Expiration Date" />
+					</GridView>
+				</ListView.View>
+			</ListView>
+			<TextBlock
             Grid.Row="1"
             Margin="3"
             VerticalAlignment="Center"
             Text="Alias:" />
-        <TextBox
+			<TextBox
             Grid.Row="1"
             Grid.Column="1"
             Margin="3"
             Text="{Binding CertificateName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <StackPanel
+			<StackPanel
             Grid.Row="2"
             Grid.ColumnSpan="2"
             HorizontalAlignment="Right"
             Orientation="Horizontal">
-            <Button
+				<Button
                 Name="btnSelect"
                 Width="70"
                 Height="23"
                 Margin="3"
                 Command="{Binding SaveCertificateCommand}"
                 Content="Save" />
-            <Button
+				<Button
                 Name="btnCancel"
                 Width="70"
                 Height="23"
@@ -78,8 +83,8 @@
                 Command="{Binding CloseWindowCommand}"
                 Content="Cancel"
                 IsCancel="True" />
-        </StackPanel>
-        <!--<TextBlock
+			</StackPanel>
+			<!--<TextBlock
             Margin="3"
             VerticalAlignment="Center"
             Text="Search By:" />
@@ -105,7 +110,7 @@
             Command="{Binding SearchCertificateCommand}"
             Content="Search" />
         -->
-        <!--<TextBox
+			<!--<TextBox
             Name="txtPath"
             Height="23"
             Margin="10,10,50,0"
@@ -200,5 +205,86 @@
             VerticalAlignment="Top"
             IsEnabled="{Binding IsCertificateNameEnabled}"
             Text="{Binding CertificateName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
-    </Grid>
+
+		</Grid>
+		<Grid Margin="10" Visibility="{Binding IsFile,Converter={StaticResource BoolToVisibilityConverter}}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<TextBlock Text="File Path:" 
+            Margin="3"
+					   />
+			<TextBlock Text="Password:" Grid.Row="1" 
+            Margin="3"
+					   />
+			<TextBox Grid.Column="1" 
+            Margin="3"
+					 Text="{Binding Path,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+			<PasswordBox
+            Name="password"
+            Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"
+            Margin="3"
+            base:PasswordBoxAssistant.BindPassword="True"
+            base:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<PasswordBox.Style>
+					<Style BasedOn="{StaticResource {x:Type PasswordBox}}" TargetType="PasswordBox">
+						<Setter Property="Visibility" Value="Visible" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding ElementName=showPassword, Path=IsChecked}" Value="True">
+								<Setter Property="Visibility" Value="Collapsed" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</PasswordBox.Style>
+			</PasswordBox>
+			<Button
+                Name="btnBrowse"
+                Height="23"
+                Margin="3"
+				Grid.Column="3"
+                Command="{Binding BrowseCertificateCommand}"
+                Content="Browse" />
+			<TextBlock
+            Grid.Row="2"
+            Margin="3"
+            VerticalAlignment="Center"
+            Text="Alias:" />
+			
+			<TextBox
+            Grid.Row="2"
+            Grid.Column="1"
+				Grid.ColumnSpan="2"
+            Margin="3"
+            Text="{Binding CertificateName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<StackPanel
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+				<Button
+                Name="btnSelect2"
+                Width="70"
+                Height="23"
+                Margin="3"
+                Command="{Binding SaveCertificateCommand}"
+                Content="Save" />
+				<Button
+                Name="btnCancel2"
+                Width="70"
+                Height="23"
+                Margin="3"
+                Command="{Binding CloseWindowCommand}"
+                Content="Cancel"
+                IsCancel="True" />
+			</StackPanel>
+		</Grid>
+	</Grid>
 </data:BaseUserControl>

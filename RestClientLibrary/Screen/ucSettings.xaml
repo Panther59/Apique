@@ -9,105 +9,90 @@
     d:DesignHeight="300"
     d:DesignWidth="300"
     mc:Ignorable="d">
-    <Grid>
-        <StackPanel>
-            <GroupBox>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Button
-                        Margin="3"
-                        Command="{Binding ImportDataCommand}"
-                        Content="Import data" />
-                    <Button
-                        Grid.Column="1"
-                        Margin="3"
-                        Command="{Binding ExportDataCommand}"
-                        Content="Export data" />
-                </Grid>
-            </GroupBox>
-            <GroupBox>
-                <StackPanel Margin="5">
-                    <WrapPanel>
-                        <TextBlock Text="Show Request Content in History" />
-                        <CheckBox Margin="10,3" IsChecked="{Binding ShowRequestContentInHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </WrapPanel>
-                    <WrapPanel>
-                        <TextBlock Text="Certificate Support" />
-                        <CheckBox Margin="10,3" IsChecked="{Binding CertificateSupport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </WrapPanel>
-                    <GroupBox Header="Search Settings">
-                        <StackPanel>
-                            <CheckBox
+	<Grid>
+		<TabControl>
+			<TabItem Header="General">
+				<StackPanel>
+					<GroupBox>
+						<StackPanel Margin="5">
+							<WrapPanel>
+								<TextBlock Text="Show Request Content in History" />
+								<CheckBox Margin="10,3" IsChecked="{Binding ShowRequestContentInHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</WrapPanel>
+							<WrapPanel>
+								<TextBlock Text="Certificate Support" />
+								<CheckBox Margin="10,3" IsChecked="{Binding CertificateSupport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</WrapPanel>
+							<GroupBox Header="Search Settings">
+								<StackPanel>
+									<CheckBox
                                 Margin="3"
                                 Content="Search in URL"
                                 IsChecked="True"
                                 IsEnabled="False" />
-                            <CheckBox
+									<CheckBox
                                 Margin="3"
                                 Content="Search in Request"
                                 IsChecked="{Binding SearchInRequest}" />
-                            <CheckBox
+									<CheckBox
                                 Margin="3"
                                 Content="Search in Heaaders"
                                 IsChecked="{Binding SearchInHeaders}" />
-                            <CheckBox
+									<CheckBox
                                 Margin="3"
                                 Content="Search in Status"
                                 IsChecked="{Binding SearchInStatus}" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="Retain History of " />
-                                <TextBox Text="{Binding MaxHistoryDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBlock VerticalAlignment="Center" Text=" days" />
-                            </StackPanel>
-                        </StackPanel>
-                    </GroupBox>
-                    <Grid>
-                        <Button
+									<StackPanel Orientation="Horizontal">
+										<TextBlock VerticalAlignment="Center" Text="Retain History of " />
+										<TextBox Text="{Binding MaxHistoryDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+										<TextBlock VerticalAlignment="Center" Text=" days" />
+									</StackPanel>
+								</StackPanel>
+							</GroupBox>
+							<Grid>
+								<Button
                             Width="50"
                             Margin="5"
                             Command="{Binding SaveButtonClickedCommand}"
                             Content="Save" />
-                    </Grid>
+							</Grid>
 
-                </StackPanel>
-            </GroupBox>
-            <GroupBox Visibility="Collapsed">
-                <Grid>
-                    <StackPanel>
-                        <TextBlock Name="txtAddNew">
+						</StackPanel>
+					</GroupBox>
+					<GroupBox Visibility="Collapsed">
+						<Grid>
+							<StackPanel>
+								<TextBlock Name="txtAddNew">
                             <TextBlock Text="Certificates:" />
                             <TextBlock Text="      " />
                             <Hyperlink Command="{Binding AddNewCertCommand}">
                                 <TextBlock Text="Add New" />
                             </Hyperlink>
                         </TextBlock>
-                        <ListView
+								<ListView
                             MinHeight="50"
                             Background="Transparent"
                             BorderBrush="White"
                             ItemsSource="{Binding Certificates}">
-                            <ListView.Resources>
-                                <Style TargetType="{x:Type ListViewItem}">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    <Setter Property="Margin" Value="3,1" />
-                                </Style>
-                            </ListView.Resources>
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="23" />
-                                        </Grid.RowDefinitions>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="40" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock FontWeight="Bold" Text="{Binding Name}" />
-                                            <Button
+									<ListView.Resources>
+										<Style TargetType="{x:Type ListViewItem}">
+											<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+											<Setter Property="Margin" Value="3,1" />
+										</Style>
+									</ListView.Resources>
+									<ListView.ItemTemplate>
+										<DataTemplate>
+											<Grid>
+												<Grid.RowDefinitions>
+													<RowDefinition Height="23" />
+												</Grid.RowDefinitions>
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*" />
+														<ColumnDefinition Width="40" />
+													</Grid.ColumnDefinitions>
+													<TextBlock FontWeight="Bold" Text="{Binding Name}" />
+													<Button
                                                 x:Name="btnRemoveCert"
                                                 Grid.Column="1"
                                                 HorizontalAlignment="Center"
@@ -118,38 +103,151 @@
                                                 FontSize="17"
                                                 Foreground="Red"
                                                 ToolTip="Remove">
-                                                <Button.Style>
-                                                    <Style TargetType="{x:Type Button}">
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="{x:Type Button}">
-                                                                    <Grid>
-                                                                        <ContentPresenter RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                                                    </Grid>
-                                                                    <ControlTemplate.Triggers>
-                                                                        <Trigger Property="IsFocused" Value="True" />
-                                                                        <Trigger Property="IsDefaulted" Value="True" />
-                                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                                            <Setter Property="FontWeight" Value="Bold" />
-                                                                        </Trigger>
-                                                                        <Trigger Property="IsPressed" Value="True" />
-                                                                        <Trigger Property="IsEnabled" Value="False" />
-                                                                    </ControlTemplate.Triggers>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
+														<Button.Style>
+															<Style TargetType="{x:Type Button}">
+																<Setter Property="Template">
+																	<Setter.Value>
+																		<ControlTemplate TargetType="{x:Type Button}">
+																			<Grid>
+																				<ContentPresenter RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+																			</Grid>
+																			<ControlTemplate.Triggers>
+																				<Trigger Property="IsFocused" Value="True" />
+																				<Trigger Property="IsDefaulted" Value="True" />
+																				<Trigger Property="IsMouseOver" Value="True">
+																					<Setter Property="FontWeight" Value="Bold" />
+																				</Trigger>
+																				<Trigger Property="IsPressed" Value="True" />
+																				<Trigger Property="IsEnabled" Value="False" />
+																			</ControlTemplate.Triggers>
+																		</ControlTemplate>
+																	</Setter.Value>
+																</Setter>
+															</Style>
+														</Button.Style>
+													</Button>
+												</Grid>
+											</Grid>
+										</DataTemplate>
+									</ListView.ItemTemplate>
+								</ListView>
+							</StackPanel>
 
-                </Grid>
-            </GroupBox>
-        </StackPanel>
-    </Grid>
+						</Grid>
+					</GroupBox>
+				</StackPanel>
+			</TabItem>
+			<TabItem Header="Data">
+				<Grid>
+					<GroupBox>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto" />
+								<ColumnDefinition Width="Auto" />
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto" />
+								<RowDefinition Height="*" />
+							</Grid.RowDefinitions>
+							<Button
+                        Margin="3"
+                        Command="{Binding ImportDataCommand}"
+                        Content="Import data" />
+							<Button
+                        Grid.Column="1"
+                        Margin="3"
+                        Command="{Binding ExportDataCommand}"
+                        Content="Export data" />
+						</Grid>
+					</GroupBox>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Certificates">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<StackPanel Orientation="Horizontal">
+						<Button Content="Add Store Certificate" Margin="10,5" Command="{Binding AddSavedCertificateCommand}"/>
+						<Button Content="Add Certificate File" Margin="10,5" Command="{Binding AddCertificateFileCommand}"/>
+					</StackPanel>
+					<ListView
+            Grid.Row="1"
+            Background="Transparent"
+            BorderBrush="White"
+            ItemsSource="{Binding Certificates}"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            VirtualizingPanel.IsContainerVirtualizable="True"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.VirtualizationMode="Recycling">
+						<ListView.Resources />
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+									</Grid.RowDefinitions>
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="Auto" />
+											<ColumnDefinition Width="*" />
+											<ColumnDefinition Width="Auto" />
+										</Grid.ColumnDefinitions>
+										<TextBlock                                 Margin="2,0"
+                                FontWeight="Bold"
+                                Text="{Binding Name}" />
+
+										<Button
+                                x:Name="btnRemoveSession"
+                                Grid.Column="2"
+                                Margin="3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ucSettings}}, Path=DataContext.RemoveCertificateCommand}"
+											CommandParameter="{Binding}"
+                                ToolTip="Remove">
+											<Button.Content>
+												<TextBlock
+                                        FontFamily="Wingdings 2"
+                                        FontSize="17"
+                                        Foreground="Red"
+                                        Text="O" />
+											</Button.Content>
+											<Button.Style>
+												<Style TargetType="{x:Type Button}">
+													<Setter Property="Template">
+														<Setter.Value>
+															<ControlTemplate TargetType="{x:Type Button}">
+																<Grid>
+																	<ContentPresenter RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+																</Grid>
+																<ControlTemplate.Triggers>
+																	<Trigger Property="IsFocused" Value="True" />
+																	<Trigger Property="IsDefaulted" Value="True" />
+																	<Trigger Property="IsMouseOver" Value="True">
+																		<Setter Property="FontWeight" Value="Bold" />
+																	</Trigger>
+																	<Trigger Property="IsPressed" Value="True" />
+																	<Trigger Property="IsEnabled" Value="False" />
+																</ControlTemplate.Triggers>
+															</ControlTemplate>
+														</Setter.Value>
+													</Setter>
+												</Style>
+											</Button.Style>
+										</Button>
+									</Grid>
+
+								</Grid>
+							</DataTemplate>
+						</ListView.ItemTemplate>
+					</ListView>
+				</Grid>
+			</TabItem>
+		</TabControl>
+
+	</Grid>
 </base:BaseUserControl>

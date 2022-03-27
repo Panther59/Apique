@@ -29,6 +29,16 @@ namespace RestClientLibrary.Screen
             this.DataContextChanged += this.UcSettings_DataContextChanged;
         }
 
+        public CertificateViewModel AddNewCertificate(bool file)
+        {
+            AddCertificateWindow window = new AddCertificateWindow();
+            window.IsCertPath = file;
+            window.Resources = (System.Windows.Window.GetWindow(this)).Resources;
+            window.ShowDialog(this);
+
+            return window.Certificate;
+        }
+
         #endregion
 
         #region Methods

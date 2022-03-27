@@ -6,301 +6,346 @@
 
 namespace RestClientLibrary.ViewModel
 {
-    using DataLibrary;
-    using RestClientLibrary.Common;
-    using RestClientLibrary.View;
-    using System.Collections.Generic;
-    using System.Security.Cryptography.X509Certificates;
+	using DataLibrary;
+	using RestClientLibrary.Common;
+	using RestClientLibrary.View;
+	using System;
+	using System.Collections.Generic;
+	using System.Security.Cryptography.X509Certificates;
+	using System.Windows.Input;
 
-    /// <summary>
-    /// Defines the <see cref="AddCertificateViewModel" />
-    /// </summary>
-    public class AddCertificateViewModel : BaseViewModel
-    {
-        #region Fields
+	/// <summary>
+	/// Defines the <see cref="AddCertificateViewModel" />
+	/// </summary>
+	public class AddCertificateViewModel : BaseViewModel
+	{
+		#region Fields
 
-        /// <summary>
-        /// Defines the _certificateName
-        /// </summary>
-        private string _certificateName;
+		/// <summary>
+		/// Defines the _certificateName
+		/// </summary>
+		private string _certificateName;
 
-        /// <summary>
-        /// Defines the _password
-        /// </summary>
-        private string _password;
+		/// <summary>
+		/// Defines the _password
+		/// </summary>
+		private string _password;
 
-        /// <summary>
-        /// Defines the _path
-        /// </summary>
-        private string _path;
+		/// <summary>
+		/// Defines the _path
+		/// </summary>
+		private string _path;
 
-        /// <summary>
-        /// The certificates field
-        /// </summary>
-        private List<X509Certificate2> certificates;
+		/// <summary>
+		/// The certificates field
+		/// </summary>
+		private List<X509Certificate2> certificates;
 
-        /// <summary>
-        /// The searchBy field
-        /// </summary>
-        private SearchCertificateBy searchBy;
+		/// <summary>
+		/// The searchBy field
+		/// </summary>
+		private SearchCertificateBy searchBy;
 
-        /// <summary>
-        /// The searchText field
-        /// </summary>
-        private string searchText;
+		/// <summary>
+		/// The searchText field
+		/// </summary>
+		private string searchText;
 
-        /// <summary>
-        /// The selectedCertificate field
-        /// </summary>
-        private X509Certificate2 selectedCertificate;
+		/// <summary>
+		/// The selectedCertificate field
+		/// </summary>
+		private X509Certificate2 selectedCertificate;
 
-        /// <summary>
-        /// Defines the view
-        /// </summary>
-        private IAddCertificateView view;
+		/// <summary>
+		/// Defines the view
+		/// </summary>
+		private IAddCertificateView view;
 
-        #region Commands
+		private RelayCommand browseCertificateCommand;
 
-        /// <summary>
-        /// The closeWindowCommand field
-        /// </summary>
-        private RelayCommand closeWindowCommand;
+		#region Commands
 
-        /// <summary>
-        /// The saveCertificateCommand field
-        /// </summary>
-        private RelayCommand saveCertificateCommand;
+		/// <summary>
+		/// The closeWindowCommand field
+		/// </summary>
+		private RelayCommand closeWindowCommand;
 
-        #endregion
+		/// <summary>
+		/// The saveCertificateCommand field
+		/// </summary>
+		private RelayCommand saveCertificateCommand;
 
-        #endregion
+		#endregion
 
-        #region Constructors
+		#endregion
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AddCertificateViewModel"/> class.
-        /// </summary>
-        /// <param name="view">The <see cref="IAddCertificateView"/></param>
-        public AddCertificateViewModel(IAddCertificateView view)
-        {
-            this.view = view;
-            this.LoadData();
-        }
+		#region Constructors
 
-        #endregion
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AddCertificateViewModel"/> class.
+		/// </summary>
+		/// <param name="view">The <see cref="IAddCertificateView"/></param>
+		public AddCertificateViewModel(IAddCertificateView view)
+		{
+			this.view = view;
+			this.LoadData();
+		}
 
-        #region Properties
+		#endregion
 
-        /// <summary>
-        /// Gets or sets the CertificateName
-        /// </summary>
-        public string CertificateName
-        {
-            get { return _certificateName; }
-            set
-            {
-                _certificateName = value;
-                OnPropertyChanged("CertificateName");
-            }
-        }
+		#region Properties
 
-        /// <summary>
-        /// Gets or sets the Certificates
-        /// </summary>
-        public List<X509Certificate2> Certificates
-        {
-            get
-            {
-                return this.certificates;
-            }
+		/// <summary>
+		/// Gets or sets the CertificateName
+		/// </summary>
+		public string CertificateName
+		{
+			get { return _certificateName; }
+			set
+			{
+				_certificateName = value;
+				OnPropertyChanged("CertificateName");
+			}
+		}
 
-            set
-            {
-                this.certificates = value;
-                this.OnPropertyChanged("Certificates");
-            }
-        }
+		public RelayCommand BrowseCertificateCommand
+		{
+			get
+			{
+				if (browseCertificateCommand == null)
+				{
+					browseCertificateCommand = new RelayCommand(command => this.ExecuteBrowseCertificate());
+				}
 
-        /// <summary>
-        /// Gets or sets the FinalCertificate
-        /// </summary>
-        public CertificateViewModel FinalCertificate { get; private set; }
+				return browseCertificateCommand;
+			}
+			set
+			{
+				browseCertificateCommand = value;
+			}
+		}
 
-        /// <summary>
-        /// Gets or sets the Password
-        /// </summary>
-        public string Password
-        {
-            get { return _password; }
-            set
-            {
-                _password = value;
-                OnPropertyChanged("Password");
-            }
-        }
+		private void ExecuteBrowseCertificate()
+		{
+			var path = this.view.GetFilePath();
+			if (path != null)
+			{
+				this.Path = path;
+			}
+		}
 
-        /// <summary>
-        /// Gets or sets the Path
-        /// </summary>
-        public string Path
-        {
-            get { return _path; }
-            set
-            {
-                _path = value;
-                OnPropertyChanged("Path");
-            }
-        }
+		/// <summary>
+		/// Gets or sets the Certificates
+		/// </summary>
+		public List<X509Certificate2> Certificates
+		{
+			get
+			{
+				return this.certificates;
+			}
 
-        /// <summary>
-        /// Gets or sets the SearchBy
-        /// </summary>
-        public SearchCertificateBy SearchBy
-        {
-            get
-            {
-                return this.searchBy;
-            }
+			set
+			{
+				this.certificates = value;
+				this.OnPropertyChanged("Certificates");
+			}
+		}
 
-            set
-            {
-                this.searchBy = value;
-                this.OnPropertyChanged("SearchBy");
-            }
-        }
+		/// <summary>
+		/// Gets or sets the FinalCertificate
+		/// </summary>
+		public CertificateViewModel FinalCertificate { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the SearchText
-        /// </summary>
-        public string SearchText
-        {
-            get
-            {
-                return this.searchText;
-            }
+		/// <summary>
+		/// Gets or sets the Password
+		/// </summary>
+		public string Password
+		{
+			get { return _password; }
+			set
+			{
+				_password = value;
+				OnPropertyChanged("Password");
+			}
+		}
 
-            set
-            {
-                this.searchText = value;
-                this.OnPropertyChanged("SearchText");
-            }
-        }
+		/// <summary>
+		/// Gets or sets the Path
+		/// </summary>
+		public string Path
+		{
+			get { return _path; }
+			set
+			{
+				_path = value;
+				OnPropertyChanged("Path");
+			}
+		}
 
-        /// <summary>
-        /// Gets or sets the SelectedCertificate
-        /// </summary>
-        public X509Certificate2 SelectedCertificate
-        {
-            get
-            {
-                return this.selectedCertificate;
-            }
+		/// <summary>
+		/// Gets or sets the SearchBy
+		/// </summary>
+		public SearchCertificateBy SearchBy
+		{
+			get
+			{
+				return this.searchBy;
+			}
 
-            set
-            {
-                this.selectedCertificate = value;
-                this.OnPropertyChanged("SelectedCertificate");
-            }
-        }
+			set
+			{
+				this.searchBy = value;
+				this.OnPropertyChanged("SearchBy");
+			}
+		}
 
-        #region Commands
+		/// <summary>
+		/// Gets or sets the SearchText
+		/// </summary>
+		public string SearchText
+		{
+			get
+			{
+				return this.searchText;
+			}
 
-        /// <summary>
-        /// Gets the CloseWindowCommand
-        /// </summary>
-        public RelayCommand CloseWindowCommand
-        {
-            get
-            {
-                if (this.closeWindowCommand == null)
-                {
-                    this.closeWindowCommand = new RelayCommand(command => this.ExecuteCloseWindow());
-                }
+			set
+			{
+				this.searchText = value;
+				this.OnPropertyChanged("SearchText");
+			}
+		}
 
-                return this.closeWindowCommand;
-            }
-        }
+		/// <summary>
+		/// Gets or sets the SelectedCertificate
+		/// </summary>
+		public X509Certificate2 SelectedCertificate
+		{
+			get
+			{
+				return this.selectedCertificate;
+			}
 
-        /// <summary>
-        /// Gets the SaveCertificateCommand
-        /// </summary>
-        public RelayCommand SaveCertificateCommand
-        {
-            get
-            {
-                if (this.saveCertificateCommand == null)
-                {
-                    this.saveCertificateCommand = new RelayCommand(command => this.ExecuteSaveCertificate(), can => this.CanSaveCertificateExecute());
-                }
+			set
+			{
+				this.selectedCertificate = value;
+				this.OnPropertyChanged("SelectedCertificate");
+			}
+		}
 
-                return this.saveCertificateCommand;
-            }
-        }
+		#region Commands
 
-        #endregion
+		/// <summary>
+		/// Gets the CloseWindowCommand
+		/// </summary>
+		public RelayCommand CloseWindowCommand
+		{
+			get
+			{
+				if (this.closeWindowCommand == null)
+				{
+					this.closeWindowCommand = new RelayCommand(command => this.ExecuteCloseWindow());
+				}
 
-        #endregion
+				return this.closeWindowCommand;
+			}
+		}
 
-        #region Methods
+		/// <summary>
+		/// Gets the SaveCertificateCommand
+		/// </summary>
+		public RelayCommand SaveCertificateCommand
+		{
+			get
+			{
+				if (this.saveCertificateCommand == null)
+				{
+					this.saveCertificateCommand = new RelayCommand(command => this.ExecuteSaveCertificate(), can => this.CanSaveCertificateExecute());
+				}
 
-        #region Public Methods
+				return this.saveCertificateCommand;
+			}
+		}
 
-        /// <summary>
-        /// The CloseWindow
-        /// </summary>
-        public void CloseWindow()
-        {
-            this.view.CloseParentWindow();
-        }
+		public bool IsFile { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#endregion
 
-        /// <summary>
-        /// Determines whether SaveCertificate can be executed or not
-        /// </summary>
-        private bool CanSaveCertificateExecute()
-        {
-            return this.SelectedCertificate != null && string.IsNullOrWhiteSpace(this.CertificateName) == false;
-        }
+		#region Methods
 
-        /// <summary>
-        /// Executes CloseWindow
-        /// </summary>
-        private void ExecuteCloseWindow()
-        {
-            this.CloseWindow();
-        }
+		#region Public Methods
 
-        /// <summary>
-        /// Executes SaveCertificate
-        /// </summary>
-        private void ExecuteSaveCertificate()
-        {
-            this.FinalCertificate = CertificateViewModel.Parse(this.SelectedCertificate, this.CertificateName);
-            this.CloseWindow();
-        }
+		/// <summary>
+		/// The CloseWindow
+		/// </summary>
+		public void CloseWindow()
+		{
+			this.view.CloseParentWindow();
+		}
 
-        /// <summary>
-        /// The LoadData
-        /// </summary>
-        private void LoadData()
-        {
-            var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
-            store.Open(OpenFlags.ReadOnly);
+		#endregion
 
-            List<X509Certificate2> certs = new List<X509Certificate2>();
-            foreach (X509Certificate2 mCert in store.Certificates)
-            {
-                certs.Add(mCert);
-            }
+		#region Private Methods
 
-            this.Certificates = certs;
-        }
+		/// <summary>
+		/// Determines whether SaveCertificate can be executed or not
+		/// </summary>
+		private bool CanSaveCertificateExecute()
+		{
+			return (!this.IsFile && this.SelectedCertificate != null && !string.IsNullOrWhiteSpace(this.CertificateName)) ||
+				(this.IsFile && !string.IsNullOrEmpty(this.Path) && !string.IsNullOrEmpty(this.Password) && !string.IsNullOrWhiteSpace(this.CertificateName));
+		}
 
-        #endregion
+		/// <summary>
+		/// Executes CloseWindow
+		/// </summary>
+		private void ExecuteCloseWindow()
+		{
+			this.CloseWindow();
+		}
 
-        #endregion
-    }
+		/// <summary>
+		/// Executes SaveCertificate
+		/// </summary>
+		private void ExecuteSaveCertificate()
+		{
+			try
+			{
+				if (this.IsFile)
+				{
+					this.SelectedCertificate = new X509Certificate2(this.Path, this.Password);
+				}
+
+				this.FinalCertificate = CertificateViewModel.Parse(this.SelectedCertificate, this.CertificateName);
+				this.CloseWindow();
+			}
+			catch (Exception ex)
+			{
+				this.view.MessageShow("Cert", ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// The LoadData
+		/// </summary>
+		private void LoadData()
+		{
+			var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+			store.Open(OpenFlags.ReadOnly);
+
+			List<X509Certificate2> certs = new List<X509Certificate2>();
+			foreach (X509Certificate2 mCert in store.Certificates)
+			{
+				certs.Add(mCert);
+			}
+
+			this.Certificates = certs;
+		}
+
+		#endregion
+
+		#endregion
+	}
 }

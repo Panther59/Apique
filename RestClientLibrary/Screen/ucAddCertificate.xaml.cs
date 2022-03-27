@@ -34,13 +34,28 @@ namespace RestClientLibrary.Screen
         {
             InitializeComponent();
             this.Loaded += this.UcAddCertificate_Loaded;
+            this.ViewModel = new AddCertificateViewModel(this as IAddCertificateView);
         }
 
         public AddCertificateViewModel ViewModel { get; private set; }
 
-        private void UcAddCertificate_Loaded(object sender, RoutedEventArgs e)
+		public string GetFilePath()
+		{
+            Microsoft.Win32.OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = Constants.ImportCertFilter;
+            var result = dialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                return dialog.FileName;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+		private void UcAddCertificate_Loaded(object sender, RoutedEventArgs e)
         {
-            this.ViewModel = new AddCertificateViewModel(this as IAddCertificateView);
             this.DataContext = this.ViewModel;
         }
 

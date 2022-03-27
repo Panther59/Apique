@@ -15,6 +15,7 @@ namespace RestClientLibrary.View
     /// </summary>
     public interface IAddCertificateView : IBaseView
     {
+        string GetFilePath();
     }
 
     #endregion
