@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Highlighting\Resources\ASPX.xshd" />
+    <None Remove="Highlighting\Resources\Boo.xshd" />
+    <None Remove="Highlighting\Resources\Coco-Mode.xshd" />
+    <None Remove="Highlighting\Resources\CPP-Mode.xshd" />
+    <None Remove="Highlighting\Resources\CSharp-Mode.xshd" />
+    <None Remove="Highlighting\Resources\CSS-Mode.xshd" />
+    <None Remove="Highlighting\Resources\HTML-Mode.xshd" />
+    <None Remove="Highlighting\Resources\Java-Mode.xshd" />
+    <None Remove="Highlighting\Resources\JavaScript-Mode.xshd" />
+    <None Remove="Highlighting\Resources\Json.xshd" />
+    <None Remove="Highlighting\Resources\MarkDown-Mode.xshd" />
+    <None Remove="Highlighting\Resources\MarkDownWithFontSize-Mode.xshd" />
+    <None Remove="Highlighting\Resources\ModeV1.xsd" />
+    <None Remove="Highlighting\Resources\ModeV2.xsd" />
+    <None Remove="Highlighting\Resources\Patch-Mode.xshd" />
+    <None Remove="Highlighting\Resources\PHP-Mode.xshd" />
+    <None Remove="Highlighting\Resources\PowerShell.xshd" />
+    <None Remove="Highlighting\Resources\Python-Mode.xshd" />
+    <None Remove="Highlighting\Resources\Tex-Mode.xshd" />
+    <None Remove="Highlighting\Resources\TSQL-Mode.xshd" />
+    <None Remove="Highlighting\Resources\VB-Mode.xshd" />
+    <None Remove="Highlighting\Resources\XML-Mode.xshd" />
+    <None Remove="Highlighting\Resources\XmlDoc.xshd" />
+    <None Remove="Themes\RightArrow.cur" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Highlighting\Resources\ASPX.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\Boo.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\Coco-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\CPP-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\CSharp-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\CSS-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\HTML-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\Java-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\JavaScript-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\Json.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\MarkDown-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\MarkDownWithFontSize-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\ModeV1.xsd" />
+    <EmbeddedResource Include="Highlighting\Resources\ModeV2.xsd" />
+    <EmbeddedResource Include="Highlighting\Resources\Patch-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\PHP-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\PowerShell.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\Python-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\Tex-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\TSQL-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\VB-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\XML-Mode.xshd" />
+    <EmbeddedResource Include="Highlighting\Resources\XmlDoc.xshd" />
+    <Resource Include="Themes\RightArrow.cur">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Unity" Version="5.11.10" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Model\Validations\**" />
+    <Compile Remove="ViewModel\Validations\**" />
+    <EmbeddedResource Remove="Model\Validations\**" />
+    <EmbeddedResource Remove="ViewModel\Validations\**" />
+    <None Remove="Model\Validations\**" />
+    <None Remove="ViewModel\Validations\**" />
+    <Page Remove="Model\Validations\**" />
+    <Page Remove="ViewModel\Validations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Model\TestCaseModel.cs" />
+    <Compile Remove="Model\TestClientModel.cs" />
+    <Compile Remove="Model\TestSuiteModel.cs" />
+    <Compile Remove="Model\ValidationRuleModel.cs" />
+    <Compile Remove="Screen\ucTestCase.xaml.cs" />
+    <Compile Remove="Screen\ucTestClient.xaml.cs" />
+    <Compile Remove="Screen\ucTestSuite.xaml.cs" />
+    <Compile Remove="Screen\ucValidations.xaml.cs" />
+    <Compile Remove="ViewModel\TestCaseViewModel.cs" />
+    <Compile Remove="ViewModel\TestClientViewModel.cs" />
+    <Compile Remove="ViewModel\TestSuiteViewModel.cs" />
+    <Compile Remove="ViewModel\ValidationsViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Screen\ucTestCase.xaml" />
+    <Page Remove="Screen\ucTestClient.xaml" />
+    <Page Remove="Screen\ucTestSuite.xaml" />
+    <Page Remove="Screen\ucValidations.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="RestSharp" Version="107.3.0" />
+    <PackageReference Include="Unity" Version="5.11.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdvanceTextEditor\AdvanceTextEditor.csproj" />
+    <ProjectReference Include="..\DataLibrary\DataLibrary.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,394 @@
+﻿<UserControl
+    x:Class="RestClientLibrary.Screen.ucValidations"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+    xmlns:baseComm="clr-namespace:DataLibrary.Common;assembly=DataLibrary"
+    xmlns:comm="clr-namespace:RestClientLibrary.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:RestClientLibrary.Screen"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:net="clr-namespace:System.Net;assembly=System"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:val="clr-namespace:RestClientLibrary.ViewModel.Validations"
+    xmlns:vm="clr-namespace:RestClientLibrary.ViewModel"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+    <Grid Margin="0,3">
+        <Grid.Resources>
+            <baseComm:BindingProxy x:Key="Proxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucValidations}}" />
+            <comm:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+            <comm:HttpStatusCodeConverter x:Key="HttpStatusCodeConverter" />
+            <ObjectDataProvider
+                x:Key="ValidationTypeProvider"
+                MethodName="GetValues"
+                ObjectType="{x:Type sys:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="comm:ValidationType" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider
+                x:Key="ValidationConditionTypeProvider"
+                MethodName="GetValues"
+                ObjectType="{x:Type sys:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="comm:ValidationConditionType" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider
+                x:Key="HttpStatusCodeProvider"
+                MethodName="GetValues"
+                ObjectType="{x:Type sys:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="net:HttpStatusCode" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <Style TargetType="{x:Type base:CircularWait}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Result}" Value="Pass">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Result}" Value="Fail">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Result}" Value="InProgress">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Result}" Value="NotStarted">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="StatusTedxtBlockStyle" TargetType="TextBlock">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Result}" Value="Pass">
+                        <Setter Property="Text" Value="P" />
+                        <Setter Property="FontFamily" Value="Wingdings 2" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}" />
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Result}" Value="Fail">
+                        <Setter Property="Text" Value="O" />
+                        <Setter Property="FontFamily" Value="Wingdings 2" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Foreground" Value="{DynamicResource ErrorColorBrush}" />
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Result}" Value="InProgress">
+                        <Setter Property="Text" Value="" />
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeBrush}" />
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Result}" Value="NotStarted">
+                        <Setter Property="Text" Value="" />
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeBrush}" />
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <DataTemplate DataType="{x:Type val:HeaderPresentRuleViewModel}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel VerticalAlignment="Center">
+                        <TextBlock
+                            Margin="0,3,5,3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            ToolTip="{Binding ResultText}">
+                            <TextBlock
+                                Name="image"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource StatusTedxtBlockStyle}" />
+                        </TextBlock>
+                        <base:CircularWait
+                            Name="progress"
+                            Width="18"
+                            Height="18" />
+                    </WrapPanel>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Text="Header Key:" />
+                    <AdornerDecorator Grid.Column="2" Margin="3">
+                        <TextBox Text="{Binding HeaderKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <base:WatermarkService.Watermark>
+                                <TextBlock
+                                    MinWidth="120"
+                                    Margin="3,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource PrimaryBorderBrush}"
+                                    Text="Key" />
+                            </base:WatermarkService.Watermark>
+                        </TextBox>
+                    </AdornerDecorator>
+                    <TextBlock
+                        Grid.Column="3"
+                        VerticalAlignment="Center"
+                        Text="Expeceted Value:" />
+                    <AdornerDecorator Grid.Column="4" Margin="3">
+                        <TextBox Text="{Binding ExpectedHeaderValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <base:WatermarkService.Watermark>
+                                <TextBlock
+                                    Margin="3,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource PrimaryBorderBrush}"
+                                    Text="Value" />
+                            </base:WatermarkService.Watermark>
+                        </TextBox>
+                    </AdornerDecorator>
+                    <Button
+                        Grid.Column="5"
+                        Width="20"
+                        VerticalAlignment="Center"
+                        Command="{Binding Source={StaticResource Proxy}, Path=Data.RemoveValidationRuleCommand}"
+                        CommandParameter="{Binding}"
+                        Content="O"
+                        FontFamily="Wingdings 2"
+                        FontSize="17"
+                        Foreground="Red"
+                        Style="{DynamicResource RemoveButtonStyle}" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type val:ResponseContainsTextRuleViewModel}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel VerticalAlignment="Center">
+                        <TextBlock
+                            Margin="0,3,5,3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            ToolTip="{Binding ResultText}">
+                            <TextBlock
+                                Name="image"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource StatusTedxtBlockStyle}" />
+                        </TextBlock>
+
+                        <base:CircularWait
+                            Name="progress"
+                            Width="18"
+                            Height="18" />
+                    </WrapPanel>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Text="Response Content:" />
+                    <ComboBox
+                        Grid.Column="2"
+                        Margin="3"
+                        ItemsSource="{Binding Source={StaticResource ValidationConditionTypeProvider}}"
+                        SelectedItem="{Binding CompareMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <AdornerDecorator Grid.Column="3" Margin="3">
+                        <TextBox Text="{Binding ExpectedContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <base:WatermarkService.Watermark>
+                                <TextBlock
+                                    Margin="3,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource PrimaryBorderBrush}"
+                                    Text="Content" />
+                            </base:WatermarkService.Watermark>
+                        </TextBox>
+                    </AdornerDecorator>
+                    <Button
+                        Grid.Column="4"
+                        Width="20"
+                        VerticalAlignment="Center"
+                        Command="{Binding Source={StaticResource Proxy}, Path=Data.RemoveValidationRuleCommand}"
+                        CommandParameter="{Binding}"
+                        Content="O"
+                        FontFamily="Wingdings 2"
+                        FontSize="17"
+                        Foreground="Red"
+                        Style="{DynamicResource RemoveButtonStyle}" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type val:ResponseFieldTextRuleViewModel}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel VerticalAlignment="Center">
+                        <TextBlock
+                            Margin="0,3,5,3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            ToolTip="{Binding ResultText}">
+                            <TextBlock
+                                Name="image"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource StatusTedxtBlockStyle}" />
+                        </TextBlock>
+
+                        <base:CircularWait
+                            Name="progress"
+                            Width="18"
+                            Height="18" />
+                    </WrapPanel>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Text="Response Tag:" />
+                    <AdornerDecorator Grid.Column="2" Margin="3">
+                        <TextBox Text="{Binding FieldPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <base:WatermarkService.Watermark>
+                                <TextBlock
+                                    MinWidth="120"
+                                    Margin="3,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource PrimaryBorderBrush}"
+                                    Text="Tag" />
+                            </base:WatermarkService.Watermark>
+                        </TextBox>
+                    </AdornerDecorator>
+                    <ComboBox
+                        Grid.Column="4"
+                        Margin="3"
+                        ItemsSource="{Binding Source={StaticResource ValidationConditionTypeProvider}}"
+                        SelectedItem="{Binding CompareMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <AdornerDecorator Grid.Column="4" Margin="3">
+                        <TextBox Text="{Binding ExpectedContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <base:WatermarkService.Watermark>
+                                <TextBlock
+                                    Margin="3,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource PrimaryBorderBrush}"
+                                    Text="Tag Value" />
+                            </base:WatermarkService.Watermark>
+                        </TextBox>
+                    </AdornerDecorator>
+                    <Button
+                        Grid.Column="5"
+                        Width="20"
+                        VerticalAlignment="Center"
+                        Command="{Binding Source={StaticResource Proxy}, Path=Data.RemoveValidationRuleCommand}"
+                        CommandParameter="{Binding}"
+                        Content="O"
+                        FontFamily="Wingdings 2"
+                        FontSize="17"
+                        Foreground="Red"
+                        Style="{DynamicResource RemoveButtonStyle}" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type val:StatusCodeValidationRuleViewModel}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel VerticalAlignment="Center">
+                        <TextBlock
+                            Margin="0,3,5,3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            ToolTip="{Binding ResultText}">
+                            <TextBlock
+                                Name="image"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource StatusTedxtBlockStyle}" />
+                        </TextBlock>
+
+                        <base:CircularWait
+                            Name="progress"
+                            Width="18"
+                            Height="18" />
+                    </WrapPanel>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Text="Expected Status Code:" />
+                    <ComboBox
+                        Grid.Column="2"
+                        Margin="3"
+                        ItemsSource="{Binding Source={StaticResource HttpStatusCodeProvider}}"
+                        SelectedItem="{Binding ExpectedStatusCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource HttpStatusCodeConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button
+                        Grid.Column="4"
+                        Width="20"
+                        VerticalAlignment="Center"
+                        Command="{Binding Source={StaticResource Proxy}, Path=Data.RemoveValidationRuleCommand}"
+                        CommandParameter="{Binding}"
+                        Content="O"
+                        FontFamily="Wingdings 2"
+                        FontSize="17"
+                        Foreground="Red"
+                        Style="{DynamicResource RemoveButtonStyle}" />
+                </Grid>
+            </DataTemplate>
+
+            <base:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Button
+            x:Name="options"
+            Margin="3"
+            HorizontalAlignment="Left"
+            Content="Add New"
+            Foreground="{DynamicResource PrimaryForeBrush}">
+            <Button.ContextMenu>
+                <ContextMenu ItemsSource="{Binding Source={StaticResource ValidationTypeProvider}}">
+                    <ContextMenu.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem
+                                Command="{Binding Source={StaticResource Proxy}, Path=Data.AddValidationCommand}"
+                                CommandParameter="{Binding}"
+                                Header="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                        </DataTemplate>
+                    </ContextMenu.ItemTemplate>
+                </ContextMenu>
+            </Button.ContextMenu>
+            <i:Interaction.Behaviors>
+                <baseComm:DropDownButtonBehavior />
+            </i:Interaction.Behaviors>
+        </Button>
+        <ListView
+            Grid.Row="1"
+            Background="Transparent"
+            ItemsSource="{Binding Validations}">
+            <ListView.Resources>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Margin" Value="3,1" />
+                </Style>
+            </ListView.Resources>
+        </ListView>
+
+    </Grid>
+</UserControl>

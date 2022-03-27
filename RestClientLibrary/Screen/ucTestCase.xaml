@@ -1,0 +1,304 @@
+﻿<base:BaseUserControl
+    x:Class="RestClientLibrary.Screen.ucTestCase"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RestClientLibrary.Screen"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:vm="clr-namespace:RestClientLibrary.ViewModel"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    Background="{DynamicResource DarkBackColor}"
+    Foreground="{DynamicResource LightForColor}"
+    mc:Ignorable="d">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.Resources>
+                <ObjectDataProvider
+                    x:Key="ValidationTypeProvider"
+                    MethodName="GetValues"
+                    ObjectType="{x:Type sys:Enum}">
+                    <ObjectDataProvider.MethodParameters>
+                        <x:Type TypeName="vm:ValidationType" />
+                    </ObjectDataProvider.MethodParameters>
+                </ObjectDataProvider>
+                <base:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock>
+                <TextBlock
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="{Binding TestCaseID}" />
+                <TextBlock>
+                    <Run Text=" - " />
+                    <TextBlock VerticalAlignment="Center" FontWeight="Bold">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding TestCaseResult}" Value="Pass">
+                                        <Setter Property="Text" Value="Passed" />
+                                        <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TestCaseResult}" Value="Fail">
+                                        <Setter Property="Text" Value="Failed" />
+                                        <Setter Property="Foreground" Value="{DynamicResource ErrorColorBrush}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TestCaseResult}" Value="InProgress">
+                                        <Setter Property="Text" Value="Executing..." />
+                                        <Setter Property="Foreground" Value="Black" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TestCaseResult}" Value="NotStarted">
+                                        <Setter Property="Text" Value="" />
+                                        <Setter Property="Foreground" Value="Black" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding TestCaseResult}" Value="NotStarted">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </TextBlock>
+            <Button
+                Width="80"
+                Margin="0,5,125,0"
+                HorizontalAlignment="Right"
+                Command="{Binding ExecuteTestCommand}"
+                Content="Execute Test" />
+            <Button
+                Width="50"
+                Margin="0,5,65,0"
+                HorizontalAlignment="Right"
+                Command="{Binding SaveTestCaseCommand}"
+                Content="Save" />
+            <Button
+                Width="50"
+                Margin="0,5,5,0"
+                HorizontalAlignment="Right"
+                Command="{Binding ResetCommand}"
+                Content="Reset" />
+            <AdornerDecorator Grid.Row="1" Margin="3">
+                <TextBox Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <base:WatermarkService.Watermark>
+                        <TextBlock
+                            Margin="3,0"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource PrimaryBorderBrush}"
+                            Text="Title" />
+                    </base:WatermarkService.Watermark>
+                </TextBox>
+            </AdornerDecorator>
+            <GroupBox Grid.Row="2" Header="Validations">
+                <Grid Margin="0,3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0">
+                        <Hyperlink Command="{Binding AddValidationCommand}">
+                            <TextBlock Text="Add New" />
+                        </Hyperlink>
+                    </TextBlock>
+                    <ListView
+                        Grid.Row="1"
+                        Background="Transparent"
+                        ItemsSource="{Binding Validations}">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Margin" Value="3,1" />
+                            </Style>
+                        </ListView.Resources>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="30" />
+                                    </Grid.ColumnDefinitions>
+                                    <WrapPanel>
+                                        <TextBlock
+                                            Name="image"
+                                            Width="18"
+                                            Height="18">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Result}" Value="Pass">
+                                                            <Setter Property="Text" Value="ü" />
+                                                            <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}" />
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Result}" Value="Fail">
+                                                            <Setter Property="Text" Value="û" />
+                                                            <Setter Property="Foreground" Value="{DynamicResource ErrorColorBrush}" />
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Result}" Value="InProgress">
+                                                            <Setter Property="Text" Value="" />
+                                                            <Setter Property="Foreground" Value="Black" />
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Result}" Value="NotStarted">
+                                                            <Setter Property="Text" Value="" />
+                                                            <Setter Property="Foreground" Value="Black" />
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <base:CircularWait
+                                            Name="progress"
+                                            Width="18"
+                                            Height="18">
+                                            <base:CircularWait.Style>
+                                                <Style TargetType="{x:Type base:CircularWait}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Result}" Value="Pass">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Result}" Value="Fail">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Result}" Value="InProgress">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Result}" Value="NotStarted">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </base:CircularWait.Style>
+                                        </base:CircularWait>
+                                    </WrapPanel>
+                                    <ComboBox
+                                        Grid.Column="1"
+                                        Margin="3"
+                                        ItemsSource="{Binding Source={StaticResource ValidationTypeProvider}}"
+                                        SelectedItem="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <AdornerDecorator Grid.Column="2" Margin="3">
+                                        <TextBox Text="{Binding ExpectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            <base:WatermarkService.Watermark>
+                                                <TextBlock
+                                                    Margin="3,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource PrimaryBorderBrush}"
+                                                    Text="Title" />
+                                            </base:WatermarkService.Watermark>
+                                        </TextBox>
+                                    </AdornerDecorator>
+                                    <Button
+                                        Grid.Column="3"
+                                        Width="20"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding RemoveCommand}"
+                                        Content="O"
+                                        FontFamily="Wingdings 2"
+                                        FontSize="17"
+                                        Foreground="Red"
+                                        Style="{DynamicResource RemoveButtonStyle}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Row="3" Header="Test Case Variables">
+                <Grid Margin="0,3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0">
+                        <Hyperlink Command="{Binding AddKeyValuePairCommand}">
+                            <TextBlock Text="Add New" />
+                        </Hyperlink>
+                    </TextBlock>
+                    <ListView
+                        Grid.Row="1"
+                        Background="Transparent"
+                        ItemsSource="{Binding Variables}">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="Margin" Value="3,0,3,1" />
+                            </Style>
+                        </ListView.Resources>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="30" />
+                                    </Grid.ColumnDefinitions>
+                                    <AdornerDecorator Grid.Column="0" Margin="3">
+                                        <TextBox Text="{Binding Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            <base:WatermarkService.Watermark>
+                                                <TextBlock
+                                                    Margin="3,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource PrimaryBorderBrush}"
+                                                    Text="Key" />
+                                            </base:WatermarkService.Watermark>
+                                        </TextBox>
+                                    </AdornerDecorator>
+                                    <AdornerDecorator Grid.Column="1" Margin="3">
+                                        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            <base:WatermarkService.Watermark>
+                                                <TextBlock
+                                                    Margin="3,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource PrimaryBorderBrush}"
+                                                    Text="Value" />
+                                            </base:WatermarkService.Watermark>
+                                        </TextBox>
+                                    </AdornerDecorator>
+                                    <Button
+                                        Grid.Column="5"
+                                        Width="20"
+                                        VerticalAlignment="Center"
+                                        Command="{Binding RemoveClickedCommand}"
+                                        Content="O"
+                                        FontFamily="Wingdings 2"
+                                        FontSize="17"
+                                        Foreground="Red"
+                                        Style="{DynamicResource RemoveButtonStyle}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Row="4" Header="Request">
+                <local:ucRestClient x:Name="ucRestClient" DataContext="{Binding RestClient}" />
+            </GroupBox>
+        </Grid>
+    </ScrollViewer>
+</base:BaseUserControl>

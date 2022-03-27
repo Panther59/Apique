@@ -1,0 +1,106 @@
+﻿<base:BaseUserControl
+    x:Class="RestClientLibrary.Screen.ucAutomationTasks"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:auto="clr-namespace:RestClientLibrary.ViewModel.Automations"
+    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:RestClientLibrary.Screen"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+    <base:BaseUserControl.Resources>
+        <DataTemplate DataType="{x:Type auto:SetGlobalVariableTaskViewModel}">
+            <local:ucSetGlobalVariableTask DataContext="{Binding}" />
+        </DataTemplate>
+    </base:BaseUserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <ComboBox ItemsSource="{Binding AvailableTasks}" SelectedItem="{Binding SelectedAvailableTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding SelectedAvailableTaskChangedCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Button Margin="3" Command="{Binding MoveTopCommand}">
+                <Button.Content>
+                    <TextBlock
+                        HorizontalAlignment="Stretch"
+                        RenderTransformOrigin="0.5,0.5"
+                        Text="&lt;&lt;">
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform />
+                                <SkewTransform />
+                                <RotateTransform Angle="90" />
+                                <TranslateTransform />
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+            <Button Margin="3" Command="{Binding MoveUpCommand}">
+                <Button.Content>
+                    <TextBlock
+                        HorizontalAlignment="Stretch"
+                        RenderTransformOrigin="0.5,0.5"
+                        Text="&lt;">
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform />
+                                <SkewTransform />
+                                <RotateTransform Angle="90" />
+                                <TranslateTransform />
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+            <Button Margin="3" Command="{Binding MoveDownCommand}">
+                <Button.Content>
+                    <TextBlock
+                        HorizontalAlignment="Stretch"
+                        RenderTransformOrigin="0.5,0.5"
+                        Text="&gt;">
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform />
+                                <SkewTransform />
+                                <RotateTransform Angle="90" />
+                                <TranslateTransform />
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+            <Button Margin="3" Command="{Binding MoveBottomCommand}">
+                <Button.Content>
+                    <TextBlock
+                        HorizontalAlignment="Stretch"
+                        RenderTransformOrigin="0.5,0.5"
+                        Text="&gt;&gt;">
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform />
+                                <SkewTransform />
+                                <RotateTransform Angle="90" />
+                                <TranslateTransform />
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        <ListView
+            Grid.Column="1"
+            ItemsSource="{Binding UsedTasks}"
+            SelectedItem="{Binding SelectedUsedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+    </Grid>
+</base:BaseUserControl>

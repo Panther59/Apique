@@ -1,0 +1,88 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:vsui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="/RestClientLibrary;component/Themes/ThemeResourceDictionary.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+	<sys:String x:Key="EditorThemeKey">Dark</sys:String>
+	<SolidColorBrush x:Key="VariableBrush" Color="Orange" />
+
+	<Style TargetType="{x:Type base:BaseWindow}">
+		<Setter Property="Background" Value="{DynamicResource PrimaryBackgroundBrush}" />
+		<Setter Property="Foreground" Value="{DynamicResource PrimaryForeBrush}" />
+	</Style>
+
+
+	<!--<SolidColorBrush x:Key="LightBackColor" Color="#FFD6DBE9" />
+         <SolidColorBrush x:Key="LightBackColor2" Color="#FFBCCDFD" />
+         <SolidColorBrush x:Key="DarkBackColor" Color="#FF293955" />
+         <SolidColorBrush x:Key="LightForColor" Color="White" />
+         <SolidColorBrush x:Key="DarkForColor" Color="Black" />-->
+
+	<Color x:Key="PrimaryBackgroundColor">#FF1F323E</Color>
+	<Color x:Key="AlternateBackgroundColor">#FF234D67</Color>
+
+	<Color x:Key="PrimaryBackColor">#FF1E1E1E</Color>
+	<Color x:Key="PrimaryForeColor">#FFF1F1F1</Color>
+	<Color x:Key="PrimaryBorderColor">#FF939398</Color>
+	<Color x:Key="PrimaryHighlightBackColor">#FF4A8ACB</Color>
+	<Color x:Key="PrimaryHighlightForeColor">#FFF1F1F1</Color>
+	<Color x:Key="PrimaryHighlightBorderColor">#FF5374AE</Color>
+	<Color x:Key="PrimaryFocusBackColor">#FF666667</Color>
+	<Color x:Key="PrimaryFocusForeColor">#FFF1F1F1</Color>
+	<Color x:Key="PrimaryFocusBorderColor">#FFCACACE</Color>
+	<Color x:Key="PrimaryDisableBackColor">#FF1E1E1E</Color>
+	<Color x:Key="PrimaryDisableForeColor">#FF807979</Color>
+	<Color x:Key="PrimaryDisableBorderColor">#FF666667</Color>
+
+	<Color x:Key="SecondaryBackgroundColor">#FFF1F1F1</Color>
+
+	<Color x:Key="SecondaryBackColor">#FFF1F1F1</Color>
+	<Color x:Key="SecondaryForeColor">#FF1E1E1E</Color>
+	<Color x:Key="SecondaryBorderColor">#FF939398</Color>
+	<Color x:Key="SecondaryHighlightBackColor">#FFE1E1E1</Color>
+	<Color x:Key="SecondaryHighlightForeColor">#FF181818</Color>
+	<Color x:Key="SecondaryHighlightBorderColor">#FF7D7D80</Color>
+	<Color x:Key="SecondaryFocusBackColor">#FF4A8ACB</Color>
+	<Color x:Key="SecondaryFocusForeColor">#FF101010</Color>
+	<Color x:Key="SecondaryFocusBorderColor">#FF5374AE</Color>
+	<Color x:Key="SecondaryDisableBackColor">#FF939398</Color>
+	<Color x:Key="SecondaryDisableForeColor">#FF807979</Color>
+	<Color x:Key="SecondaryDisableBorderColor">#FF666667</Color>
+
+	<SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="{DynamicResource PrimaryBackgroundColor}" />
+	<SolidColorBrush x:Key="AlternateBackgroundBrush" Color="{DynamicResource AlternateBackgroundColor}" />
+
+	<SolidColorBrush x:Key="PrimaryBackBrush" Color="{DynamicResource PrimaryBackColor}" />
+	<SolidColorBrush x:Key="PrimaryForeBrush" Color="{DynamicResource PrimaryForeColor}" />
+	<SolidColorBrush x:Key="PrimaryBorderBrush" Color="{DynamicResource PrimaryBorderColor}" />
+	<SolidColorBrush x:Key="PrimaryHighlightBackBrush" Color="{DynamicResource PrimaryHighlightBackColor}" />
+	<SolidColorBrush x:Key="PrimaryHighlightForeBrush" Color="{DynamicResource PrimaryHighlightForeColor}" />
+	<SolidColorBrush x:Key="PrimaryHighlightBorderBrush" Color="{DynamicResource PrimaryHighlightBorderColor}" />
+	<SolidColorBrush x:Key="PrimaryFocusBackBrush" Color="{DynamicResource PrimaryFocusBackColor}" />
+	<SolidColorBrush x:Key="PrimaryFocusForeBrush" Color="{DynamicResource PrimaryFocusForeColor}" />
+	<SolidColorBrush x:Key="PrimaryFocusBorderBrush" Color="{DynamicResource PrimaryFocusBorderColor}" />
+	<SolidColorBrush x:Key="PrimaryDisableBackBrush" Color="{DynamicResource PrimaryDisableBackColor}" />
+	<SolidColorBrush x:Key="PrimaryDisableForeBrush" Color="{DynamicResource PrimaryDisableForeColor}" />
+	<SolidColorBrush x:Key="PrimaryDisableBorderBrush" Color="{DynamicResource PrimaryDisableBorderColor}" />
+
+	<SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="{DynamicResource SecondaryBackgroundColor}" />
+
+	<SolidColorBrush x:Key="SecondaryBackBrush" Color="{DynamicResource SecondaryBackColor}" />
+	<SolidColorBrush x:Key="SecondaryForeBrush" Color="{DynamicResource SecondaryForeColor}" />
+	<SolidColorBrush x:Key="SecondaryBorderBrush" Color="{DynamicResource SecondaryBorderColor}" />
+	<SolidColorBrush x:Key="SecondaryHighlightBackBrush" Color="{DynamicResource SecondaryHighlightBackColor}" />
+	<SolidColorBrush x:Key="SecondaryHighlightForeBrush" Color="{DynamicResource SecondaryHighlightForeColor}" />
+	<SolidColorBrush x:Key="SecondaryHighlightBorderBrush" Color="{DynamicResource SecondaryHighlightBorderColor}" />
+	<SolidColorBrush x:Key="SecondaryFocusBackBrush" Color="{DynamicResource SecondaryFocusBackColor}" />
+	<SolidColorBrush x:Key="SecondaryFocusForeBrush" Color="{DynamicResource SecondaryFocusForeColor}" />
+	<SolidColorBrush x:Key="SecondaryFocusBorderBrush" Color="{DynamicResource SecondaryFocusBorderColor}" />
+	<SolidColorBrush x:Key="SecondaryDisableBackBrush" Color="{DynamicResource SecondaryDisableBackColor}" />
+	<SolidColorBrush x:Key="SecondaryDisableForeBrush" Color="{DynamicResource SecondaryDisableForeColor}" />
+	<SolidColorBrush x:Key="SecondaryDisableBorderBrush" Color="{DynamicResource SecondaryDisableBorderColor}" />
+
+</ResourceDictionary>

@@ -1,0 +1,155 @@
+﻿<base:BaseUserControl
+    x:Class="RestClientLibrary.Screen.ucSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RestClientLibrary.Screen"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+    <Grid>
+        <StackPanel>
+            <GroupBox>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        Margin="3"
+                        Command="{Binding ImportDataCommand}"
+                        Content="Import data" />
+                    <Button
+                        Grid.Column="1"
+                        Margin="3"
+                        Command="{Binding ExportDataCommand}"
+                        Content="Export data" />
+                </Grid>
+            </GroupBox>
+            <GroupBox>
+                <StackPanel Margin="5">
+                    <WrapPanel>
+                        <TextBlock Text="Show Request Content in History" />
+                        <CheckBox Margin="10,3" IsChecked="{Binding ShowRequestContentInHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Text="Certificate Support" />
+                        <CheckBox Margin="10,3" IsChecked="{Binding CertificateSupport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </WrapPanel>
+                    <GroupBox Header="Search Settings">
+                        <StackPanel>
+                            <CheckBox
+                                Margin="3"
+                                Content="Search in URL"
+                                IsChecked="True"
+                                IsEnabled="False" />
+                            <CheckBox
+                                Margin="3"
+                                Content="Search in Request"
+                                IsChecked="{Binding SearchInRequest}" />
+                            <CheckBox
+                                Margin="3"
+                                Content="Search in Heaaders"
+                                IsChecked="{Binding SearchInHeaders}" />
+                            <CheckBox
+                                Margin="3"
+                                Content="Search in Status"
+                                IsChecked="{Binding SearchInStatus}" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Text="Retain History of " />
+                                <TextBox Text="{Binding MaxHistoryDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock VerticalAlignment="Center" Text=" days" />
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <Grid>
+                        <Button
+                            Width="50"
+                            Margin="5"
+                            Command="{Binding SaveButtonClickedCommand}"
+                            Content="Save" />
+                    </Grid>
+
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Visibility="Collapsed">
+                <Grid>
+                    <StackPanel>
+                        <TextBlock Name="txtAddNew">
+                            <TextBlock Text="Certificates:" />
+                            <TextBlock Text="      " />
+                            <Hyperlink Command="{Binding AddNewCertCommand}">
+                                <TextBlock Text="Add New" />
+                            </Hyperlink>
+                        </TextBlock>
+                        <ListView
+                            MinHeight="50"
+                            Background="Transparent"
+                            BorderBrush="White"
+                            ItemsSource="{Binding Certificates}">
+                            <ListView.Resources>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="Margin" Value="3,1" />
+                                </Style>
+                            </ListView.Resources>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="23" />
+                                        </Grid.RowDefinitions>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="40" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock FontWeight="Bold" Text="{Binding Name}" />
+                                            <Button
+                                                x:Name="btnRemoveCert"
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding RemoveCertificateCommand}"
+                                                Content="O"
+                                                FontFamily="Wingdings 2"
+                                                FontSize="17"
+                                                Foreground="Red"
+                                                ToolTip="Remove">
+                                                <Button.Style>
+                                                    <Style TargetType="{x:Type Button}">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                    <Grid>
+                                                                        <ContentPresenter RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                                    </Grid>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsFocused" Value="True" />
+                                                                        <Trigger Property="IsDefaulted" Value="True" />
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="FontWeight" Value="Bold" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsPressed" Value="True" />
+                                                                        <Trigger Property="IsEnabled" Value="False" />
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</base:BaseUserControl>
