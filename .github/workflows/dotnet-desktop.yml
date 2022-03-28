@@ -57,6 +57,7 @@ jobs:
 
     env:
       Solution_Name: Apique.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
+      Project_Directory: Apique    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       Wap_Project_Directory: ApiquePackage    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       Wap_Project_Path: ApiquePackage\ApiquePackage.wapproj                 # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
@@ -75,36 +76,36 @@ jobs:
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
-
+      
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
 
-    # Decode the base 64 encoded pfx and save the Signing_Certificate
-    - name: Decode the pfx
-      run: |
-        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
-        $certificatePath = Join-Path -Path $env:Wap_Project_Directory -ChildPath GitHubActionsWorkflow.pfx
-        [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
-
-    # Create the app package by building and packaging the Windows Application Packaging project
-    - name: Create the app package
-      run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
-      env:
-        Appx_Bundle: Always
-        Appx_Bundle_Platforms: x86|x64
-        Appx_Package_Build_Mode: StoreUpload
-        Configuration: ${{ matrix.configuration }}
-
-    # Remove the pfx
-    - name: Remove the pfx
-      run: Remove-Item -path $env:Wap_Project_Directory\$env:Signing_Certificate
+    - name: Build DotNet
+      # You may pin to the exact commit or the version.
+      # uses: Elskom/build-dotnet@54d97a0f7d5d5ca946404976db00d27386b09254
+      uses: Elskom/build-dotnet@v1.1.1
+      with:
+        # Filepath of the solution of which contains all the projects to be built, optionally tested and packed, relative to root of repository
+        SOLUTION_FILE_PATH: $env:Solution_Name
+        # Flag to toggle packing the projects built
+        PACK: true
+    
+    - name: Zip Release
+      # You may pin to the exact commit or the version.
+      # uses: TheDoctor0/zip-release@591e9b128012d3328db6043d0d0266c3ac27f9b5
+      uses: TheDoctor0/zip-release@0.6.1
+      with:
+        # Base path for archive files
+        path: ${{ env:Project_Directory }}/bin/${{ env:Configuration }}/net6.0-windows
+        # Working directory before zipping
+        directory: ${{ env:Project_Directory }}/bin/${{ env:Configuration }}/net6.0-windows
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: MSIX Package
-        path: ${{ env.Wap_Project_Directory }}\AppPackages
+        path: ${{ env:Project_Directory }}/bin/${{ env:Configuration }}/net6.0-windows/release.zip
