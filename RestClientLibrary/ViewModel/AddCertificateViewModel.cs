@@ -340,10 +340,18 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private void LoadData()
 		{
-			var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+			List<X509Certificate2> certs = new List<X509Certificate2>();
+			var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
 			store.Open(OpenFlags.ReadOnly);
 
-			List<X509Certificate2> certs = new List<X509Certificate2>();
+			foreach (X509Certificate2 mCert in store.Certificates)
+			{
+				certs.Add(mCert);
+			}
+
+			store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+			store.Open(OpenFlags.ReadOnly);
+
 			foreach (X509Certificate2 mCert in store.Certificates)
 			{
 				certs.Add(mCert);

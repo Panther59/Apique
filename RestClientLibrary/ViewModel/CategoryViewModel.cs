@@ -99,6 +99,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets a value indicating whether IsExpanded
         /// </summary>
+        [JsonIgnore]
         public bool IsExpanded
         {
             get
@@ -116,6 +117,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets a value indicating whether IsRenaming
         /// </summary>
+        [JsonIgnore]
         public bool IsRenaming
         {
             get
@@ -169,6 +171,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets the CloneRequestCommand
         /// </summary>
+        [JsonIgnore]
         public RelayCommand<TransactionViewModel> CloneRequestCommand
         {
             get
@@ -185,6 +188,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets the DeleteRequestCommand
         /// </summary>
+        [JsonIgnore]
         public RelayCommand<TransactionViewModel> DeleteRequestCommand
         {
             get

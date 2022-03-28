@@ -2026,11 +2026,28 @@ namespace RestClientLibrary.ViewModel
 			{
 				return null;
 			}
+			
+			List<X509Certificate2> certs = new List<X509Certificate2>();
+
+			var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+			store.Open(OpenFlags.ReadOnly);
+
+			if (store.Certificates != null)
+			{
+				foreach (X509Certificate2 mCert in store.Certificates)
+				{
+					if (mCert.Thumbprint.Equals(thumbprint, StringComparison.CurrentCultureIgnoreCase))
+					{
+						return mCert;
+					}
+				}
+			}
+
+			certs = new List<X509Certificate2>();
 
 			var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
 			store.Open(OpenFlags.ReadOnly);
 
-			List<X509Certificate2> certs = new List<X509Certificate2>();
 			if (store.Certificates != null)
 			{
 				foreach (X509Certificate2 mCert in store.Certificates)

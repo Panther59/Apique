@@ -110,6 +110,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets a value indicating whether IsRenaming
         /// </summary>
+        [JsonIgnore]
         public bool IsRenaming
         {
             get

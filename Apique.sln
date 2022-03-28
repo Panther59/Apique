@@ -11,11 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestClientLibrary", "RestCl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvanceTextEditor", "AdvanceTextEditor\AdvanceTextEditor.csproj", "{F57BE3D8-4832-4C3A-884C-9FBE58FFEEBE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55C2F885-354F-4873-A88D-63BB58598DF7}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\dotnet-desktop.yml = .github\workflows\dotnet-desktop.yml
-	EndProjectSection
-EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "ApiquePackage", "ApiquePackage\ApiquePackage.wapproj", "{2615C0FF-99E9-44B3-B687-E91BF00A1994}"
 EndProject
 Global
