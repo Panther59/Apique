@@ -99,7 +99,7 @@ jobs:
       uses: TheDoctor0/zip-release@0.6.1
       with:
         # Base path for archive files
-        path: ${{ env:App_Project_Directory }}/bin/${{ env:Configuration }}/net6.0-windows
+        path: $env:App_Project_Directory/bin/$env:Configuration/net6.0-windows
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
