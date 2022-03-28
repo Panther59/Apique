@@ -33,7 +33,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <param name="variableData">The <see cref="GlobalVariableModel"/></param>
         /// <param name="selectedEnvironment">The <see cref="string"/></param>
         public RestClientBaseExecutionAutomation(
-            GlobalVariableModel variableData,
+            GlobalSetupViewModel variableData,
             string selectedEnvironment)
         {
             this.GlobalVariableData = variableData;
@@ -55,7 +55,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets or sets the GlobalVariableData
         /// </summary>
-        public GlobalVariableModel GlobalVariableData
+        public GlobalSetupViewModel GlobalVariableData
         {
             get; private set;
         }
@@ -101,7 +101,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <inheritdoc/>
         public string GetVariableValue(string variableName)
         {
-            KeyValueModel variable = null;
+            KeyValueViewModel variable = null;
             var env = this.GetCurrentEnvironment();
             if (env != null && env.Variables != null)
             {
@@ -176,7 +176,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// The GetCurrentEnvironment
         /// </summary>
         /// <returns>The <see cref="EnvironmentModel"/></returns>
-        private EnvironmentModel GetCurrentEnvironment()
+        private EnvironmentViewModel GetCurrentEnvironment()
         {
             if (selectedEnvironment == null)
             {
@@ -198,7 +198,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <param name="arg">The <see cref="KeyValueModel"/></param>
         /// <param name="variableName">The <see cref="string"/></param>
         /// <returns>The <see cref="bool"/></returns>
-        private bool VariableCompareExpression(KeyValueModel arg, string variableName)
+        private bool VariableCompareExpression(KeyValueViewModel arg, string variableName)
         {
             return arg.Key.Equals(variableName, System.StringComparison.CurrentCultureIgnoreCase);
         }

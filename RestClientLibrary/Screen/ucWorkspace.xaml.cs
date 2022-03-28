@@ -152,7 +152,7 @@ namespace RestClientLibrary.Screen
         /// <param name="globalData">The <see cref="GlobalVariableModel"/></param>
         /// <param name="environment">The <see cref="EnvironmentModel"/></param>
         /// <returns>The <see cref="EnvironmentModel"/></returns>
-        public EnvironmentModel ViewEnvironmentWindow(GlobalVariableModel globalData, EnvironmentModel environment, string workspace)
+        public EnvironmentModel ViewEnvironmentWindow(GlobalSetupViewModel globalData, EnvironmentModel environment, string workspace)
         {
             GlobalSetupWindow window = new GlobalSetupWindow();
             window.Resources = (this.Parent as Grid).Resources;

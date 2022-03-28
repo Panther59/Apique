@@ -343,7 +343,7 @@ namespace RestClientLibrary.ViewModel
         /// <param name="category">The <see cref="CategoryViewModel"/></param>
         /// <param name="variables">The <see cref="List{KeyValueModel}"/></param>
         /// <param name="environmentName">The <see cref="string"/></param>
-        public void BeginRun(GlobalVariableModel globalData, CategoryViewModel category, string environmentName, string environmentId)
+        public void BeginRun(GlobalSetupViewModel globalData, CategoryViewModel category, string environmentName, string environmentId)
         {
             this.CollectionName = category.Name;
             this.CollectionId = category.Guid;
@@ -367,7 +367,7 @@ namespace RestClientLibrary.ViewModel
         /// <param name="globalData">The <see cref="GlobalVariableModel"/></param>
         /// <param name="inRequests">The <see cref="ObservableCollection{TransactionViewModel}"/></param>
         /// <param name="variables">The <see cref="List{KeyValueModel}"/></param>
-        private async void BeginSendingRequests(GlobalVariableModel globalData, ObservableCollection<TransactionViewModel> inRequests, string environmentName)
+        private async void BeginSendingRequests(GlobalSetupViewModel globalData, ObservableCollection<TransactionViewModel> inRequests, string environmentName)
         {
             List<TestRequestViewModel> requests = new List<TestRequestViewModel>();
             foreach (var req in inRequests)

@@ -369,7 +369,7 @@ namespace RestClientLibrary.ViewModel
         /// </summary>
         /// <param name = "variables">The <see cref = "List{KeyValueModel}"/></param>
         /// <returns>The <see cref = "TransactionViewModel"/></returns>
-        public void ApplyVariables(List<KeyValueModel> variables)
+        public void ApplyVariables(List<KeyValueViewModel> variables)
         {
             this.Url = this.ReplaceVariables(this.PreUrl, variables);
             this.RequestContent = this.ReplaceVariables(this.PreRequestContent, variables);
@@ -405,7 +405,7 @@ namespace RestClientLibrary.ViewModel
         /// <param name = "input">The <see cref = "string "/></param>
         /// <param name = "variables">The <see cref = "List{KeyValueModel}"/></param>
         /// <returns>The <see cref = "string "/></returns>
-        private string ReplaceVariables(string input, List<KeyValueModel> variables)
+        private string ReplaceVariables(string input, List<KeyValueViewModel> variables)
         {
             if (variables != null)
             {

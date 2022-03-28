@@ -13,7 +13,7 @@
         /// </summary>
         /// <param name="variableData">The <see cref="GlobalVariableModel"/></param>
         /// <param name="selectedEnvironment">The <see cref="string"/></param>
-        public RestClientPreExecutionAutomation(GlobalVariableModel variableData, string selectedEnvironment) : base(variableData, selectedEnvironment)
+        public RestClientPreExecutionAutomation(GlobalSetupViewModel variableData, string selectedEnvironment) : base(variableData, selectedEnvironment)
         {
         }
     }

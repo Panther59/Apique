@@ -8,7 +8,8 @@ namespace RestClientLibrary.Screen
 {
     using System.Windows;
     using DataLibrary;
-    using RestClientLibrary.Model;
+	using RestClientLibrary.Common;
+	using RestClientLibrary.Model;
     using RestClientLibrary.ViewModel;
 
     /// <summary>
@@ -48,7 +49,7 @@ namespace RestClientLibrary.Screen
         /// <summary>
         /// Gets or sets the GlobalData
         /// </summary>
-        public GlobalVariableModel GlobalData { get; set; }
+        public GlobalSetupViewModel GlobalData { get; set; }
 		public string Workspace { get; internal set; }
 
 		#endregion
@@ -96,8 +97,9 @@ namespace RestClientLibrary.Screen
         /// <param name="e">The <see cref="RoutedEventArgs"/></param>
         private void GlobalSetupWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.viewModel = new GlobalSetupViewModel(this.ucGlobalSetup);
-            viewModel.LoadData(this.GlobalData, this.Environment, this.Workspace);
+            this.viewModel = this.GlobalData ?? GlobalSetupViewModel.Parse(AppDataHelper.LoadGlobalData());
+            this.viewModel.AttachView(this.ucGlobalSetup);
+            viewModel.LoadData(this.Environment, this.Workspace);
 
             this.ucGlobalSetup.DataContext = viewModel;
         }

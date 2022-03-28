@@ -26,7 +26,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Defines the view
 		/// </summary>
-		private readonly IGlobalSetupView view;
+		private IGlobalSetupView view;
 		private RelayCommand deleteWorkspaceCommand;
 
 		/// <summary>
@@ -83,6 +83,7 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private RelayCommand<KeyValueViewModel> removeVariableCommand;
 		private ObservableCollection<string> workspaces;
+		private ObservableCollection<string> allWorkspaces;
 		private string selectedWorkspace;
 
 		#endregion
@@ -95,7 +96,16 @@ namespace RestClientLibrary.ViewModel
 		/// Initializes a new instance of the <see cref = "GlobalSetupViewModel"/> class.
 		/// </summary>
 		/// <param name = "view">The <see cref = "IGlobalSetupView"/></param>
-		public GlobalSetupViewModel(IGlobalSetupView view)
+		public GlobalSetupViewModel()
+		{
+		}
+
+		public GlobalSetupViewModel(IGlobalSetupView view) : this()
+		{
+			this.view = view;
+		}
+
+		public void AttachView(IGlobalSetupView view)
 		{
 			this.view = view;
 		}
@@ -121,7 +131,7 @@ namespace RestClientLibrary.ViewModel
 			}
 		}
 
-		private List<EnvironmentViewModel> allEnvironments;
+		public List<EnvironmentViewModel> allEnvironments;
 
 		/// <summary>
 		/// Gets or sets the Environments
@@ -173,6 +183,19 @@ namespace RestClientLibrary.ViewModel
 			{
 				this.workspaces = value;
 				this.OnPropertyChanged("Workspaces");
+			}
+		}
+		public ObservableCollection<string> AllWorkspaces
+		{
+			get
+			{
+				return this.allWorkspaces;
+			}
+
+			set
+			{
+				this.allWorkspaces = value;
+				this.OnPropertyChanged("AllWorkspaces");
 			}
 		}
 
@@ -360,60 +383,18 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// The LoadData
 		/// </summary>
-		public void LoadData(GlobalVariableModel globalData, EnvironmentModel selectedEnvironment, string workspace)
+		public void LoadData(EnvironmentModel selectedEnvironment, string workspace)
 		{
-			var globalVariables = globalData ?? AppDataHelper.LoadGlobalData();
 			var settings = AppDataHelper.LoadSettingsData();
 
-			if (globalVariables.Workspaces == null)
-			{
-				globalVariables.Workspaces = new List<string>();
-			}
-
-			if (!globalVariables.Workspaces.Any(x => x == Constants.DefaultWorkspace))
-			{
-				globalVariables.Workspaces.Insert(0, Constants.DefaultWorkspace);
-			}
 
 			if (selectedEnvironment != null && selectedEnvironment.Workspace == null)
 			{
 				selectedEnvironment.Workspace = Constants.DefaultWorkspace;
 			}
 
-			var ws = globalVariables.Workspaces.ToList();
-			ws.Add(Constants.AddNew);
-			this.Workspaces = new ObservableCollection<string>(ws);
 			this.SelectedWorkspace = selectedEnvironment?.Workspace ?? workspace ?? Constants.DefaultWorkspace;
-
-			if (globalVariables.Variables != null)
-			{
-				this.Variables = new ObservableCollection<KeyValueViewModel>(globalVariables.Variables.Select(x => KeyValueViewModel.Parse(x)));
-			}
-
-			if (globalVariables.Certificates != null)
-			{
-				this.Certificates = new ObservableCollection<CertificateViewModel>(globalVariables.Certificates.Select(x => CertificateViewModel.Parse(x)));
-			}
-
-			List<EnvironmentViewModel> envs = new List<EnvironmentViewModel>();
-			if (globalVariables.Environments != null)
-			{
-				foreach (var env in globalVariables.Environments)
-				{
-					envs.Add(EnvironmentViewModel.Parse(env));
-				}
-			}
-
-			this.allEnvironments = envs;
-			this.Environments = new ObservableCollection<EnvironmentViewModel>(envs.Where(x => x.Workspace == this.SelectedWorkspace));
-			//if (selectedEnvironment != null)
-			//{
-			//	this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Name == selectedEnvironment.Name);
-			//}
-			//else
-			//{
-			//	//this.SelectedEnvironment = this.Environments.First();
-			//}
+			this.Environments = new ObservableCollection<EnvironmentViewModel>(this.allEnvironments.Where(x => x.Workspace == this.SelectedWorkspace));
 		}
 
 		/// <summary>
@@ -514,7 +495,8 @@ namespace RestClientLibrary.ViewModel
 				string workspace = this.view.AddNewWorkspace();
 				if (!string.IsNullOrEmpty(workspace))
 				{
-					this.Workspaces.Insert(Workspaces.Count - 1, workspace);
+					this.AllWorkspaces.Insert(AllWorkspaces.Count - 1, workspace);
+					this.Workspaces.Add(workspace);
 					this.SelectedWorkspace = workspace;
 				}
 				else
@@ -625,7 +607,7 @@ namespace RestClientLibrary.ViewModel
 		/// The ToModel
 		/// </summary>
 		/// <returns>The <see cref = "GlobalVariableModel"/></returns>
-		private GlobalVariableModel ToModel()
+		public GlobalVariableModel ToModel()
 		{
 			GlobalVariableModel output = new GlobalVariableModel();
 			if (this.Variables != null)
@@ -645,6 +627,32 @@ namespace RestClientLibrary.ViewModel
 			}
 
 			output.Workspaces = this.Workspaces?.Where(x => x != Constants.AddNew).ToList();
+
+			return output;
+		}
+
+		public static GlobalSetupViewModel Parse(GlobalVariableModel model)
+		{
+			GlobalSetupViewModel output = new GlobalSetupViewModel();
+			if (model.Variables != null)
+			{
+				output.Variables = new ObservableCollection<KeyValueViewModel>( model.Variables?.Select(x => KeyValueViewModel.Parse(x)) ?? new ObservableCollection<KeyValueViewModel>());
+			}
+
+			if (model.Certificates != null)
+			{
+				output.Certificates = new ObservableCollection<CertificateViewModel>(model.Certificates?.Select(x => CertificateViewModel.Parse(x)) ?? new ObservableCollection<CertificateViewModel>());
+			}
+
+			var envs = model.Environments?.Select(x => EnvironmentViewModel.Parse(x)).ToList() ?? new List<EnvironmentViewModel>();
+			envs.Insert(0, new EnvironmentViewModel() { Name = Constants.Select });
+			envs.Add(new EnvironmentViewModel() { Name = Constants.AddNew });
+			output.allEnvironments = (envs);
+
+			var ws = model.Workspaces?.ToList() ?? new List<string>();
+			output.Workspaces = new ObservableCollection<string>(ws);
+			ws.Add(Constants.AddNew);
+			output.AllWorkspaces = new ObservableCollection<string>(ws);
 
 			return output;
 		}

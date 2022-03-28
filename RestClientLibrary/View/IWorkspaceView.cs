@@ -67,7 +67,7 @@ namespace RestClientLibrary.View
         /// <param name="globalData">The <see cref="GlobalVariableModel"/></param>
         /// <param name="environment">The <see cref="EnvironmentModel"/></param>
         /// <returns>The <see cref="EnvironmentModel"/></returns>
-        EnvironmentModel ViewEnvironmentWindow(GlobalVariableModel globalData, EnvironmentModel environment, string workspace);
+        EnvironmentModel ViewEnvironmentWindow(GlobalSetupViewModel globalData, EnvironmentModel environment, string workspace);
 
         /// <summary>
         /// The ViewSettingsWindow

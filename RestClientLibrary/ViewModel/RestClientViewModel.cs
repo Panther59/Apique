@@ -1765,7 +1765,7 @@ namespace RestClientLibrary.ViewModel
 		/// <param name="list">The <see cref="List{KeyValuePair{string, string}}"/></param>
 		/// <param name="variables">The <see cref="List{KeyValueModel}"/></param>
 		/// <returns>The <see cref="List{KeyValuePair{string, string}}"/></returns>
-		private List<KeyValuePair<string, string>> BuildParameters(List<KeyValuePair<string, string>> list, List<KeyValueModel> variables)
+		private List<KeyValuePair<string, string>> BuildParameters(List<KeyValuePair<string, string>> list, List<KeyValueViewModel> variables)
 		{
 			if (list == null)
 			{
@@ -2204,7 +2204,7 @@ namespace RestClientLibrary.ViewModel
 					RestClientPreExecutionAutomation preAutomation = new RestClientPreExecutionAutomation(this.ParentViewModel.GlobalVariables, this.ParentViewModel.SelectedEnvironment?.Name);
 					runtimeAutomation.ExecutePreCode(this.PreScript.Code, preAutomation);
 					this.ParentViewModel.GlobalVariables = preAutomation.GlobalVariableData;
-					AppDataHelper.SaveGlobalVariablesData(this.ParentViewModel.GlobalVariables);
+					AppDataHelper.SaveGlobalVariablesData(this.ParentViewModel.GlobalVariables.ToModel());
 				}
 
 				// Get variabled again since there is a chance that the variable values might have changed in PreScript
@@ -2275,7 +2275,7 @@ namespace RestClientLibrary.ViewModel
 					RestClientPostExecutionAutomation postAutomation = new RestClientPostExecutionAutomation(this.ParentViewModel.GlobalVariables, this.ParentViewModel.SelectedEnvironment?.Name, restresponse);
 					runtimeAutomation.ExecutePostCode(this.PostScript.Code, postAutomation);
 					this.ParentViewModel.GlobalVariables = postAutomation.GlobalVariableData;
-					AppDataHelper.SaveGlobalVariablesData(this.ParentViewModel.GlobalVariables);
+					AppDataHelper.SaveGlobalVariablesData(this.ParentViewModel.GlobalVariables.ToModel());
 				}
 
 				bool? validationSuccess = null;
@@ -2284,7 +2284,7 @@ namespace RestClientLibrary.ViewModel
 					RestClientValidationsAutomation validations = new RestClientValidationsAutomation(this.ParentViewModel.GlobalVariables, this.ParentViewModel.SelectedEnvironment?.Name, restresponse);
 					runtimeAutomation.ExecuteValidations(this.ValidationsScript.Code, validations);
 					this.ParentViewModel.GlobalVariables = validations.GlobalVariableData;
-					AppDataHelper.SaveGlobalVariablesData(this.ParentViewModel.GlobalVariables);
+					AppDataHelper.SaveGlobalVariablesData(this.ParentViewModel.GlobalVariables.ToModel());
 
 					validationSuccess = this.LoadValidations(validations.Results);
 					transaction.Validations = validations.Results;
@@ -2421,7 +2421,7 @@ namespace RestClientLibrary.ViewModel
 		/// The RaiseGetRelatedVariables
 		/// </summary>
 		/// <returns>The <see cref = "List{KeyValueModel}"/></returns>
-		private List<KeyValueModel> RaiseGetRelatedVariables()
+		private List<KeyValueViewModel> RaiseGetRelatedVariables()
 		{
 			return this.ParentViewModel?.Variables;
 		}
@@ -2444,7 +2444,7 @@ namespace RestClientLibrary.ViewModel
 		/// <param name = "input">The <see cref = "string "/></param>
 		/// <param name = "variables">The <see cref = "List{KeyValueModel}"/></param>
 		/// <returns>The <see cref = "string "/></returns>
-		private string ReplaceVariables(string input, List<KeyValueModel> variables)
+		private string ReplaceVariables(string input, List<KeyValueViewModel> variables)
 		{
 			if (variables != null)
 			{
@@ -2530,7 +2530,7 @@ namespace RestClientLibrary.ViewModel
 		/// <param name = "request">The <see cref = "TransactionViewModel"/></param>
 		/// <param name = "variable">The <see cref = "List{KeyValueModel}"/></param>
 		/// <returns>The <see cref = "bool "/></returns>
-		private bool Validation(TransactionViewModel request, List<KeyValueModel> variable)
+		private bool Validation(TransactionViewModel request, List<KeyValueViewModel> variable)
 		{
 			try
 			{

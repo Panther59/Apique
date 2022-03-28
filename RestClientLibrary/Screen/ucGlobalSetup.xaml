@@ -158,7 +158,7 @@
 				<TextBlock Margin="3" Text="Workspace: " />
 				<ComboBox
 					Margin="3"
-					ItemsSource="{Binding Workspaces}"
+					ItemsSource="{Binding AllWorkspaces}"
 					SelectedItem="{Binding SelectedWorkspace, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 					<i:Interaction.Triggers>
 						<i:EventTrigger EventName="SelectionChanged">

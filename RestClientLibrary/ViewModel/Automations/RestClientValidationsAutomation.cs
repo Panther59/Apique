@@ -25,7 +25,7 @@
         /// <param name="variableData">The <see cref="GlobalVariableModel"/></param>
         /// <param name="selectedEnvironment">The <see cref="string"/></param>
         /// <param name="restresponse">The <see cref="RestResponse"/></param>
-        public RestClientValidationsAutomation(GlobalVariableModel variableData, string selectedEnvironment, RestResponse restresponse) : base(variableData, selectedEnvironment, restresponse)
+        public RestClientValidationsAutomation(GlobalSetupViewModel variableData, string selectedEnvironment, RestResponse restresponse) : base(variableData, selectedEnvironment, restresponse)
         {
             this.restresponse = restresponse;
         }

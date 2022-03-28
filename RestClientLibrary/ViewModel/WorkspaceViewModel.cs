@@ -73,7 +73,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// The globalVariables field
 		/// </summary>
-		private GlobalVariableModel globalVariables;
+		private GlobalSetupViewModel globalVariables;
 
 		/// <summary>
 		/// The restClients field
@@ -103,7 +103,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Defines the 
 		/// </summary>
-		private List<KeyValueModel> variables;
+		private List<KeyValueViewModel> variables;
 
 		///// <summary>
 		///// Defines the certificates
@@ -203,7 +203,7 @@ namespace RestClientLibrary.ViewModel
 			LoadData();
 		}
 
-		private List<EnvironmentViewModel> allEnvironments;
+		//private List<EnvironmentViewModel> allEnvironments;
 
 		#endregion
 
@@ -260,7 +260,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets the GlobalVariables
 		/// </summary>
-		public GlobalVariableModel GlobalVariables
+		public GlobalSetupViewModel GlobalVariables
 		{
 			get
 			{
@@ -418,7 +418,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets the Variables
 		/// </summary>
-		public List<KeyValueModel> Variables
+		public List<KeyValueViewModel> Variables
 		{
 			get
 			{
@@ -903,7 +903,7 @@ namespace RestClientLibrary.ViewModel
 					var env = parts[0];
 					var variable = parts[1];
 					var action = parts[2];
-					EnvironmentModel environmentToBeShown = null;
+					EnvironmentViewModel environmentToBeShown = null;
 					if (env == "Global")
 					{
 						var matchVariables = this.GlobalVariables.Variables?.Where(x => x.Key.Equals(variable, StringComparison.CurrentCultureIgnoreCase));
@@ -914,19 +914,19 @@ namespace RestClientLibrary.ViewModel
 							{
 								matchVariables.First().Value = text;
 
-								AppDataHelper.SaveGlobalVariablesData(this.GlobalVariables);
+								AppDataHelper.SaveGlobalVariablesData(this.GlobalVariables.ToModel());
 							}
 						}
 						else
 						{
 							if (this.GlobalVariables.Variables == null)
 							{
-								this.GlobalVariables.Variables = new List<KeyValueModel>();
+								this.GlobalVariables.Variables = new ObservableCollection<KeyValueViewModel>();
 							}
 
-							var newVariable = new KeyValueModel { Value = text };
+							var newVariable = new KeyValueViewModel { Value = text };
 							this.GlobalVariables.Variables.Add(newVariable);
-							AppDataHelper.SaveGlobalVariablesData(this.GlobalVariables);
+							AppDataHelper.SaveGlobalVariablesData(this.GlobalVariables.ToModel());
 						}
 					}
 					else
@@ -946,19 +946,19 @@ namespace RestClientLibrary.ViewModel
 									{
 										matchVariables.First().Value = text;
 
-										AppDataHelper.SaveGlobalVariablesData(this.GlobalVariables);
+										AppDataHelper.SaveGlobalVariablesData(this.GlobalVariables.ToModel());
 									}
 								}
 								else
 								{
 									if (matchEnvs.First().Variables == null)
 									{
-										matchEnvs.First().Variables = new List<KeyValueModel>();
+										matchEnvs.First().Variables = new ObservableCollection<KeyValueViewModel>();
 									}
 
-									var newVariable = new KeyValueModel { Value = text };
+									var newVariable = new KeyValueViewModel { Value = text };
 									matchEnvs.First().Variables.Add(newVariable);
-									AppDataHelper.SaveGlobalVariablesData(this.GlobalVariables);
+									AppDataHelper.SaveGlobalVariablesData(this.GlobalVariables.ToModel());
 								}
 							}
 						}
@@ -1045,12 +1045,12 @@ namespace RestClientLibrary.ViewModel
 		/// The BuildVariables
 		/// </summary>
 		/// <param name="global">The <see cref="GlobalVariableModel"/></param>
-		private void BuildVariables(GlobalVariableModel global)
+		private void BuildVariables(GlobalSetupViewModel global)
 		{
-			List<KeyValueModel> variables = new List<KeyValueModel>();
-			List<CertificateModel> certs = new List<CertificateModel>();
+			List<KeyValueViewModel> variables = new List<KeyValueViewModel>();
+			List<CertificateViewModel> certs = new List<CertificateViewModel>();
 
-			EnvironmentModel environment = null;
+			EnvironmentViewModel environment = null;
 			if (global.Environments != null)
 			{
 				environment = global.Environments.FirstOrDefault(x => this.SelectedEnvironment != null && x.Name == this.SelectedEnvironment.Name);
@@ -1133,7 +1133,7 @@ namespace RestClientLibrary.ViewModel
 
 		private void ExecuteWorkspaceChanged(string command)
 		{
-			var finalEnvs = this.allEnvironments.Where(x => x.Workspace == this.SelectedWorkspace).ToList();
+			var finalEnvs = this.GlobalVariables.allEnvironments.Where(x => x.Workspace == this.SelectedWorkspace).ToList();
 			finalEnvs.Insert(0, new EnvironmentViewModel() { Name = Constants.Select });
 
 			var oldEnvGuid = this.SelectedEnvironment?.Guid;
@@ -1243,7 +1243,7 @@ namespace RestClientLibrary.ViewModel
 			Settings = AppDataHelper.LoadSettingsData();
 			Settings.ParentViewModel = this;
 			
-			this.GlobalVariables = AppDataHelper.LoadGlobalData();
+			this.GlobalVariables = GlobalSetupViewModel.Parse(AppDataHelper.LoadGlobalData());
 			
 			this.LoadEnvironmentData();
 			this.SelectedEnvironment = this.Environments.First();
@@ -1272,17 +1272,17 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private void LoadFromGlobalData()
 		{
-			List<EnvironmentViewModel> envs = new List<EnvironmentViewModel>();
+			//List<EnvironmentViewModel> envs = new List<EnvironmentViewModel>();
 
-			envs.Add(new EnvironmentViewModel() { Guid = Guid.NewGuid().ToString(), Name = Constants.Select });
+			//envs.Add(new EnvironmentViewModel() { Guid = Guid.NewGuid().ToString(), Name = Constants.Select });
 
-			if (GlobalVariables.Environments != null)
-			{
-				foreach (var env in this.GlobalVariables.Environments)
-				{
-					envs.Add(EnvironmentViewModel.Parse(env));
-				}
-			}
+			//if (GlobalVariables.Environments != null)
+			//{
+			//	foreach (var env in this.GlobalVariables.Environments)
+			//	{
+			//		envs.Add(EnvironmentViewModel.Parse(env));
+			//	}
+			//}
 
 			var oldSelectedEnv = this.SelectedEnvironment?.Guid;
 			if (this.GlobalVariables.Workspaces != null)
@@ -1298,8 +1298,8 @@ namespace RestClientLibrary.ViewModel
 				}				
 			}
 
-			this.allEnvironments = envs;
-			var finalEnvs = envs.Where(x => x.Workspace == this.SelectedWorkspace).ToList();
+			//this.allEnvironments = envs;
+			var finalEnvs = this.GlobalVariables.allEnvironments.Where(x => x.Workspace == this.SelectedWorkspace).ToList();
 			finalEnvs.Insert(0, new EnvironmentViewModel() { Name = Constants.Select });
 
 			this.Environments = new ObservableCollection<EnvironmentViewModel>(finalEnvs);
@@ -1427,10 +1427,10 @@ namespace RestClientLibrary.ViewModel
 		private void SetViewEnvData()
 		{
 			this.EnvironmentsViewData = new ViewEnvironmentsViewModel();
-			this.EnvironmentsViewData.Variables = this.GlobalVariables?.Variables?.Select(x => KeyValueViewModel.Parse(x)).ToList();
+			this.EnvironmentsViewData.Variables = this.GlobalVariables?.Variables?.ToList();
 			if (this.SelectedEnvironment != null)
 			{
-				this.EnvironmentsViewData.Environment = EnvironmentViewModel.Parse(this.GlobalVariables?.Environments?.FirstOrDefault(x => x.Guid == this.SelectedEnvironment.Guid));
+				this.EnvironmentsViewData.Environment = this.GlobalVariables?.Environments?.FirstOrDefault(x => x.Guid == this.SelectedEnvironment.Guid);
 			}
 		}
 

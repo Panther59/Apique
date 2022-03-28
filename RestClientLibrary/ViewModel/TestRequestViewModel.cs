@@ -62,11 +62,11 @@ namespace RestClientLibrary.ViewModel
         /// <param name="globalData">The <see cref="GlobalVariableModel"/></param>
         /// <param name="variables">The <see cref="List{KeyValueModel}"/></param>
         /// <returns>The <see cref="Task"/></returns>
-        public async Task Execute(GlobalVariableModel globalData, string environmentName)
+        public async Task Execute(GlobalSetupViewModel globalData, string environmentName)
         {
             await Task.Run(() =>
             {
-                List<KeyValueModel> variables = this.GetVariables(globalData, environmentName);
+                List<KeyValueViewModel> variables = this.GetVariables(globalData, environmentName);
                 var certs = this.GetCertificates(globalData, environmentName);
                 RuntimeCodeViewModel preScript = null;
                 RuntimeCodeViewModel postScript = null;
@@ -103,7 +103,7 @@ namespace RestClientLibrary.ViewModel
                         RestClientPreExecutionAutomation preAutomation = new RestClientPreExecutionAutomation(globalData, environmentName);
                         runtimeAutomation.ExecutePreCode(preScript.Code, preAutomation);
                         globalData = preAutomation.GlobalVariableData;
-                        AppDataHelper.SaveGlobalVariablesData(globalData);
+                        AppDataHelper.SaveGlobalVariablesData(globalData.ToModel());
                     }
 
                     this.ApplyVariables(variables);
@@ -173,7 +173,7 @@ namespace RestClientLibrary.ViewModel
                         RestClientPostExecutionAutomation postAutomation = new RestClientPostExecutionAutomation(globalData, environmentName, restresponse);
                         runtimeAutomation.ExecutePostCode(postScript.Code, postAutomation);
                         globalData = postAutomation.GlobalVariableData;
-                        AppDataHelper.SaveGlobalVariablesData(globalData);
+                        AppDataHelper.SaveGlobalVariablesData(globalData.ToModel());
                     }
 
 
@@ -182,7 +182,7 @@ namespace RestClientLibrary.ViewModel
                         RestClientValidationsAutomation validations = new RestClientValidationsAutomation(globalData, environmentName, restresponse);
                         runtimeAutomation.ExecuteValidations(validationsScript.Code, validations);
                         globalData = validations.GlobalVariableData;
-                        AppDataHelper.SaveGlobalVariablesData(globalData);
+                        AppDataHelper.SaveGlobalVariablesData(globalData.ToModel());
 
                         this.Validations = validations.Results;
                     }
@@ -273,9 +273,9 @@ namespace RestClientLibrary.ViewModel
         /// <param name="globalData">The <see cref="GlobalVariableModel"/></param>
         /// <param name="environmentName">The <see cref="string"/></param>
         /// <returns>The <see cref="List{CertificateModel}"/></returns>
-        private List<CertificateModel> GetCertificates(GlobalVariableModel globalData, string environmentName)
+        private List<CertificateViewModel> GetCertificates(GlobalSetupViewModel globalData, string environmentName)
         {
-            List<CertificateModel> list = new List<CertificateModel>();
+            List<CertificateViewModel> list = new List<CertificateViewModel>();
             //List<CertificateModel> envList = globalData?.Certificates?.FirstOrDefault(x => x.Name.Equals(environmentName, StringComparison.CurrentCultureIgnoreCase))?.Certificates?.ToList();
             //if (envList != null)
             //{
@@ -329,10 +329,10 @@ namespace RestClientLibrary.ViewModel
         /// <param name="globalData">The <see cref="GlobalVariableModel"/></param>
         /// <param name="environmentName">The <see cref="string"/></param>
         /// <returns>The <see cref="List{KeyValueModel}"/></returns>
-        private List<KeyValueModel> GetVariables(GlobalVariableModel globalData, string environmentName)
+        private List<KeyValueViewModel> GetVariables(GlobalSetupViewModel globalData, string environmentName)
         {
-            List<KeyValueModel> list = new List<KeyValueModel>();
-            List<KeyValueModel> envList = globalData?.Environments?.FirstOrDefault(x => x.Name.Equals(environmentName, StringComparison.CurrentCultureIgnoreCase))?.Variables?.ToList();
+            List<KeyValueViewModel> list = new List<KeyValueViewModel>();
+            List<KeyValueViewModel> envList = globalData?.Environments?.FirstOrDefault(x => x.Name.Equals(environmentName, StringComparison.CurrentCultureIgnoreCase))?.Variables?.ToList();
             if (envList != null)
             {
                 list.AddRange(envList);
@@ -352,7 +352,7 @@ namespace RestClientLibrary.ViewModel
         /// <param name = "input">The <see cref = "string "/></param>
         /// <param name = "variables">The <see cref = "List{KeyValueModel}"/></param>
         /// <returns>The <see cref = "string "/></returns>
-        private string ReplaceVariables(string input, List<KeyValueModel> variables)
+        private string ReplaceVariables(string input, List<KeyValueViewModel> variables)
         {
             if (variables != null)
             {
@@ -375,7 +375,7 @@ namespace RestClientLibrary.ViewModel
         /// <param name="postScript">The <see cref="RuntimeCodeViewModel"/></param>
         /// <param name="validationsScript">The <see cref="RuntimeCodeViewModel"/></param>
         /// <returns>The <see cref="string"/></returns>
-        private string Validation(TestRequestViewModel request, List<KeyValueModel> variable, List<CertificateModel> certificates, RuntimeCodeViewModel preScript, RuntimeCodeViewModel postScript, RuntimeCodeViewModel validationsScript)
+        private string Validation(TestRequestViewModel request, List<KeyValueViewModel> variable, List<CertificateViewModel> certificates, RuntimeCodeViewModel preScript, RuntimeCodeViewModel postScript, RuntimeCodeViewModel validationsScript)
         {
             try
             {
