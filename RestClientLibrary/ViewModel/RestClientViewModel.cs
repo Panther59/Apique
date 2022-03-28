@@ -2045,7 +2045,7 @@ namespace RestClientLibrary.ViewModel
 
 			certs = new List<X509Certificate2>();
 
-			var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+			store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
 			store.Open(OpenFlags.ReadOnly);
 
 			if (store.Certificates != null)
