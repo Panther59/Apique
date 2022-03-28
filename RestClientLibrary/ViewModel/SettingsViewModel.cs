@@ -11,6 +11,7 @@ namespace RestClientLibrary.ViewModel
 	using System.Linq;
 	using System.Xml.Serialization;
 	using DataLibrary;
+	using Newtonsoft.Json;
 	using RestClientLibrary.Common;
 	using RestClientLibrary.Model;
 	using RestClientLibrary.View;
@@ -57,15 +58,12 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private ObservableCollection<CertificateViewModel> certificates;
 
+		private CertificateViewModel defaultCertificate;
+
 		/// <summary>
 		/// Defines the 
 		/// </summary>
 		private ISettingsView _view;
-
-		/// <summary>
-		/// The certificateSupport field
-		/// </summary>
-		private bool certificateSupport;
 
 		#region Commands
 
@@ -81,6 +79,7 @@ namespace RestClientLibrary.ViewModel
 		private RelayCommand addSavedCertificateCommand;
 		private RelayCommand addCertificateFileCommand;
 		private RelayCommand<CertificateViewModel> removeCertificateCommand;
+		private RelayCommand defaultCertificateChangedCommand;
 
 		/// <summary>
 		/// The importDataCommand field
@@ -116,26 +115,9 @@ namespace RestClientLibrary.ViewModel
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets a value indicating whether CertificateSupport
-		/// </summary>
-		public bool CertificateSupport
-		{
-			get
-			{
-				return this.certificateSupport;
-			}
-
-			set
-			{
-				this.certificateSupport = value;
-				this.OnPropertyChanged("CertificateSupport");
-			}
-		}
-
-		/// <summary>
 		/// Gets or sets a value indicating whether IsCertificatePopupOpen
 		/// </summary>
-		[XmlIgnore]
+		[JsonIgnore]
 		public bool IsCertificatePopupOpen
 		{
 			get { return _isCertificatePopupOpen; }
@@ -162,7 +144,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets the ParentViewModel
 		/// </summary>
-		[XmlIgnore]
+		[JsonIgnore]
 		public WorkspaceViewModel ParentViewModel { get; set; }
 
 		/// <summary>
@@ -234,12 +216,26 @@ namespace RestClientLibrary.ViewModel
 			}
 		}
 
+		public CertificateViewModel DefaultCertificate
+		{
+			get
+			{
+				return this.defaultCertificate;
+			}
+
+			set
+			{
+				this.defaultCertificate = value;
+				this.OnPropertyChanged("DefaultCertificate");
+			}
+		}
+
 		#region Commands
 
 		/// <summary>
 		/// Gets the ExportDataCommand
 		/// </summary>
-		[XmlIgnore]
+		[JsonIgnore]
 		public RelayCommand ExportDataCommand
 		{
 			get
@@ -256,7 +252,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets the AddSavedCertificateCommand
 		/// </summary>
-		[XmlIgnore]
+		[JsonIgnore]
 		public RelayCommand AddSavedCertificateCommand
 		{
 			get
@@ -273,7 +269,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets the AddCertificateFileCommand
 		/// </summary>
-		[XmlIgnore]
+		[JsonIgnore]
 		public RelayCommand AddCertificateFileCommand
 		{
 			get
@@ -290,7 +286,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets the ImportDataCommand
 		/// </summary>
-		[XmlIgnore]
+		[JsonIgnore]
 		public RelayCommand ImportDataCommand
 		{
 			get
@@ -307,7 +303,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets the SaveButtonClickedCommand
 		/// </summary>
-		[XmlIgnore]
+		[JsonIgnore]
 		public RelayCommand SaveButtonClickedCommand
 		{
 			get
@@ -321,7 +317,7 @@ namespace RestClientLibrary.ViewModel
 			set { _saveButtonClickedCommand = value; }
 		}
 
-		[XmlIgnore]
+		[JsonIgnore]
 		public RelayCommand<CertificateViewModel> RemoveCertificateCommand
 		{
 			get
@@ -333,6 +329,19 @@ namespace RestClientLibrary.ViewModel
 				return removeCertificateCommand;
 			}
 			set { removeCertificateCommand = value; }
+		}
+
+		public RelayCommand DefaultCertificateChangedCommand
+		{
+			get
+			{
+				if (defaultCertificateChangedCommand == null)
+				{
+					defaultCertificateChangedCommand = new RelayCommand(command => ExecuteDefaultCertificateChangedCommand());
+				}
+				return defaultCertificateChangedCommand;
+			}
+			set { defaultCertificateChangedCommand = value; }
 		}
 
 		
@@ -357,29 +366,30 @@ namespace RestClientLibrary.ViewModel
 		public static SettingsViewModel Parse(SettingsModel model)
 		{
 			SettingsViewModel vm = new SettingsViewModel();
-			vm.CertificateSupport = model.CertificateSupport ?? true;
 			vm.ShowRequestContentInHistory = model.ShowRequestContentInHistory ?? false;
 			vm.SearchInStatus = model.SearchInStatus ?? true;
 			vm.MaxHistoryDays = model.MaxHistoryDays ?? 90;
 			vm.SearchInHeaders = model.SearchInHeaders ?? true;
 			vm.SearchInRequest = model.SearchInRequest ?? true;
 			vm.Certificates = new ObservableCollection<CertificateViewModel>(model.Certificates?.Select(x => CertificateViewModel.Parse(x)) ?? new ObservableCollection<CertificateViewModel>());
+			vm.DefaultCertificate = vm.Certificates.FirstOrDefault(x => x.Name == model.DefaultCertificate);
 
 			return vm;
 		}
 
-		public static SettingsModel ToModel(SettingsViewModel model)
+		public SettingsModel ToModel()
 		{
-			SettingsModel vm = new SettingsModel();
-			vm.CertificateSupport = model.CertificateSupport;
-			vm.ShowRequestContentInHistory = model.ShowRequestContentInHistory;
-			vm.SearchInStatus = model.SearchInStatus;
-			vm.MaxHistoryDays = model.MaxHistoryDays;
-			vm.SearchInHeaders = model.SearchInHeaders;
-			vm.SearchInRequest = model.SearchInRequest;
-			vm.Certificates = model.Certificates?.Select(x => x.ToModel())?.ToList();
+			var vm = this;
+			SettingsModel model = new SettingsModel();
+			model.ShowRequestContentInHistory = vm.ShowRequestContentInHistory;
+			model.SearchInStatus = vm.SearchInStatus;
+			model.MaxHistoryDays = vm.MaxHistoryDays;
+			model.SearchInHeaders = vm.SearchInHeaders;
+			model.SearchInRequest = vm.SearchInRequest;
+			model.Certificates = vm.Certificates?.Select(x => x.ToModel())?.ToList();
+			model.DefaultCertificate = vm.DefaultCertificate?.Name;
 
-			return vm;
+			return model;
 		}
 
 		#endregion
@@ -413,6 +423,7 @@ namespace RestClientLibrary.ViewModel
 		private void RemoveCertificateClicked(CertificateViewModel command)
 		{
 			this.Certificates.Remove(command);
+			AppDataHelper.SaveSettingsData(this);
 		}
 
 		/// <summary>
@@ -444,6 +455,8 @@ namespace RestClientLibrary.ViewModel
 					this.Certificates.Add(cert);
 				}
 			}
+
+			AppDataHelper.SaveSettingsData(this);
 		}
 
 		private void ExecuteAddCertificateFile()
@@ -451,11 +464,18 @@ namespace RestClientLibrary.ViewModel
 			var cert = this._view.AddNewCertificate(true);
 			if (cert != null)
 			{
-				if (!this.Certificates.Any(x => x.FriendlyName == cert.Thumbprint))
+				if (!this.Certificates.Any(x => x.FilePath == cert.FilePath))
 				{
 					this.Certificates.Add(cert);
 				}
 			}
+
+			AppDataHelper.SaveSettingsData(this);
+		}
+
+		private void ExecuteDefaultCertificateChangedCommand()
+		{
+			AppDataHelper.SaveSettingsData(this);
 		}
 
 		#endregion

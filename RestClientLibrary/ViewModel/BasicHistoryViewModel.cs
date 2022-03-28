@@ -10,7 +10,8 @@ namespace RestClientLibrary.ViewModel
     using System.Windows;
     using System.Xml.Serialization;
     using DataLibrary;
-    using RestClientLibrary.Common;
+	using Newtonsoft.Json;
+	using RestClientLibrary.Common;
 
     /// <summary>
     /// Defines the <see cref="BasicHistoryViewModel" />
@@ -336,7 +337,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the MainViewModel
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public WorkspaceViewModel MainViewModel
         {
             get; set;
@@ -347,7 +348,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the CopySessionCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand<string> CopySessionCommand
         {
             get
@@ -364,7 +365,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the EmailAsAttachmentCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand<bool> EmailAsAttachmentCommand
         {
             get
@@ -381,7 +382,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the EmailInBodyCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand<bool> EmailInBodyCommand
         {
             get
@@ -398,7 +399,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the RemoveSessionCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand RemoveSessionCommand
         {
             get
@@ -415,7 +416,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the SaveRequestToFileCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand SaveRequestToFileCommand
         {
             get
@@ -432,7 +433,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the SaveRequestToMasterCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand SaveRequestToMasterCommand
         {
             get
@@ -449,7 +450,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the SessionSelectedCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand SessionSelectedCommand
         {
             get

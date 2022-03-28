@@ -1,147 +1,147 @@
 ﻿<base:BaseUserControl
-    x:Class="RestClientLibrary.Screen.ucRuntimeCode"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ava="clr-namespace:AdvanceTextEditor;assembly=AdvanceTextEditor"
-    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
-    xmlns:ctrl="clr-namespace:DataLibrary.CustomControl;assembly=DataLibrary"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:RestClientLibrary.Screen"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:xcd="http://schemas.xceed.com/wpf/xaml/avalondock"
-    d:DesignHeight="300"
-    d:DesignWidth="300"
-    mc:Ignorable="d">
-    <base:BaseUserControl.Resources />
-    <Grid MinHeight="100" MaxHeight="250">
-        <Grid.Resources>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <ctrl:LayeredGrid
-            Grid.Row="0"
-            Grid.ColumnSpan="2"
-            Background="{DynamicResource PrimaryBackgroundBrush}">
-            <ctrl:LayeredGrid.Layers>
-                <ctrl:Layer Name="txt" Level="0">
-                    <ctrl:Layer.Content>
-                        <ava:TextEditor
-                            Name="txtExecutionScript"
-                            Background="{DynamicResource PrimaryBackBrush}"
-                            BindableText="{Binding EditableCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            CaretIndex="{Binding CodeCaretIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            EditorTheme="{DynamicResource EditorThemeKey}"
-                            Foreground="{DynamicResource PrimaryForeBrush}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"
-                            ShowLineNumbers="True"
-                            SyntaxHighlightingKey="C#"
-                            WordWrap="True">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="TextChanged">
-                                    <i:InvokeCommandAction Command="{Binding CodeChangedCommand}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ava:TextEditor>
-                    </ctrl:Layer.Content>
-                </ctrl:Layer>
-                <ctrl:Layer
-                    Name="Snippets"
-                    ColumnLocation="Right"
-                    Level="1"
-                    Orientation="Column">
-                    <ctrl:Layer.Content>
-                        <ListView
-                            Height="{Binding ElementName=txtExecutionScript, Path=ActualHeight}"
-                            Margin="0,0,0,-0.4"
-                            ItemsSource="{Binding Snippets}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
-                                        <Hyperlink Command="{Binding DataContext.AddCodeSnippetCommand, RelativeSource={RelativeSource AncestorType=local:ucRuntimeCode}}" CommandParameter="{Binding}">
-                                            <TextBlock Text="{Binding Name}" />
-                                        </Hyperlink>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </ctrl:Layer.Content>
-                </ctrl:Layer>
-            </ctrl:LayeredGrid.Layers>
-        </ctrl:LayeredGrid>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2">
-            <TextBlock
-                Grid.Row="1"
-                Margin="3,3,130,3"
-                VerticalAlignment="Center"
-                Text="{Binding StatusMessage}" />
-            <Button
-                Grid.Row="1"
-                Margin="3,3,10,3"
-                HorizontalAlignment="Right"
-                Command="{Binding CompileCodeCommand}"
-                Content="Compile" />
-            <Button
-                Grid.Row="1"
-                Margin="3,3,70,3"
-                HorizontalAlignment="Right"
-                Command="{Binding PreviewCodeCommand}"
-                Content="Preview" />
-        </Grid>
-        <ListView
-            Grid.Row="2"
-            Grid.ColumnSpan="2"
-            MinHeight="70"
-            ItemContainerStyle="{DynamicResource GridViewListViewItem}"
-            ItemsSource="{Binding Errors}"
-            SelectedItem="{Binding SelectedError, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Visibility="{Binding HasBuildErrors, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn
-                        x:Name="Type"
-                        DisplayMemberBinding="{Binding Severity}"
-                        Header="Type" />
-                    <GridViewColumn
-                        x:Name="Code"
-                        DisplayMemberBinding="{Binding Code}"
-                        Header="Code" />
-                    <GridViewColumn
-                        x:Name="Description"
-                        Width="{Binding ElementName=helperField, Path=ActualWidth}"
-                        DisplayMemberBinding="{Binding Description}"
-                        Header="Description" />
-                    <GridViewColumn
-                        x:Name="Line"
-                        DisplayMemberBinding="{Binding Line}"
-                        Header="Line" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <!--  Width is bound to width of the first GridViewColumn  -->
-                <ColumnDefinition Width="{Binding ElementName=Type, Path=ActualWidth}" />
-                <ColumnDefinition Width="{Binding ElementName=Code, Path=ActualWidth}" />
-                <!--  Width is set to "Fill"  -->
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="{Binding ElementName=Line, Path=ActualWidth}" />
-                <!--  Correction Width  -->
-                <ColumnDefinition Width="20" />
-            </Grid.ColumnDefinitions>
-            <!--  This is the hidden helper Field which is used to bind to, using the "Fill" column of the helper grid  -->
-            <Grid x:Name="helperField" Grid.Column="2" />
-        </Grid>
-    </Grid>
+	x:Class="RestClientLibrary.Screen.ucRuntimeCode"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:ava="clr-namespace:AdvanceTextEditor;assembly=AdvanceTextEditor"
+	xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+	xmlns:ctrl="clr-namespace:DataLibrary.CustomControl;assembly=DataLibrary"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+	xmlns:local="clr-namespace:RestClientLibrary.Screen"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:xcd="http://schemas.xceed.com/wpf/xaml/avalondock"
+	d:DesignHeight="300"
+	d:DesignWidth="300"
+	mc:Ignorable="d">
+	<base:BaseUserControl.Resources />
+	<Grid MinHeight="100" MaxHeight="250">
+		<Grid.Resources>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+		</Grid.Resources>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+		<ctrl:LayeredGrid
+			Grid.Row="0"
+			Grid.ColumnSpan="2"
+			Background="{DynamicResource PrimaryBackgroundBrush}">
+			<ctrl:LayeredGrid.Layers>
+				<ctrl:Layer Name="txt" Level="0">
+					<ctrl:Layer.Content>
+						<ava:TextEditor
+							Name="txtExecutionScript"
+							Background="{DynamicResource PrimaryBackBrush}"
+							BindableText="{Binding EditableCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							CaretIndex="{Binding CodeCaretIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							EditorTheme="{DynamicResource EditorThemeKey}"
+							Foreground="{DynamicResource PrimaryForeBrush}"
+							ScrollViewer.HorizontalScrollBarVisibility="Auto"
+							ScrollViewer.VerticalScrollBarVisibility="Auto"
+							ShowLineNumbers="True"
+							SyntaxHighlightingKey="C#"
+							WordWrap="True">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="TextChanged">
+									<i:InvokeCommandAction Command="{Binding CodeChangedCommand}" />
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</ava:TextEditor>
+					</ctrl:Layer.Content>
+				</ctrl:Layer>
+				<ctrl:Layer
+					Name="Snippets"
+					ColumnLocation="Right"
+					Level="1"
+					Orientation="Column">
+					<ctrl:Layer.Content>
+						<ListView
+							Height="{Binding ElementName=txtExecutionScript, Path=ActualHeight}"
+							Margin="0,0,0,-0.4"
+							ItemsSource="{Binding Snippets}"
+							ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+							ScrollViewer.VerticalScrollBarVisibility="Auto">
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<TextBlock>
+										<Hyperlink Command="{Binding DataContext.AddCodeSnippetCommand, RelativeSource={RelativeSource AncestorType=local:ucRuntimeCode}}" CommandParameter="{Binding}">
+											<TextBlock Text="{Binding Name}" />
+										</Hyperlink>
+									</TextBlock>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+					</ctrl:Layer.Content>
+				</ctrl:Layer>
+			</ctrl:LayeredGrid.Layers>
+		</ctrl:LayeredGrid>
+		<Grid Grid.Row="1" Grid.ColumnSpan="2">
+			<TextBlock
+				Grid.Row="1"
+				Margin="3,3,130,3"
+				VerticalAlignment="Center"
+				Text="{Binding StatusMessage}" />
+			<Button
+				Grid.Row="1"
+				Margin="3,3,10,3"
+				HorizontalAlignment="Right"
+				Command="{Binding CompileCodeCommand}"
+				Content="Compile" />
+			<Button
+				Grid.Row="1"
+				Margin="3,3,70,3"
+				HorizontalAlignment="Right"
+				Command="{Binding PreviewCodeCommand}"
+				Content="Preview" />
+		</Grid>
+		<ListView
+			Grid.Row="2"
+			Grid.ColumnSpan="2"
+			MinHeight="70"
+			ItemContainerStyle="{DynamicResource GridViewListViewItem}"
+			ItemsSource="{Binding Errors}"
+			SelectedItem="{Binding SelectedError, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			Visibility="{Binding HasBuildErrors, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn
+						x:Name="Type"
+						DisplayMemberBinding="{Binding Severity}"
+						Header="Type" />
+					<GridViewColumn
+						x:Name="Code"
+						DisplayMemberBinding="{Binding Code}"
+						Header="Code" />
+					<GridViewColumn
+						x:Name="Description"
+						Width="{Binding ElementName=helperField, Path=ActualWidth}"
+						DisplayMemberBinding="{Binding Description}"
+						Header="Description" />
+					<GridViewColumn
+						x:Name="Line"
+						DisplayMemberBinding="{Binding Line}"
+						Header="Line" />
+				</GridView>
+			</ListView.View>
+		</ListView>
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<!--  Width is bound to width of the first GridViewColumn  -->
+				<ColumnDefinition Width="{Binding ElementName=Type, Path=ActualWidth}" />
+				<ColumnDefinition Width="{Binding ElementName=Code, Path=ActualWidth}" />
+				<!--  Width is set to "Fill"  -->
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="{Binding ElementName=Line, Path=ActualWidth}" />
+				<!--  Correction Width  -->
+				<ColumnDefinition Width="20" />
+			</Grid.ColumnDefinitions>
+			<!--  This is the hidden helper Field which is used to bind to, using the "Fill" column of the helper grid  -->
+			<Grid x:Name="helperField" Grid.Column="2" />
+		</Grid>
+	</Grid>
 </base:BaseUserControl>

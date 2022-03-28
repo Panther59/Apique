@@ -1,204 +1,204 @@
 ﻿<UserControl
-    x:Class="RestClientLibrary.Screen.SavedData.ucSavedCategory"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
-    xmlns:baseComm="clr-namespace:DataLibrary.Common;assembly=DataLibrary"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:data="clr-namespace:RestClientLibrary.ViewModel"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:RestClientLibrary.Screen"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:saveUI="clr-namespace:RestClientLibrary.Screen.SavedData"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    Margin="0,0,0,1"
-    d:DesignHeight="50"
-    d:DesignWidth="300"
-    mc:Ignorable="d">
-    <UserControl.Resources>
-        <ResourceDictionary Source="/RestClientLibrary;component/Themes/ThemeResourceDictionary.xaml" />
-    </UserControl.Resources>
-    <Grid Name="catGrid">
-        <Grid.Resources>
-            <baseComm:BindingProxy x:Key="Proxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
-            <DataTemplate DataType="{x:Type data:TransactionViewModel}">
-                <saveUI:ucSavedRequest DataContext="{Binding}" />
-            </DataTemplate>
-            <sys:Boolean x:Key="TrueValue">true</sys:Boolean>
-            <sys:Boolean x:Key="FalseValue">false</sys:Boolean>
-            <ControlTemplate x:Key="3DotsButtonTemplate" TargetType="Button">
-                <Grid
-                    HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                    Opacity="{TemplateBinding Opacity}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Rectangle Grid.ColumnSpan="3" Fill="Transparent" />
-                    <Ellipse
-                        Width="7"
-                        Height="7"
-                        Margin="1"
-                        Fill="{TemplateBinding Foreground}" />
-                    <Ellipse
-                        Grid.Column="1"
-                        Width="7"
-                        Height="7"
-                        Margin="2"
-                        Fill="{TemplateBinding Foreground}" />
-                    <Ellipse
-                        Grid.Column="2"
-                        Width="7"
-                        Height="7"
-                        Margin="1"
-                        Fill="{TemplateBinding Foreground}" />
-                </Grid>
-            </ControlTemplate>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <base:ToggleBoolToVisibilityConverter x:Key="BooleanToInvisibilityConverter" />
+	x:Class="RestClientLibrary.Screen.SavedData.ucSavedCategory"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+	xmlns:baseComm="clr-namespace:DataLibrary.Common;assembly=DataLibrary"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:data="clr-namespace:RestClientLibrary.ViewModel"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+	xmlns:local="clr-namespace:RestClientLibrary.Screen"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:saveUI="clr-namespace:RestClientLibrary.Screen.SavedData"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	Margin="0,0,0,1"
+	d:DesignHeight="50"
+	d:DesignWidth="300"
+	mc:Ignorable="d">
+	<UserControl.Resources>
+		<ResourceDictionary Source="/RestClientLibrary;component/Themes/ThemeResourceDictionary.xaml" />
+	</UserControl.Resources>
+	<Grid Name="catGrid">
+		<Grid.Resources>
+			<baseComm:BindingProxy x:Key="Proxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
+			<DataTemplate DataType="{x:Type data:TransactionViewModel}">
+				<saveUI:ucSavedRequest DataContext="{Binding}" />
+			</DataTemplate>
+			<sys:Boolean x:Key="TrueValue">true</sys:Boolean>
+			<sys:Boolean x:Key="FalseValue">false</sys:Boolean>
+			<ControlTemplate x:Key="3DotsButtonTemplate" TargetType="Button">
+				<Grid
+					HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+					VerticalAlignment="{TemplateBinding VerticalAlignment}"
+					Opacity="{TemplateBinding Opacity}">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<Rectangle Grid.ColumnSpan="3" Fill="Transparent" />
+					<Ellipse
+						Width="7"
+						Height="7"
+						Margin="1"
+						Fill="{TemplateBinding Foreground}" />
+					<Ellipse
+						Grid.Column="1"
+						Width="7"
+						Height="7"
+						Margin="2"
+						Fill="{TemplateBinding Foreground}" />
+					<Ellipse
+						Grid.Column="2"
+						Width="7"
+						Height="7"
+						Margin="1"
+						Fill="{TemplateBinding Foreground}" />
+				</Grid>
+			</ControlTemplate>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+			<base:ToggleBoolToVisibilityConverter x:Key="BooleanToInvisibilityConverter" />
 
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Border
-            Name="border"
-            Width="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=ActualWidth}"
-            Background="{DynamicResource PrimaryFocusBackBrush}">
-            <Grid Margin="2,2,7,2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <ToggleButton
-                    Padding="3,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Center"
-                    Background="Transparent"
-                    FontWeight="Bold"
-                    Foreground="{DynamicResource PrimaryForeBrush}"
-                    IsChecked="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid>
-                                <Rectangle
-                                    HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                                    Fill="{TemplateBinding Background}" />
-                                <ContentPresenter
-                                    x:Name="contentPresenter"
-                                    Margin="{TemplateBinding Padding}"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    Content="{TemplateBinding Content}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-                            </Grid>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                    <ToggleButton.Content>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock
-                                FontSize="17"
-                                Text="{Binding Name}"
-                                Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToInvisibilityConverter}}" />
-                            <TextBox
-                                Name="editableName"
-                                base:TextBoxVisibilityBehavior.SetFocus="True"
-                                base:TextBoxVisibilityBehavior.TrackCaretIndex="True"
-                                FontSize="17"
-                                Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="LostFocus">
-                                        <i:InvokeCommandAction Command="{Binding RenameCategoryCommand}" CommandParameter="{StaticResource FalseValue}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </TextBox>
-                            <TextBlock Grid.Row="1" Text="{Binding Requests.Count, StringFormat='{}{0} Requests'}" />
-                        </Grid>
-                    </ToggleButton.Content>
-                </ToggleButton>
-                <Button
-                    x:Name="options"
-                    Grid.Column="1"
-                    Margin="1"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    VerticalContentAlignment="Center"
-                    Foreground="{DynamicResource PrimaryForeBrush}"
-                    Template="{StaticResource 3DotsButtonTemplate}">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Opacity" Value="0.5" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=border, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Opacity" Value="1" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                    <Button.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem
-                                Command="{Binding RenameCategoryCommand}"
-                                CommandParameter="{StaticResource TrueValue}"
-                                Header="Rename" />
-                            <MenuItem
-                                Command="{Binding Source={StaticResource Proxy}, Path=Data.SaveRequest.DeleteCategoryCommand}"
-                                CommandParameter="{Binding}"
-                                Header="Delete" />
-                            <MenuItem
-                                Command="{Binding Source={StaticResource Proxy}, Path=Data.SaveRequest.CloneCategoryCommand}"
-                                CommandParameter="{Binding}"
-                                Header="Clone" />
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                    <i:Interaction.Behaviors>
-                        <baseComm:DropDownButtonBehavior />
-                    </i:Interaction.Behaviors>
-                </Button>
-            </Grid>
-        </Border>
-        <ListView
-            Name="ListRequests"
-            Grid.Row="1"
-            Margin="1,0.2,-1,-0.2"
-            ItemsSource="{Binding Requests}"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ListView.Style>
-                <Style BasedOn="{StaticResource {x:Type ListView}}" TargetType="ListView">
-                    <Style.Triggers>
-                        <EventTrigger RoutedEvent="PreviewLostKeyboardFocus">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(ListView.SelectedItem)">
+		</Grid.Resources>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Border
+			Name="border"
+			Width="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=ActualWidth}"
+			Background="{DynamicResource PrimaryFocusBackBrush}">
+			<Grid Margin="2,2,7,2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<ToggleButton
+					Padding="3,0"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Stretch"
+					HorizontalContentAlignment="Left"
+					VerticalContentAlignment="Center"
+					Background="Transparent"
+					FontWeight="Bold"
+					Foreground="{DynamicResource PrimaryForeBrush}"
+					IsChecked="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					<ToggleButton.Template>
+						<ControlTemplate TargetType="ToggleButton">
+							<Grid>
+								<Rectangle
+									HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+									VerticalAlignment="{TemplateBinding VerticalAlignment}"
+									Fill="{TemplateBinding Background}" />
+								<ContentPresenter
+									x:Name="contentPresenter"
+									Margin="{TemplateBinding Padding}"
+									HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+									VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+									Content="{TemplateBinding Content}"
+									ContentTemplate="{TemplateBinding ContentTemplate}" />
+							</Grid>
+						</ControlTemplate>
+					</ToggleButton.Template>
+					<ToggleButton.Content>
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto" />
+								<RowDefinition Height="Auto" />
+							</Grid.RowDefinitions>
+							<TextBlock
+								FontSize="17"
+								Text="{Binding Name}"
+								Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToInvisibilityConverter}}" />
+							<TextBox
+								Name="editableName"
+								base:TextBoxVisibilityBehavior.SetFocus="True"
+								base:TextBoxVisibilityBehavior.TrackCaretIndex="True"
+								FontSize="17"
+								Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToVisibilityConverter}}">
+								<i:Interaction.Triggers>
+									<i:EventTrigger EventName="LostFocus">
+										<i:InvokeCommandAction Command="{Binding RenameCategoryCommand}" CommandParameter="{StaticResource FalseValue}" />
+									</i:EventTrigger>
+								</i:Interaction.Triggers>
+							</TextBox>
+							<TextBlock Grid.Row="1" Text="{Binding Requests.Count, StringFormat='{}{0} Requests'}" />
+						</Grid>
+					</ToggleButton.Content>
+				</ToggleButton>
+				<Button
+					x:Name="options"
+					Grid.Column="1"
+					Margin="1"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Stretch"
+					VerticalContentAlignment="Center"
+					Foreground="{DynamicResource PrimaryForeBrush}"
+					Template="{StaticResource 3DotsButtonTemplate}">
+					<Button.Style>
+						<Style TargetType="Button">
+							<Setter Property="Opacity" Value="0.5" />
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding ElementName=border, Path=IsMouseOver}" Value="True">
+									<Setter Property="Opacity" Value="1" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</Button.Style>
+					<Button.ContextMenu>
+						<ContextMenu>
+							<MenuItem
+								Command="{Binding RenameCategoryCommand}"
+								CommandParameter="{StaticResource TrueValue}"
+								Header="Rename" />
+							<MenuItem
+								Command="{Binding Source={StaticResource Proxy}, Path=Data.SaveRequest.DeleteCategoryCommand}"
+								CommandParameter="{Binding}"
+								Header="Delete" />
+							<MenuItem
+								Command="{Binding Source={StaticResource Proxy}, Path=Data.SaveRequest.CloneCategoryCommand}"
+								CommandParameter="{Binding}"
+								Header="Clone" />
+						</ContextMenu>
+					</Button.ContextMenu>
+					<i:Interaction.Behaviors>
+						<baseComm:DropDownButtonBehavior />
+					</i:Interaction.Behaviors>
+				</Button>
+			</Grid>
+		</Border>
+		<ListView
+			Name="ListRequests"
+			Grid.Row="1"
+			Margin="1,0.2,-1,-0.2"
+			ItemsSource="{Binding Requests}"
+			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+			Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<ListView.Style>
+				<Style BasedOn="{StaticResource {x:Type ListView}}" TargetType="ListView">
+					<Style.Triggers>
+						<EventTrigger RoutedEvent="PreviewLostKeyboardFocus">
+							<BeginStoryboard>
+								<Storyboard>
+									<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(ListView.SelectedItem)">
 
-                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Null}" />
-                                    </ObjectAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.Style>
-            <ListView.ItemContainerStyle>
-                <Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
-                    <Setter Property="AllowDrop" Value="True" />
-                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListRequests_PreviewMouseLeftButtonDown" />
-                    <EventSetter Event="PreviewMouseLeftButtonUp" Handler="ListViewItem_PreviewMouseLeftButtonUp" />
-                    <EventSetter Event="Drop" Handler="ListRequests_Drop" />
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
-    </Grid>
+										<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Null}" />
+									</ObjectAnimationUsingKeyFrames>
+								</Storyboard>
+							</BeginStoryboard>
+						</EventTrigger>
+					</Style.Triggers>
+				</Style>
+			</ListView.Style>
+			<ListView.ItemContainerStyle>
+				<Style BasedOn="{StaticResource {x:Type ListViewItem}}" TargetType="ListViewItem">
+					<Setter Property="AllowDrop" Value="True" />
+					<EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListRequests_PreviewMouseLeftButtonDown" />
+					<EventSetter Event="PreviewMouseLeftButtonUp" Handler="ListViewItem_PreviewMouseLeftButtonUp" />
+					<EventSetter Event="Drop" Handler="ListRequests_Drop" />
+				</Style>
+			</ListView.ItemContainerStyle>
+		</ListView>
+	</Grid>
 </UserControl>

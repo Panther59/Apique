@@ -276,11 +276,11 @@ namespace RestClientLibrary.ViewModel
         private List<CertificateModel> GetCertificates(GlobalVariableModel globalData, string environmentName)
         {
             List<CertificateModel> list = new List<CertificateModel>();
-            List<CertificateModel> envList = globalData?.Environments?.FirstOrDefault(x => x.Name.Equals(environmentName, StringComparison.CurrentCultureIgnoreCase))?.Certificates?.ToList();
-            if (envList != null)
-            {
-                list.AddRange(envList);
-            }
+            //List<CertificateModel> envList = globalData?.Certificates?.FirstOrDefault(x => x.Name.Equals(environmentName, StringComparison.CurrentCultureIgnoreCase))?.Certificates?.ToList();
+            //if (envList != null)
+            //{
+            //    list.AddRange(envList);
+            //}
 
             if (globalData != null && globalData.Variables != null)
             {

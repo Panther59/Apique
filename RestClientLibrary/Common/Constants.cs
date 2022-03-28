@@ -123,14 +123,16 @@ namespace RestClientLibrary.Common
         public const string ExportImportFilter = "Rest Client Data|*.rcd";
         public const string ImportCertFilter = "Certificate|*.p12;*.pfx";
 
-        #endregion
+        public static string DefaultWorkspace = "Default";
 
-        #region Enums
+		#endregion
 
-        /// <summary>
-        /// Defines the MainTab
-        /// </summary>
-        public enum MainTab
+		#region Enums
+
+		/// <summary>
+		/// Defines the MainTab
+		/// </summary>
+		public enum MainTab
         {
             /// <summary>
             /// Defines the RestClient

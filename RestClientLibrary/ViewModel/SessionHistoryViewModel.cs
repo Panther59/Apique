@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using DataLibrary;
 using System.Windows;
+using Newtonsoft.Json;
 
 namespace RestClientLibrary.ViewModel
 {
@@ -87,7 +88,7 @@ namespace RestClientLibrary.ViewModel
         }
 
         private RelayCommand _sessionSelectedCommand;
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand SessionSelectedCommand
         {
             get
@@ -102,7 +103,7 @@ namespace RestClientLibrary.ViewModel
         }
 
         private RelayCommand<string> _copySessionCommand;
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand<string> CopySessionCommand
         {
             get
@@ -117,7 +118,7 @@ namespace RestClientLibrary.ViewModel
         }
 
         private RelayCommand _removeSessionCommand;
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand RemoveSessionCommand
         {
             get
@@ -132,7 +133,7 @@ namespace RestClientLibrary.ViewModel
         }
 
         private RelayCommand _saveRequestToMasterCommand;
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand SaveRequestToMasterCommand
         {
             get
@@ -147,7 +148,7 @@ namespace RestClientLibrary.ViewModel
         }
 
         private RelayCommand _saveRequestToFileCommand;
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand SaveRequestToFileCommand
         {
             get
@@ -162,7 +163,7 @@ namespace RestClientLibrary.ViewModel
         }
 
         private RelayCommand<bool> _emailInBodyCommand;
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand<bool> EmailInBodyCommand
         {
             get
@@ -177,7 +178,7 @@ namespace RestClientLibrary.ViewModel
         }
 
         private RelayCommand<bool> _emailAsAttachmentCommand;
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand<bool> EmailAsAttachmentCommand
         {
             get
@@ -191,7 +192,7 @@ namespace RestClientLibrary.ViewModel
             set { _emailAsAttachmentCommand = value; }
         }
 
-        [XmlIgnore]
+        [JsonIgnore]
         public WorkspaceViewModel MainViewModel { get; set; }
 
         private void RemoveSession()

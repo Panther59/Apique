@@ -33,13 +33,13 @@ namespace RestClientLibrary.Common
             string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             OldAppDataDirectory = baseDir + "\\VSPackage\\RestClient";
             AppDataDirectory = baseDir + "\\Ayvan\\Rest Client\\Data";
-            SessionHistoryPath = AppDataDirectory + "\\SessionHistory.rsh";
-            SettingFilePath = AppDataDirectory + "\\SessionHistory.rst";
-            CertificateFilePath = AppDataDirectory + "\\Certifcate.cert";
-            SavedRequestsFilePath = AppDataDirectory + "\\SavedRequests.rsr";
-            TestClientFilePath = AppDataDirectory + "\\TestClient.tcr";
-            GlobalEnvironmentFilePath = AppDataDirectory + "\\GlobalEnvironment.gev";
-            TestRunsFilePath = AppDataDirectory + "\\TestRuns.trr";
+            SessionHistoryPath = AppDataDirectory + "\\SessionHistory.json";
+            SettingFilePath = AppDataDirectory + "\\Settings.json";
+            CertificateFilePath = AppDataDirectory + "\\Certifcates.json";
+            SavedRequestsFilePath = AppDataDirectory + "\\SavedRequests.json";
+            TestClientFilePath = AppDataDirectory + "\\TestClient.json";
+            GlobalEnvironmentFilePath = AppDataDirectory + "\\GlobalEnvironment.json";
+            TestRunsFilePath = AppDataDirectory + "\\TestRuns.json";
 
             MoveDataToNewDirectory(OldAppDataDirectory, AppDataDirectory);
 
@@ -47,6 +47,7 @@ namespace RestClientLibrary.Common
             jsonSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             jsonSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             jsonSettings.Formatting = Formatting.None;
+            jsonSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         }
 
         #endregion
@@ -188,8 +189,10 @@ namespace RestClientLibrary.Common
         /// <returns>The <see cref = "SettingsViewModel"/></returns>
         public static SettingsViewModel LoadSettingsData()
         {
-            SettingsViewModel setting = ReadSettingFile<SettingsViewModel>(SettingFilePath);
-            return setting;
+            var setting = ReadSettingFile<SettingsModel>(SettingFilePath);
+
+            var vm = SettingsViewModel.Parse(setting);
+            return vm;
         }
 
         /// <summary>
@@ -326,7 +329,7 @@ namespace RestClientLibrary.Common
         /// <param name = "data">The <see cref = "SettingsViewModel"/></param>
         public static void SaveSettingsData(SettingsViewModel data)
         {
-            WriteSettingFile<SettingsViewModel>(SettingFilePath, data);
+            WriteSettingFile(SettingFilePath, data.ToModel());
         }
 
         /// <summary>
@@ -443,10 +446,7 @@ namespace RestClientLibrary.Common
                     }
 
                     string outJson = Newtonsoft.Json.JsonConvert.SerializeObject(data, jsonSettings);
-                    StreamWriter writer = System.IO.File.CreateText(path);
-                    writer.Write(outJson);
-                    writer.Flush();
-                    writer.Dispose();
+                    System.IO.File.WriteAllText(path, outJson);
                 }
                 catch (Exception ex)
                 {

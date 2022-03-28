@@ -30,7 +30,7 @@ namespace RestClientLibrary.Model
         /// <summary>
         /// Gets or sets Certificates
         /// </summary>
-        public List<CertificateModel> Certificates { get; set; }
+        public CertificateModel DefaultCertificate { get; set; }
 
         /// <summary>
         /// Gets or sets the Guid
@@ -41,6 +41,11 @@ namespace RestClientLibrary.Model
         /// Gets or sets Name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets Workspace
+        /// </summary>
+        public string Workspace { get; set; }
 
         /// <summary>
         /// Gets or sets Variables

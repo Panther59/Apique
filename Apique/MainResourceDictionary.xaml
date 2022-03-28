@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:vsui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0">
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	xmlns:vsui="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.11.0">
 
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="/RestClientLibrary;component/Themes/ThemeResourceDictionary.xaml" />

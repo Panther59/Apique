@@ -8,6 +8,7 @@ namespace RestClientLibrary.ViewModel
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
 	using System.Linq;
 	using System.Security.Cryptography.X509Certificates;
 	using System.Text;
@@ -121,7 +122,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// The certificate field
 		/// </summary>
-		private string certificate;
+		private CertificateViewModel certificate;
 
 		/// <summary>
 		/// The collapseAllFoldings field
@@ -346,7 +347,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets the Certificate
 		/// </summary>
-		public string Certificate
+		public CertificateViewModel Certificate
 		{
 			get
 			{
@@ -1273,6 +1274,11 @@ namespace RestClientLibrary.ViewModel
 			}
 		}
 
+		public void SelectCertificate(string certName)
+		{
+			this.Certificate = this.ParentViewModel.Settings.Certificates.FirstOrDefault(x => x.Name == certName);
+		}
+
 		#endregion
 
 		#endregion
@@ -1305,7 +1311,7 @@ namespace RestClientLibrary.ViewModel
 				ParentViewModel = this.ParentViewModel,
 				Name = name,
 				Guid = this.GUID,
-				Certificate = this.Certificate,
+				Certificate = this.Certificate?.Name,
 				RequestContentType = this.RequestContentType,
 				PreRequestHeaders = HeadersBase.GetHeaderContent(),
 				Operation = SelectedOperation.Text,
@@ -1572,7 +1578,7 @@ namespace RestClientLibrary.ViewModel
 
 				if (section == null || section.GetString().ToUpper() == "CERTIFICATE")
 				{
-					this.Certificate = session.Certificate;
+					this.Certificate = this.ParentViewModel?.Settings.Certificates?.FirstOrDefault(x => x.Name == session.Certificate);
 				}
 
 				if (section == null || section.GetString().ToUpper() == "URL")
@@ -2039,6 +2045,24 @@ namespace RestClientLibrary.ViewModel
 			return null;
 		}
 
+		private X509Certificate2 GetCertificateFromFile(string file, string password)
+		{
+			if (string.IsNullOrEmpty(file) || string.IsNullOrEmpty(password))
+			{
+				return null;
+			}
+
+			try
+			{
+				return new X509Certificate2(file, password);
+			}
+			catch (Exception ex)
+			{
+				this.LogException(ex);
+				return null;
+			}
+		}
+
 		/// <summary>
 		/// The GetHeaders
 		/// </summary>
@@ -2175,15 +2199,8 @@ namespace RestClientLibrary.ViewModel
 				IsXmlResponse = false;
 				IsJsonResponse = false;
 				RestResponse restresponse = null;
-				X509Certificate2 clientCert = null;
+				X509Certificate2 clientCert = this.GetCertificate();
 				ServiceClient client = null;
-
-				if (string.IsNullOrWhiteSpace(this.Certificate) == false)
-				{
-					var certs = this.ParentViewModel?.Certificates;
-					var cert = certs?.LastOrDefault(x => x.Name.Equals(this.Certificate.Trim(), StringComparison.CurrentCultureIgnoreCase));
-					clientCert = this.GetCertificateFromThumprint(cert?.Thumbprint);
-				}
 
 				if (clientCert != null)
 				{
@@ -2271,7 +2288,7 @@ namespace RestClientLibrary.ViewModel
 					Task.Run(() => this.ResponseHeaders = transaction.ResponseHeaders, this.requestResponseDataThreadCancellationSource.Token);
 					this.requestResponseHeaderThreadCancellationSource = new CancellationTokenSource();
 					Task.Run(() => this.SetOutputResponseContent(restresponse.OutputContent, restresponse.ContentType), this.requestResponseHeaderThreadCancellationSource.Token);
-					
+
 					transaction.StatusCode = restresponse.StatusCode;
 					transaction.StatusDescription = restresponse.StatusDescription;
 					transaction.ResponseContent = restresponse.OutputContent;
@@ -2317,6 +2334,25 @@ namespace RestClientLibrary.ViewModel
 					this.SendButtonText = "Send";
 				}));
 			}
+		}
+
+		private X509Certificate2 GetCertificate()
+		{
+			X509Certificate2 clientCert = null;
+			if (this.Certificate != null)
+			{
+				var cert = this.ParentViewModel?.Settings.Certificates.LastOrDefault(x => x.Name.Equals(this.Certificate.Name.Trim(), StringComparison.CurrentCultureIgnoreCase));
+				if (!string.IsNullOrEmpty(cert.Thumbprint))
+				{
+					clientCert = this.GetCertificateFromThumprint(cert?.Thumbprint);
+				}
+				else if (!string.IsNullOrEmpty(cert.FilePath))
+				{
+					clientCert = this.GetCertificateFromFile(cert?.FilePath, cert.FilePassword);
+				}
+			}
+
+			return clientCert;
 		}
 
 		/// <summary>
@@ -2524,13 +2560,12 @@ namespace RestClientLibrary.ViewModel
 					return false;
 				}
 
-				if (string.IsNullOrWhiteSpace(this.Certificate) == false)
+				if (this.Certificate != null)
 				{
-					var certs = this.ParentViewModel?.Certificates;
-					var cert = certs?.LastOrDefault(x => x.Name.Equals(this.Certificate.Trim(), StringComparison.CurrentCultureIgnoreCase));
+					var cert = this.GetCertificate();
 					if (cert == null)
 					{
-						this._view.MessageShow("Validations Error", "Unable to find '" + this.Certificate + "' certificate in the Global or selected environment certificates.");
+						this._view.MessageShow("Validations Error", "Unable to find '" + this.Certificate.Name + "' certificate in the Global or selected environment certificates.");
 						return false;
 					}
 				}

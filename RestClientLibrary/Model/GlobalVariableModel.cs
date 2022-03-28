@@ -30,6 +30,7 @@ namespace RestClientLibrary.Model
         /// </summary>
         public List<KeyValueModel> Variables { get; set; }
 
+        public List<string> Workspaces { get; set; }
         #endregion
     }
 }

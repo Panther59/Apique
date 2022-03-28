@@ -5,11 +5,12 @@
     using RestClientLibrary.View;
     using RestClientLibrary.ViewModel;
     using System.Security.Cryptography.X509Certificates;
+	using RestClientLibrary.Screen.Windows;
 
-    /// <summary>
-    /// Interaction logic for ucGlobalSetup.xaml
-    /// </summary>
-    public partial class ucGlobalSetup : BaseUserControl, IGlobalSetupView
+	/// <summary>
+	/// Interaction logic for ucGlobalSetup.xaml
+	/// </summary>
+	public partial class ucGlobalSetup : BaseUserControl, IGlobalSetupView
     {
         /// <summary>
         /// Initializes a new instance of the <see cref = "ucGlobalSetup"/> class.
@@ -37,5 +38,14 @@
 
             return window.Environment;
         }
-    }
+
+		public string AddNewWorkspace()
+		{
+            AddNameWindow window = new AddNameWindow();
+            window.Resources = (System.Windows.Window.GetWindow(this)).Resources;
+            window.ShowDialog(this);
+
+            return window.NewName;
+        }
+	}
 }

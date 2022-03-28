@@ -1,6 +1,7 @@
 ﻿namespace DataLibrary
 {
-    using System;
+	using Newtonsoft.Json;
+	using System;
     using System.ComponentModel;
     using System.Xml.Serialization;
 
@@ -30,7 +31,7 @@
         /// <summary>
         /// Gets or sets a value indicating whether IsBusy
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public bool IsBusy
         {
             get

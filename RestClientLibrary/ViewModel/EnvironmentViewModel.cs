@@ -6,362 +6,417 @@
 
 namespace RestClientLibrary.ViewModel
 {
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using DataLibrary;
-    using RestClientLibrary.Model;
-    using RestClientLibrary.View;
+	using System;
+	using System.Collections.ObjectModel;
+	using System.Linq;
+	using DataLibrary;
+	using RestClientLibrary.Common;
+	using RestClientLibrary.Model;
+	using RestClientLibrary.View;
 
-    /// <summary>
-    /// Defines the <see cref = "EnvironmentViewModel"/>
-    /// </summary>
-    public class EnvironmentViewModel : BaseViewModel
-    {
-        #region Fields
+	/// <summary>
+	/// Defines the <see cref = "EnvironmentViewModel"/>
+	/// </summary>
+	public class EnvironmentViewModel : BaseViewModel
+	{
+		public EnvironmentViewModel()
+		{
+			if (string.IsNullOrEmpty(this.Guid))
+			{
+				this.Guid = System.Guid.NewGuid().ToString();
+			}
+		}
 
-        /// <summary>
-        /// The certificates field
-        /// </summary>
-        private ObservableCollection<CertificateViewModel> certificates;
+		#region Fields
 
-        /// <summary>
-        /// The certificateSupport field
-        /// </summary>
-        private bool certificateSupport;
+		/// <summary>
+		/// The certificates field
+		/// </summary>
+		private ObservableCollection<CertificateViewModel> certificates;
 
-        /// <summary>
-        /// The guid field
-        /// </summary>
-        private string guid;
+		/// <summary>
+		/// The guid field
+		/// </summary>
+		private string guid;
 
-        /// <summary>
-        /// The name field
-        /// </summary>
-        private string name;
+		/// <summary>
+		/// The name field
+		/// </summary>
+		private string name;
 
-        /// <summary>
-        /// The variables field
-        /// </summary>
-        private ObservableCollection<KeyValueViewModel> variables;
+		/// <summary>
+		/// The variables field
+		/// </summary>
+		private ObservableCollection<KeyValueViewModel> variables;
+		private ObservableCollection<string> workspaces;
+		private string workspace;
+		private CertificateViewModel defaultDertificate;
+		
 
-        /// <summary>
-        /// Defines the view
-        /// </summary>
-        private IEnvironmentView view;
+		public CertificateViewModel DefaultCertificate
+		{
+			get
+			{
+				return this.defaultDertificate;
+			}
 
-        #region Commands
+			set
+			{
+				this.defaultDertificate = value;
+				this.OnPropertyChanged("DefaultCertificate");
+			}
+		}
+		/// <summary>
+		/// Defines the view
+		/// </summary>
+		private IEnvironmentView view;
 
-        /// <summary>
-        /// The addNewCertificateCommand field
-        /// </summary>
-        private RelayCommand addNewCertificateCommand;
+		public void LoadData()
+		{
+			var settings = AppDataHelper.LoadSettingsData();
+			var globalVariables = AppDataHelper.LoadGlobalData();
+			if (globalVariables.Workspaces == null)
+			{
+				globalVariables.Workspaces = new System.Collections.Generic.List<string>();
+			}
 
-        /// <summary>
-        /// The addNewVariableCommand field
-        /// </summary>
-        private RelayCommand addNewVariableCommand;
+			if (!globalVariables.Workspaces.Any(x => x == Constants.DefaultWorkspace))
+			{
+				globalVariables.Workspaces.Insert(0, Constants.DefaultWorkspace);
+			}
+			var ws = globalVariables.Workspaces.ToList();
+			this.Workspaces = new ObservableCollection<string>(ws);
+			if (string.IsNullOrEmpty(this.Workspace))
+			{
+				this.Workspace = Constants.DefaultWorkspace;
+			}
 
-        /// <summary>
-        /// The removeCertificateCommand field
-        /// </summary>
-        private RelayCommand<CertificateViewModel> removeCertificateCommand;
+			if (settings.Certificates != null)
+			{
+				this.Certificates = new ObservableCollection<CertificateViewModel>(settings.Certificates);
+			}
 
-        /// <summary>
-        /// The removeVariableCommand field
-        /// </summary>
-        private RelayCommand<KeyValueViewModel> removeVariableCommand;
+			if (this.DefaultCertificate != null)
+			{
+				this.DefaultCertificate = this.Certificates.FirstOrDefault(x => x.Name == this.DefaultCertificate.Name);
+			}
+		}
 
-        #endregion
+		#region Commands
 
-        #endregion
+		/// <summary>
+		/// The addNewCertificateCommand field
+		/// </summary>
+		private RelayCommand addNewCertificateCommand;
 
-        #region Properties
+		/// <summary>
+		/// The addNewVariableCommand field
+		/// </summary>
+		private RelayCommand addNewVariableCommand;
 
-        /// <summary>
-        /// Gets or sets the Certificates
-        /// </summary>
-        public ObservableCollection<CertificateViewModel> Certificates
-        {
-            get
-            {
-                return this.certificates;
-            }
+		/// <summary>
+		/// The removeCertificateCommand field
+		/// </summary>
+		private RelayCommand<CertificateViewModel> removeCertificateCommand;
 
-            set
-            {
-                this.certificates = value;
-                this.OnPropertyChanged("Certificates");
-            }
-        }
+		/// <summary>
+		/// The removeVariableCommand field
+		/// </summary>
+		private RelayCommand<KeyValueViewModel> removeVariableCommand;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether CertificateSupport
-        /// </summary>
-        public bool CertificateSupport
-        {
-            get
-            {
-                return this.certificateSupport;
-            }
+		#endregion
 
-            set
-            {
-                this.certificateSupport = value;
-                this.OnPropertyChanged("CertificateSupport");
-            }
-        }
+		#endregion
 
-        /// <summary>
-        /// Gets or sets the Guid
-        /// </summary>
-        public string Guid
-        {
-            get
-            {
-                return this.guid;
-            }
+		#region Properties
 
-            set
-            {
-                this.guid = value;
-                this.OnPropertyChanged("Guid");
-            }
-        }
+		/// <summary>
+		/// Gets or sets the Certificates
+		/// </summary>
+		public ObservableCollection<CertificateViewModel> Certificates
+		{
+			get
+			{
+				return this.certificates;
+			}
 
-        /// <summary>
-        /// Gets or sets the Name
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
+			set
+			{
+				this.certificates = value;
+				this.OnPropertyChanged("Certificates");
+			}
+		}
+		public ObservableCollection<string> Workspaces
+		{
+			get
+			{
+				return this.workspaces;
+			}
 
-            set
-            {
-                this.name = value;
-                this.OnPropertyChanged("Name");
-            }
-        }
+			set
+			{
+				this.workspaces = value;
+				this.OnPropertyChanged("Workspaces");
+			}
+		}
 
-        /// <summary>
-        /// Gets or sets the Variables
-        /// </summary>
-        public ObservableCollection<KeyValueViewModel> Variables
-        {
-            get
-            {
-                return this.variables;
-            }
+		public string Workspace
+		{
+			get
+			{
+				return this.workspace;
+			}
 
-            set
-            {
-                this.variables = value;
-                this.OnPropertyChanged("Variables");
-            }
-        }
+			set
+			{
+				this.workspace = value;
+				this.OnPropertyChanged("Workspace");
+			}
+		}
 
-        #region Commands
+		/// <summary>
+		/// Gets or sets the Guid
+		/// </summary>
+		public string Guid
+		{
+			get
+			{
+				return this.guid;
+			}
 
-        /// <summary>
-        /// Gets the AddNewCertificateCommand
-        /// </summary>
-        public RelayCommand AddNewCertificateCommand
-        {
-            get
-            {
-                if (this.addNewCertificateCommand == null)
-                {
-                    this.addNewCertificateCommand = new RelayCommand(command => this.ExecuteAddNewCertificate());
-                }
+			set
+			{
+				this.guid = value;
+				this.OnPropertyChanged("Guid");
+			}
+		}
 
-                return this.addNewCertificateCommand;
-            }
-        }
+		/// <summary>
+		/// Gets or sets the Name
+		/// </summary>
+		public string Name
+		{
+			get
+			{
+				return this.name;
+			}
 
-        /// <summary>
-        /// Gets the AddNewVariableCommand
-        /// </summary>
-        public RelayCommand AddNewVariableCommand
-        {
-            get
-            {
-                if (this.addNewVariableCommand == null)
-                {
-                    this.addNewVariableCommand = new RelayCommand(command => this.ExecuteAddNewVariable());
-                }
+			set
+			{
+				this.name = value;
+				this.OnPropertyChanged("Name");
+			}
+		}
 
-                return this.addNewVariableCommand;
-            }
-        }
+		/// <summary>
+		/// Gets or sets the Variables
+		/// </summary>
+		public ObservableCollection<KeyValueViewModel> Variables
+		{
+			get
+			{
+				return this.variables;
+			}
 
-        /// <summary>
-        /// Gets the RemoveCertificateCommand
-        /// </summary>
-        public RelayCommand<CertificateViewModel> RemoveCertificateCommand
-        {
-            get
-            {
-                if (this.removeCertificateCommand == null)
-                {
-                    this.removeCertificateCommand = new RelayCommand<CertificateViewModel>(command => this.ExecuteRemoveCertificate(command));
-                }
+			set
+			{
+				this.variables = value;
+				this.OnPropertyChanged("Variables");
+			}
+		}
 
-                return this.removeCertificateCommand;
-            }
-        }
+		#region Commands
 
-        /// <summary>
-        /// Gets the RemoveVariableCommand
-        /// </summary>
-        public RelayCommand<KeyValueViewModel> RemoveVariableCommand
-        {
-            get
-            {
-                if (this.removeVariableCommand == null)
-                {
-                    this.removeVariableCommand = new RelayCommand<KeyValueViewModel>(command => this.ExecuteRemoveVariable(command));
-                }
+		/// <summary>
+		/// Gets the AddNewCertificateCommand
+		/// </summary>
+		public RelayCommand AddNewCertificateCommand
+		{
+			get
+			{
+				if (this.addNewCertificateCommand == null)
+				{
+					this.addNewCertificateCommand = new RelayCommand(command => this.ExecuteAddNewCertificate());
+				}
 
-                return this.removeVariableCommand;
-            }
-        }
+				return this.addNewCertificateCommand;
+			}
+		}
 
-        #endregion
+		/// <summary>
+		/// Gets the AddNewVariableCommand
+		/// </summary>
+		public RelayCommand AddNewVariableCommand
+		{
+			get
+			{
+				if (this.addNewVariableCommand == null)
+				{
+					this.addNewVariableCommand = new RelayCommand(command => this.ExecuteAddNewVariable());
+				}
 
-        #endregion
+				return this.addNewVariableCommand;
+			}
+		}
 
-        #region Methods
+		/// <summary>
+		/// Gets the RemoveCertificateCommand
+		/// </summary>
+		public RelayCommand<CertificateViewModel> RemoveCertificateCommand
+		{
+			get
+			{
+				if (this.removeCertificateCommand == null)
+				{
+					this.removeCertificateCommand = new RelayCommand<CertificateViewModel>(command => this.ExecuteRemoveCertificate(command));
+				}
 
-        #region Public Methods
+				return this.removeCertificateCommand;
+			}
+		}
 
-        /// <summary>
-        /// The Parse
-        /// </summary>
-        /// <param name = "input">The <see cref = "EnvironmentModel"/></param>
-        /// <returns>The <see cref = "EnvironmentViewModel"/></returns>
-        public static EnvironmentViewModel Parse(EnvironmentModel input)
-        {
-            if (input == null)
-            {
-                return null;
-            }
+		/// <summary>
+		/// Gets the RemoveVariableCommand
+		/// </summary>
+		public RelayCommand<KeyValueViewModel> RemoveVariableCommand
+		{
+			get
+			{
+				if (this.removeVariableCommand == null)
+				{
+					this.removeVariableCommand = new RelayCommand<KeyValueViewModel>(command => this.ExecuteRemoveVariable(command));
+				}
 
-            EnvironmentViewModel output = new EnvironmentViewModel();
-            output.Guid = input.Guid;
-            output.Name = input.Name;
-            if (input.Variables != null)
-            {
-                output.Variables = new ObservableCollection<KeyValueViewModel>(input.Variables.Select(x => KeyValueViewModel.Parse(x)));
-            }
+				return this.removeVariableCommand;
+			}
+		}
 
-            if (input.Certificates != null)
-            {
-                output.Certificates = new ObservableCollection<CertificateViewModel>(input.Certificates.Select(x => CertificateViewModel.Parse(x)));
-            }
+		#endregion
 
-            return output;
-        }
+		#endregion
 
-        /// <summary>
-        /// The AttachView
-        /// </summary>
-        /// <param name="view">The <see cref="IEnvironmentView"/></param>
-        public void AttachView(IEnvironmentView view)
-        {
-            this.view = view;
-            this.CheckForCertificateSupport();
-        }
+		#region Methods
 
-        /// <summary>
-        /// The IsValid
-        /// </summary>
-        /// <returns>The <see cref="bool"/></returns>
-        public bool IsValid()
-        {
-            return (string.IsNullOrEmpty(this.Name) == false);
-        }
+		#region Public Methods
 
-        /// <summary>
-        /// The ToModel
-        /// </summary>
-        /// <returns>The <see cref = "EnvironmentModel"/></returns>
-        public EnvironmentModel ToModel()
-        {
-            return new EnvironmentModel
-            {
-                Guid = this.Guid,
-                Name = this.Name,
-                Certificates = this.Certificates?.Select(x => x.ToModel()).ToList(),
-                Variables = this.Variables?.Select(x => x.ToModel()).ToList()
-            };
-        }
+		/// <summary>
+		/// The Parse
+		/// </summary>
+		/// <param name = "input">The <see cref = "EnvironmentModel"/></param>
+		/// <returns>The <see cref = "EnvironmentViewModel"/></returns>
+		public static EnvironmentViewModel Parse(EnvironmentModel input)
+		{
+			if (input == null)
+			{
+				return null;
+			}
 
-        #endregion
+			EnvironmentViewModel output = new EnvironmentViewModel();
+			output.Guid = input.Guid;
+			output.Name = input.Name;
+			output.Workspace = input.Workspace;
+			if (input.Variables != null)
+			{
+				output.Variables = new ObservableCollection<KeyValueViewModel>(input.Variables.Select(x => KeyValueViewModel.Parse(x)));
+			}
 
-        #region Private Methods
+			if (input.DefaultCertificate != null)
+			{
+				output.DefaultCertificate = CertificateViewModel.Parse(input.DefaultCertificate);
+			}
 
-        /// <summary>
-        /// The CheckForCertificateSupport
-        /// </summary>
-        private void CheckForCertificateSupport()
-        {
-            var settings = RestClientLibrary.Common.AppDataHelper.LoadSettingsData();
-            this.CertificateSupport = settings.CertificateSupport;
-        }
+			return output;
+		}
 
-        /// <summary>
-        /// Executes AddNewCertificate
-        /// </summary>
-        private void ExecuteAddNewCertificate()
-        {
-            var certificate = this.view?.AddNewCertificate();
-            if (certificate != null)
-            {
-                if (this.Certificates == null)
-                {
-                    this.Certificates = new ObservableCollection<CertificateViewModel>();
-                }
+		/// <summary>
+		/// The AttachView
+		/// </summary>
+		/// <param name="view">The <see cref="IEnvironmentView"/></param>
+		public void AttachView(IEnvironmentView view)
+		{
+			this.view = view;
+		}
 
-                this.Certificates.Add(certificate);
-            }
-        }
+		/// <summary>
+		/// The IsValid
+		/// </summary>
+		/// <returns>The <see cref="bool"/></returns>
+		public bool IsValid()
+		{
+			return !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.Workspace);
+		}
 
-        /// <summary>
-        /// Executes AddNewVariableCommand
-        /// </summary>
-        private void ExecuteAddNewVariable()
-        {
-            if (this.Variables == null)
-            {
-                this.Variables = new ObservableCollection<KeyValueViewModel>();
-            }
+		/// <summary>
+		/// The ToModel
+		/// </summary>
+		/// <returns>The <see cref = "EnvironmentModel"/></returns>
+		public EnvironmentModel ToModel()
+		{
+			return new EnvironmentModel
+			{
+				Guid = this.Guid,
+				Name = this.Name,
+				DefaultCertificate = this.DefaultCertificate?.ToModel(),
+				Variables = this.Variables?.Select(x => x.ToModel()).ToList(),
+				Workspace = this.Workspace
+			};
+		}
 
-            this.Variables.Add(new KeyValueViewModel());
-        }
+		#endregion
 
-        /// <summary>
-        /// Executes RemoveCertificate
-        /// </summary>
-        private void ExecuteRemoveCertificate(CertificateViewModel input)
-        {
-            if (this.Certificates != null)
-            {
-                this.Certificates.Remove(input);
-            }
-        }
+		#region Private Methods
 
-        /// <summary>
-        /// Executes RemoveVariable
-        /// </summary>
-        private void ExecuteRemoveVariable(KeyValueViewModel variable)
-        {
-            this.Variables.Remove(variable);
-        }
+		/// <summary>
+		/// Executes AddNewCertificate
+		/// </summary>
+		private void ExecuteAddNewCertificate()
+		{
+			var certificate = this.view?.AddNewCertificate();
+			if (certificate != null)
+			{
+				if (this.Certificates == null)
+				{
+					this.Certificates = new ObservableCollection<CertificateViewModel>();
+				}
 
-        #endregion
+				this.Certificates.Add(certificate);
+			}
+		}
 
-        #endregion
-    }
+		/// <summary>
+		/// Executes AddNewVariableCommand
+		/// </summary>
+		private void ExecuteAddNewVariable()
+		{
+			if (this.Variables == null)
+			{
+				this.Variables = new ObservableCollection<KeyValueViewModel>();
+			}
+
+			this.Variables.Add(new KeyValueViewModel());
+		}
+
+		/// <summary>
+		/// Executes RemoveCertificate
+		/// </summary>
+		private void ExecuteRemoveCertificate(CertificateViewModel input)
+		{
+			if (this.Certificates != null)
+			{
+				this.Certificates.Remove(input);
+			}
+		}
+
+		/// <summary>
+		/// Executes RemoveVariable
+		/// </summary>
+		private void ExecuteRemoveVariable(KeyValueViewModel variable)
+		{
+			this.Variables.Remove(variable);
+		}
+
+		#endregion
+
+		#endregion
+	}
 }

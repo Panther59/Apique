@@ -49,16 +49,17 @@ namespace RestClientLibrary.Screen
         /// Gets or sets the GlobalData
         /// </summary>
         public GlobalVariableModel GlobalData { get; set; }
+		public string Workspace { get; internal set; }
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// The OnRenderSizeChanged
-        /// </summary>
-        /// <param name="sizeInfo">The <see cref="SizeChangedInfo"/></param>
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+		/// <summary>
+		/// The OnRenderSizeChanged
+		/// </summary>
+		/// <param name="sizeInfo">The <see cref="SizeChangedInfo"/></param>
+		protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
 
@@ -96,7 +97,7 @@ namespace RestClientLibrary.Screen
         private void GlobalSetupWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.viewModel = new GlobalSetupViewModel(this.ucGlobalSetup);
-            viewModel.LoadData(this.GlobalData, this.Environment);
+            viewModel.LoadData(this.GlobalData, this.Environment, this.Workspace);
 
             this.ucGlobalSetup.DataContext = viewModel;
         }
@@ -111,7 +112,7 @@ namespace RestClientLibrary.Screen
             var anyError = await this.viewModel.SaveData();
             if (anyError == false)
             {
-                this.Environment = viewModel.SelectedEnvironment.ToModel();
+                this.Environment = viewModel.SelectedEnvironment?.ToModel();
                 this.Close();
             }
         }

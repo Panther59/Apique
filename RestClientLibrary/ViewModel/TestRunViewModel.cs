@@ -16,11 +16,12 @@ namespace RestClientLibrary.ViewModel
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Xml.Serialization;
+	using Newtonsoft.Json;
 
-    /// <summary>
-    /// Defines the <see cref="TestRunViewModel" />
-    /// </summary>
-    public class TestRunViewModel : BaseViewModel
+	/// <summary>
+	/// Defines the <see cref="TestRunViewModel" />
+	/// </summary>
+	public class TestRunViewModel : BaseViewModel
     {
         #region Fields
 
@@ -216,7 +217,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets a value indicating whether IsSelected
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public bool IsSelected
         {
             get
@@ -235,7 +236,7 @@ namespace RestClientLibrary.ViewModel
         /// Sets the Mapper
         /// </summary>
         [Dependency]
-        [XmlIgnore]
+        [JsonIgnore]
         public IMapper Mapper
         {
             set

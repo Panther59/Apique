@@ -7,7 +7,8 @@
 namespace RestClientLibrary.ViewModel
 {
     using DataLibrary;
-    using RestClientLibrary.Common;
+	using Newtonsoft.Json;
+	using RestClientLibrary.Common;
     using System;
     using System.Collections.ObjectModel;
     using System.Xml.Serialization;
@@ -200,7 +201,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets the RenameCategoryCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand<bool> RenameCategoryCommand
         {
             get

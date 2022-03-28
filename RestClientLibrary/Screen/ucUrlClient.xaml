@@ -1,250 +1,250 @@
 ﻿<base:BaseUserControl
-    x:Class="RestClientLibrary.Screen.ucUrlClient"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="334"
-    d:DesignWidth="674"
-    mc:Ignorable="d">
-    <UserControl.Resources>
-        <base:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <PathGeometry x:Key="TreeArrow" Figures="M0,0 L0,6 L6,0 z" />
-        <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="Width" Value="16" />
-            <Setter Property="Height" Value="16" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border
-                            Width="16"
-                            Height="16"
-                            Padding="5,5,5,5"
-                            Background="Transparent">
-                            <Path
-                                x:Name="ExpandPath"
-                                Data="{StaticResource TreeArrow}"
-                                Fill="Transparent"
-                                Stroke="#FF989898">
-                                <Path.RenderTransform>
-                                    <RotateTransform Angle="135" CenterX="3" CenterY="3" />
-                                </Path.RenderTransform>
-                            </Path>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ExpandPath" Property="Stroke" Value="#FF1BBBFA" />
-                                <Setter TargetName="ExpandPath" Property="Fill" Value="Transparent" />
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="ExpandPath" Property="RenderTransform">
-                                    <Setter.Value>
-                                        <RotateTransform Angle="180" CenterX="3" CenterY="3" />
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="ExpandPath" Property="Fill" Value="#FF595959" />
-                                <Setter TargetName="ExpandPath" Property="Stroke" Value="#FF262626" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
-            <Setter Property="OverridesDefaultStyle" Value="True" />
-            <Setter Property="ContextMenu" Value="{DynamicResource CustomVariableContextMenus}" />
-        </Style>
-    </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0" />
-        </Grid.ColumnDefinitions>
-        <TextBlock
-            Grid.Column="1"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Text="Url" />
-        <ToggleButton
-            Grid.Column="1"
-            Width="20"
-            Margin="13,2,0,3"
-            HorizontalAlignment="Left"
-            Command="{Binding UrlExpandedCommand}"
-            IsChecked="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource ExpandCollapseToggleStyle}" />
-        <ComboBox
-            Grid.Column="1"
-            Grid.ColumnSpan="2"
-            Margin="30,0,0,0"
-            ContextMenu="{DynamicResource CustomVariableContextMenus}"
-            DisplayMemberPath="Text"
-            IsEditable="True"
-            IsReadOnly="{Binding IsExpanded}"
-            ItemsSource="{Binding Urls}"
-            StaysOpenOnEdit="True"
-            Style="{DynamicResource VariableComboBox}"
-            Text="{Binding EnteredUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+	x:Class="RestClientLibrary.Screen.ucUrlClient"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	d:DesignHeight="334"
+	d:DesignWidth="674"
+	mc:Ignorable="d">
+	<UserControl.Resources>
+		<base:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+		<PathGeometry x:Key="TreeArrow" Figures="M0,0 L0,6 L6,0 z" />
+		<Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
+			<Setter Property="Focusable" Value="False" />
+			<Setter Property="Width" Value="16" />
+			<Setter Property="Height" Value="16" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ToggleButton}">
+						<Border
+							Width="16"
+							Height="16"
+							Padding="5,5,5,5"
+							Background="Transparent">
+							<Path
+								x:Name="ExpandPath"
+								Data="{StaticResource TreeArrow}"
+								Fill="Transparent"
+								Stroke="#FF989898">
+								<Path.RenderTransform>
+									<RotateTransform Angle="135" CenterX="3" CenterY="3" />
+								</Path.RenderTransform>
+							</Path>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter TargetName="ExpandPath" Property="Stroke" Value="#FF1BBBFA" />
+								<Setter TargetName="ExpandPath" Property="Fill" Value="Transparent" />
+							</Trigger>
+							<Trigger Property="IsChecked" Value="True">
+								<Setter TargetName="ExpandPath" Property="RenderTransform">
+									<Setter.Value>
+										<RotateTransform Angle="180" CenterX="3" CenterY="3" />
+									</Setter.Value>
+								</Setter>
+								<Setter TargetName="ExpandPath" Property="Fill" Value="#FF595959" />
+								<Setter TargetName="ExpandPath" Property="Stroke" Value="#FF262626" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+			<Setter Property="OverridesDefaultStyle" Value="True" />
+			<Setter Property="ContextMenu" Value="{DynamicResource CustomVariableContextMenus}" />
+		</Style>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="10" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="0" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="0" />
+		</Grid.ColumnDefinitions>
+		<TextBlock
+			Grid.Column="1"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Center"
+			Text="Url" />
+		<ToggleButton
+			Grid.Column="1"
+			Width="20"
+			Margin="13,2,0,3"
+			HorizontalAlignment="Left"
+			Command="{Binding UrlExpandedCommand}"
+			IsChecked="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			Style="{StaticResource ExpandCollapseToggleStyle}" />
+		<ComboBox
+			Grid.Column="1"
+			Grid.ColumnSpan="2"
+			Margin="30,0,0,0"
+			ContextMenu="{DynamicResource CustomVariableContextMenus}"
+			DisplayMemberPath="Text"
+			IsEditable="True"
+			IsReadOnly="{Binding IsExpanded}"
+			ItemsSource="{Binding Urls}"
+			StaysOpenOnEdit="True"
+			Style="{DynamicResource VariableComboBox}"
+			Text="{Binding EnteredUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Grid
-            Grid.Row="2"
-            Grid.ColumnSpan="4"
-            Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0" />
-                <RowDefinition Height="0" />
-                <RowDefinition Height="23" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="23" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="20" />
-                <RowDefinition Height="10" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="10" />
-            </Grid.ColumnDefinitions>
+		<Grid
+			Grid.Row="2"
+			Grid.ColumnSpan="4"
+			Visibility="{Binding IsExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="0" />
+				<RowDefinition Height="0" />
+				<RowDefinition Height="23" />
+				<RowDefinition Height="10" />
+				<RowDefinition Height="23" />
+				<RowDefinition Height="10" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="10" />
+				<RowDefinition Height="20" />
+				<RowDefinition Height="10" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="10" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="2*" />
+				<ColumnDefinition Width="10" />
+			</Grid.ColumnDefinitions>
 
-            <TextBlock
-                Grid.Row="2"
-                Grid.Column="1"
-                Margin="0,0,10,0"
-                Text="Scheme:" />
-            <TextBox
-                Grid.Row="2"
-                Grid.Column="1"
-                Margin="50,0,10,0"
-                ContextMenu="{DynamicResource CustomVariableContextMenus}"
-                Text="{Binding Scheme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<TextBlock
+				Grid.Row="2"
+				Grid.Column="1"
+				Margin="0,0,10,0"
+				Text="Scheme:" />
+			<TextBox
+				Grid.Row="2"
+				Grid.Column="1"
+				Margin="50,0,10,0"
+				ContextMenu="{DynamicResource CustomVariableContextMenus}"
+				Text="{Binding Scheme, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock
-                Grid.Row="2"
-                Grid.Column="2"
-                Margin="0,0,10,0"
-                Text="Host:" />
-            <TextBox
-                Grid.Row="2"
-                Grid.Column="2"
-                Margin="30,0,10,0"
-                ContextMenu="{DynamicResource CustomVariableContextMenus}"
-                Text="{Binding Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<TextBlock
+				Grid.Row="2"
+				Grid.Column="2"
+				Margin="0,0,10,0"
+				Text="Host:" />
+			<TextBox
+				Grid.Row="2"
+				Grid.Column="2"
+				Margin="30,0,10,0"
+				ContextMenu="{DynamicResource CustomVariableContextMenus}"
+				Text="{Binding Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBlock
-                Grid.Row="4"
-                Grid.Column="1"
-                Margin="0,0,10,0"
-                Text="Path:" />
-            <TextBox
-                Grid.Row="4"
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
-                Margin="30,0,10,0"
-                ContextMenu="{DynamicResource CustomVariableContextMenus}"
-                Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <GroupBox
-                Grid.Row="6"
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
-                MinHeight="100"
-                Header="Query string">
-                <Grid>
-                    <TextBlock>
-                        <Hyperlink Command="{Binding AddNewQueryStringClickedCommand}">
-                            <TextBlock Text="Add New" />
-                        </Hyperlink>
-                    </TextBlock>
-                    <ItemsControl Margin="0,20,0,0" ItemsSource="{Binding QueryStrings}">
-                        <ItemsControl.Resources>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ItemsControl.Resources>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="20" />
-                                        <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="30" />
-                                        <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="30" />
-                                        <ColumnDefinition Width="10" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        Text="Key:" />
-                                    <TextBox
-                                        Grid.Column="1"
-                                        Margin="25,0,0,0"
-                                        ContextMenu="{DynamicResource CustomVariableContextMenus}"
-                                        Text="{Binding Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<TextBlock
+				Grid.Row="4"
+				Grid.Column="1"
+				Margin="0,0,10,0"
+				Text="Path:" />
+			<TextBox
+				Grid.Row="4"
+				Grid.Column="1"
+				Grid.ColumnSpan="2"
+				Margin="30,0,10,0"
+				ContextMenu="{DynamicResource CustomVariableContextMenus}"
+				Text="{Binding Path, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<GroupBox
+				Grid.Row="6"
+				Grid.Column="1"
+				Grid.ColumnSpan="2"
+				MinHeight="100"
+				Header="Query string">
+				<Grid>
+					<TextBlock>
+						<Hyperlink Command="{Binding AddNewQueryStringClickedCommand}">
+							<TextBlock Text="Add New" />
+						</Hyperlink>
+					</TextBlock>
+					<ItemsControl Margin="0,20,0,0" ItemsSource="{Binding QueryStrings}">
+						<ItemsControl.Resources>
+							<Style TargetType="ListViewItem">
+								<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+							</Style>
+						</ItemsControl.Resources>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="10" />
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="5" />
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="5" />
+										<ColumnDefinition Width="20" />
+										<ColumnDefinition Width="5" />
+										<ColumnDefinition Width="30" />
+										<ColumnDefinition Width="5" />
+										<ColumnDefinition Width="30" />
+										<ColumnDefinition Width="10" />
+									</Grid.ColumnDefinitions>
+									<TextBlock
+										Grid.Column="1"
+										VerticalAlignment="Center"
+										Text="Key:" />
+									<TextBox
+										Grid.Column="1"
+										Margin="25,0,0,0"
+										ContextMenu="{DynamicResource CustomVariableContextMenus}"
+										Text="{Binding Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                                    <TextBlock
-                                        Grid.Column="3"
-                                        VerticalAlignment="Center"
-                                        Text="Value:" />
-                                    <TextBox
-                                        Grid.Column="3"
-                                        Margin="35,0,0,0"
-                                        ContextMenu="{DynamicResource CustomVariableContextMenus}"
-                                        Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									<TextBlock
+										Grid.Column="3"
+										VerticalAlignment="Center"
+										Text="Value:" />
+									<TextBox
+										Grid.Column="3"
+										Margin="35,0,0,0"
+										ContextMenu="{DynamicResource CustomVariableContextMenus}"
+										Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                                    <Button
-                                        Grid.Column="5"
-                                        Width="20"
-                                        Command="{Binding RemoveClickedCommand}"
-                                        Content="O"
-                                        FontFamily="Wingdings 2"
-                                        FontSize="17"
-                                        Foreground="Red"
-                                        Style="{DynamicResource RemoveButtonStyle}" />
+									<Button
+										Grid.Column="5"
+										Width="20"
+										Command="{Binding RemoveClickedCommand}"
+										Content="O"
+										FontFamily="Wingdings 2"
+										FontSize="17"
+										Foreground="Red"
+										Style="{DynamicResource RemoveButtonStyle}" />
 
-                                    <Button
-                                        Grid.Column="7"
-                                        Command="{Binding EncodeClickedCommand}"
-                                        Content="Enc" />
+									<Button
+										Grid.Column="7"
+										Command="{Binding EncodeClickedCommand}"
+										Content="Enc" />
 
-                                    <Button
-                                        Grid.Column="9"
-                                        Command="{Binding DecodeClickedCommand}"
-                                        Content="Dec" />
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-            </GroupBox>
+									<Button
+										Grid.Column="9"
+										Command="{Binding DecodeClickedCommand}"
+										Content="Dec" />
+								</Grid>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</Grid>
+			</GroupBox>
 
-            <TextBlock
-                Grid.Row="8"
-                Grid.Column="1"
-                Text="Hash:" />
-            <TextBox
-                Grid.Row="8"
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
-                Margin="40,0,0,0"
-                Text="{Binding Hash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        </Grid>
-    </Grid>
+			<TextBlock
+				Grid.Row="8"
+				Grid.Column="1"
+				Text="Hash:" />
+			<TextBox
+				Grid.Row="8"
+				Grid.Column="1"
+				Grid.ColumnSpan="2"
+				Margin="40,0,0,0"
+				Text="{Binding Hash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+		</Grid>
+	</Grid>
 </base:BaseUserControl>

@@ -1,27 +1,27 @@
 ﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary">
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Controls\ButtonResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\CheckBoxResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\ComboBoxResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\ExpanderResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\GroupBoxResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\HyperlinkResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\LabelResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\ListViewResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\ListBoxResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\MenuItemResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\RadioButtonResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\ScrollViewerResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\TextBlockResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\TabControlResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\TextBoxResourceDictionary.xaml" />
-        <ResourceDictionary Source="Controls\TreeViewResourceDictionary.xaml" />
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="Controls\ButtonResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\CheckBoxResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\ComboBoxResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\ExpanderResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\GroupBoxResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\HyperlinkResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\LabelResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\ListViewResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\ListBoxResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\MenuItemResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\RadioButtonResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\ScrollViewerResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\TextBlockResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\TabControlResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\TextBoxResourceDictionary.xaml" />
+		<ResourceDictionary Source="Controls\TreeViewResourceDictionary.xaml" />
 
-        <ResourceDictionary Source="GeneralResourceDictionary.xaml" />
-    </ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="GeneralResourceDictionary.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

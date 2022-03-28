@@ -30,9 +30,11 @@ namespace RestClientLibrary.View
         /// <param name="environment">The <see cref="EnvironmentViewModel"/></param>
         /// <returns>The <see cref="EnvironmentViewModel"/></returns>
         EnvironmentViewModel AddNewEnvironment(EnvironmentViewModel environment);
+		
+        string AddNewWorkspace();
 
-        #endregion
-    }
+		#endregion
+	}
 
     #endregion
 }

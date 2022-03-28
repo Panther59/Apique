@@ -48,6 +48,7 @@
                 this.viewModel = new EnvironmentViewModel();
             }
 
+            viewModel.LoadData();
             this.ucEnvironment.DataContext = viewModel;
         }
 

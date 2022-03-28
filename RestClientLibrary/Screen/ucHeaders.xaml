@@ -1,105 +1,105 @@
 ﻿<base:BaseUserControl
-    x:Class="RestClientLibrary.Screen.ucHeaders"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ava="clr-namespace:AdvanceTextEditor;assembly=AdvanceTextEditor"
-    xmlns:avautil="clr-namespace:AdvanceTextEditor.Utils;assembly=AdvanceTextEditor"
-    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
-    xmlns:comm="clr-namespace:RestClientLibrary.Common"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:RestClientLibrary.Screen"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="300"
-    d:DesignWidth="300"
-    mc:Ignorable="d">
-    <Grid>
-        <TabControl SelectedIndex="{Binding SelctedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding HeaderTabChangedCommand}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <TabItem Header="Raw">
-                <ava:TextEditor
-                    Name="txtRawHeaders"
-                    Grid.Row="1"
-                    MaxHeight="250"
-                    Margin="0,2,2,2"
-                    Background="{DynamicResource PrimaryBackBrush}"
-                    BindableText="{Binding Headers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    ContextMenu="{DynamicResource CustomVariableContextMenus}"
-                    EditorTheme="{DynamicResource EditorThemeKey}"
-                    Foreground="{DynamicResource PrimaryForeBrush}"
-                    LineNumbersForeground="Gray"
-                    ShowLineNumbers="True"
-                    SyntaxHighlightingKey="Variables"
-                    VerticalScrollBarVisibility="Auto"
-                    WordWrap="True" />
-            </TabItem>
-            <TabItem Header="Form">
-                <Grid>
-                    <TextBlock>
-                        <Hyperlink Command="{Binding AddNewHeaderCommand}">
-                            <TextBlock Text="Add New" />
-                        </Hyperlink>
-                    </TextBlock>
-                    <ItemsControl Margin="0,20,0,0" ItemsSource="{Binding FormHeaders}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="10" />
-                                        <ColumnDefinition Width="30" />
-                                        <ColumnDefinition Width="10" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        VerticalAlignment="Center"
-                                        Text="Key:" />
-                                    <RichTextBox
-                                        Grid.Column="1"
-                                        Margin="25,0,0,0"
-                                        comm:RichTextBoxBehavior.HighlightText="True"
-                                        comm:RichTextBoxBehavior.RichText="{Binding Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        ContextMenu="{DynamicResource CustomVariableContextMenus}"
-                                        Foreground="{DynamicResource PrimaryForeBrush}"
-                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                        VerticalScrollBarVisibility="Disabled" />
-                                    <TextBlock
-                                        Grid.Column="3"
-                                        VerticalAlignment="Center"
-                                        Text="Value:" />
-                                    <RichTextBox
-                                        Name="txtValue"
-                                        Grid.Column="3"
-                                        Margin="35,0,0,0"
-                                        comm:RichTextBoxBehavior.HighlightText="True"
-                                        comm:RichTextBoxBehavior.RichText="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        ContextMenu="{DynamicResource CustomVariableContextMenus}"
-                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
-                                    <Button
-                                        Grid.Column="5"
-                                        Width="20"
-                                        Command="{Binding RemoveClickedCommand}"
-                                        Content="O"
-                                        FontFamily="Wingdings 2"
-                                        FontSize="17"
-                                        Foreground="Red"
-                                        Style="{DynamicResource RemoveButtonStyle}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Authorization">
-                <local:ucAuthorization DataContext="{Binding Authorization}" />
-            </TabItem>
-        </TabControl>
-    </Grid>
+	x:Class="RestClientLibrary.Screen.ucHeaders"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:ava="clr-namespace:AdvanceTextEditor;assembly=AdvanceTextEditor"
+	xmlns:avautil="clr-namespace:AdvanceTextEditor.Utils;assembly=AdvanceTextEditor"
+	xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+	xmlns:comm="clr-namespace:RestClientLibrary.Common"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+	xmlns:local="clr-namespace:RestClientLibrary.Screen"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	d:DesignHeight="300"
+	d:DesignWidth="300"
+	mc:Ignorable="d">
+	<Grid>
+		<TabControl SelectedIndex="{Binding SelctedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<i:Interaction.Triggers>
+				<i:EventTrigger EventName="SelectionChanged">
+					<i:InvokeCommandAction Command="{Binding HeaderTabChangedCommand}" />
+				</i:EventTrigger>
+			</i:Interaction.Triggers>
+			<TabItem Header="Raw">
+				<ava:TextEditor
+					Name="txtRawHeaders"
+					Grid.Row="1"
+					MaxHeight="250"
+					Margin="0,2,2,2"
+					Background="{DynamicResource PrimaryBackBrush}"
+					BindableText="{Binding Headers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ContextMenu="{DynamicResource CustomVariableContextMenus}"
+					EditorTheme="{DynamicResource EditorThemeKey}"
+					Foreground="{DynamicResource PrimaryForeBrush}"
+					LineNumbersForeground="Gray"
+					ShowLineNumbers="True"
+					SyntaxHighlightingKey="Variables"
+					VerticalScrollBarVisibility="Auto"
+					WordWrap="True" />
+			</TabItem>
+			<TabItem Header="Form">
+				<Grid>
+					<TextBlock>
+						<Hyperlink Command="{Binding AddNewHeaderCommand}">
+							<TextBlock Text="Add New" />
+						</Hyperlink>
+					</TextBlock>
+					<ItemsControl Margin="0,20,0,0" ItemsSource="{Binding FormHeaders}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="10" />
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="10" />
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="10" />
+										<ColumnDefinition Width="30" />
+										<ColumnDefinition Width="10" />
+									</Grid.ColumnDefinitions>
+									<TextBlock
+										Grid.Column="1"
+										VerticalAlignment="Center"
+										Text="Key:" />
+									<RichTextBox
+										Grid.Column="1"
+										Margin="25,0,0,0"
+										comm:RichTextBoxBehavior.HighlightText="True"
+										comm:RichTextBoxBehavior.RichText="{Binding Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+										ContextMenu="{DynamicResource CustomVariableContextMenus}"
+										Foreground="{DynamicResource PrimaryForeBrush}"
+										ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+										VerticalScrollBarVisibility="Disabled" />
+									<TextBlock
+										Grid.Column="3"
+										VerticalAlignment="Center"
+										Text="Value:" />
+									<RichTextBox
+										Name="txtValue"
+										Grid.Column="3"
+										Margin="35,0,0,0"
+										comm:RichTextBoxBehavior.HighlightText="True"
+										comm:RichTextBoxBehavior.RichText="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+										ContextMenu="{DynamicResource CustomVariableContextMenus}"
+										ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+									<Button
+										Grid.Column="5"
+										Width="20"
+										Command="{Binding RemoveClickedCommand}"
+										Content="O"
+										FontFamily="Wingdings 2"
+										FontSize="17"
+										Foreground="Red"
+										Style="{DynamicResource RemoveButtonStyle}" />
+								</Grid>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Authorization">
+				<local:ucAuthorization DataContext="{Binding Authorization}" />
+			</TabItem>
+		</TabControl>
+	</Grid>
 </base:BaseUserControl>

@@ -316,9 +316,17 @@ namespace RestClientLibrary.ViewModel
 				if (this.IsFile)
 				{
 					this.SelectedCertificate = new X509Certificate2(this.Path, this.Password);
-				}
 
-				this.FinalCertificate = CertificateViewModel.Parse(this.SelectedCertificate, this.CertificateName);
+					var cert = new CertificateViewModel();
+					cert.FilePath = Path;
+					cert.FilePassword = Password;
+					cert.Name = this.CertificateName;
+					this.FinalCertificate = cert;
+				}
+				else
+				{
+					this.FinalCertificate = CertificateViewModel.Parse(this.SelectedCertificate, this.CertificateName);
+				}
 				this.CloseWindow();
 			}
 			catch (Exception ex)

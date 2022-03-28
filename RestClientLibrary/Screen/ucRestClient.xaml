@@ -1,695 +1,691 @@
 ﻿<base:BaseUserControl
-    x:Class="RestClientLibrary.Screen.ucRestClient"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ava="clr-namespace:AdvanceTextEditor;assembly=AdvanceTextEditor"
-    xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
-    xmlns:baseComm="clr-namespace:DataLibrary.Common;assembly=DataLibrary"
-    xmlns:comm="clr-namespace:RestClientLibrary.Common"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:RestClientLibrary.Screen"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    d:DesignHeight="900"
-    d:DesignWidth="600"
-    Foreground="{DynamicResource PrimaryForeBrush}"
-    mc:Ignorable="d">
-    <UserControl.Resources>
-        <ResourceDictionary Source="/RestClientLibrary;component/Themes/ThemeResourceDictionary.xaml" />
-    </UserControl.Resources>
-    <UserControl.InputBindings>
-        <KeyBinding
-            Key="F11"
-            Command="{Binding SendButtonClickedCommand}"
-            Modifiers="Shift" />
-    </UserControl.InputBindings>
-    <Grid Margin="0,5,0,0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.Resources>
-            <baseComm:BindingProxy x:Key="RestClientProxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" />
-            <baseComm:BindingProxy x:Key="MainProxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
-            <x:Static x:Key="emptyString" Member="sys:String.Empty" />
-            <sys:Boolean x:Key="TrueValue">true</sys:Boolean>
-            <sys:Boolean x:Key="FalseValue">false</sys:Boolean>
-            <base:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-            <CollectionViewSource x:Key="UseVariableMenus" Source="{Binding DataContext.UseVariableMenus, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
-            <CollectionViewSource x:Key="SetMenus" Source="{Binding DataContext.SetMenus, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
-            <ContextMenu x:Key="CustomVariableContextMenus">
-                <ContextMenu.ItemsSource>
-                    <CompositeCollection>
-                        <MenuItem Command="ApplicationCommands.Cut" Header="Cut" />
-                        <MenuItem Command="ApplicationCommands.Copy" Header="Copy" />
-                        <MenuItem Command="ApplicationCommands.Paste" Header="Paste" />
-                        <Separator />
-                        <CollectionContainer Collection="{Binding Source={StaticResource SetMenus}}" />
-                        <Separator />
-                        <CollectionContainer Collection="{Binding Source={StaticResource UseVariableMenus}}" />
-                    </CompositeCollection>
-                </ContextMenu.ItemsSource>
-                <ContextMenu.Resources>
-                    <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
-                        <Setter Property="Header" Value="{Binding Header}" />
-                        <Setter Property="Command" Value="{Binding Command}" />
-                        <Setter Property="CommandParameter" Value="{Binding Key}" />
-                        <Setter Property="ItemsSource" Value="{Binding Children}" />
-                    </Style>
-                </ContextMenu.Resources>
-            </ContextMenu>
-            <ContextMenu x:Key="CustomVariableResultContextMenus">
-                <ContextMenu.ItemsSource>
-                    <CompositeCollection>
-                        <MenuItem Command="ApplicationCommands.Cut" Header="Cut" />
-                        <MenuItem Command="ApplicationCommands.Copy" Header="Copy" />
-                        <MenuItem Command="ApplicationCommands.Paste" Header="Paste" />
-                        <Separator />
-                        <CollectionContainer Collection="{Binding Source={StaticResource SetMenus}}" />
-                    </CompositeCollection>
-                </ContextMenu.ItemsSource>
-                <ContextMenu.Resources>
-                    <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
-                        <Setter Property="Header" Value="{Binding Header}" />
-                        <Setter Property="Command" Value="{Binding Command}" />
-                        <Setter Property="CommandParameter" Value="{Binding Key}" />
-                        <Setter Property="ItemsSource" Value="{Binding Children}" />
-                    </Style>
-                </ContextMenu.Resources>
-            </ContextMenu>
-            <ContextMenu x:Key="FormattedResponseContentContextMenus">
-                <ContextMenu.ItemsSource>
-                    <CompositeCollection>
-                        <MenuItem
-                            Command="{Binding ExpandCollapseAllCommand}"
-                            CommandParameter="{StaticResource TrueValue}"
-                            Header="Expand All" />
-                        <MenuItem
-                            Command="{Binding ExpandCollapseAllCommand}"
-                            CommandParameter="{StaticResource FalseValue}"
-                            Header="Collapse All" />
-                        <Separator />
-                        <MenuItem Command="ApplicationCommands.Cut" Header="Cut" />
-                        <MenuItem Command="ApplicationCommands.Copy" Header="Copy" />
-                        <MenuItem Command="ApplicationCommands.Paste" Header="Paste" />
-                        <Separator />
-                        <CollectionContainer Collection="{Binding Source={StaticResource SetMenus}}" />
-                    </CompositeCollection>
-                </ContextMenu.ItemsSource>
-                <ContextMenu.Resources>
-                    <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
-                        <Setter Property="Header" Value="{Binding Header}" />
-                        <Setter Property="Command" Value="{Binding Command}" />
-                        <Setter Property="CommandParameter" Value="{Binding Key}" />
-                        <Setter Property="ItemsSource" Value="{Binding Children}" />
-                    </Style>
-                </ContextMenu.Resources>
-            </ContextMenu>
-            <ContextMenu x:Key="DefaultContextMenus">
-                <ContextMenu.ItemsSource>
-                    <CompositeCollection>
-                        <MenuItem Command="ApplicationCommands.Cut" Header="Cut" />
-                        <MenuItem Command="ApplicationCommands.Copy" Header="Copy" />
-                        <MenuItem Command="ApplicationCommands.Paste" Header="Paste" />
-                    </CompositeCollection>
-                </ContextMenu.ItemsSource>
-            </ContextMenu>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <base:ToggleBoolToVisibilityConverter x:Key="BooleanToInvisibilityConverter" />
-        </Grid.Resources>
-        <Grid Name="Title" Visibility="{Binding IsSavedRequest, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <TextBlock
-                Margin="3"
-                FontSize="17"
-                Text="{Binding Title}"
-                Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToInvisibilityConverter}}" />
-            <TextBox
-                Name="editableName"
-                Margin="3"
-                base:TextBoxVisibilityBehavior.SetFocus="True"
-                base:TextBoxVisibilityBehavior.TrackCaretIndex="True"
-                FontSize="17"
-                Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="LostFocus">
-                        <i:InvokeCommandAction Command="{Binding RenameTitleCommand}" CommandParameter="{StaticResource FalseValue}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </TextBox>
-            <Button
-                Name="RenameTitle"
-                Grid.Column="1"
-                Margin="3"
-                Command="{Binding RenameTitleCommand}"
-                CommandParameter="{StaticResource TrueValue}"
-                ToolTip="Rename title"
-                Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToInvisibilityConverter}}">
-                <TextBlock FontFamily="Wingdings" Text="!" />
-            </Button>
-        </Grid>
-        <Grid x:Name="grdOperation" Grid.Row="1">
-            <WrapPanel Margin="0,0,130,0" VerticalAlignment="Center">
-                <Grid>
-                    <TextBlock
-                        Margin="5,1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Text="Operation:" />
-                    <ComboBox
-                        Width="100"
-                        Margin="70,0,0,5"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        DisplayMemberPath="Text"
-                        ItemsSource="{Binding Operations}"
-                        SelectedItem="{Binding SelectedOperation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding OperationChangedCommand}" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </ComboBox>
-                </Grid>
-                <Grid Visibility="{Binding ParentViewModel.Settings.CertificateSupport, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock
-                        Margin="3,1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Text="Certificate:" />
-                    <TextBox
-                        Name="txtCert"
-                        Width="100"
-                        Margin="65,0,0,5"
-                        HorizontalAlignment="Left"
-                        Text="{Binding Certificate}" />
-                </Grid>
-            </WrapPanel>
-            <WrapPanel Margin="0,-3,0,3.2" HorizontalAlignment="Right">
-                <Button
-                    Width="50"
-                    Height="25"
-                    Margin="5,0"
-                    HorizontalAlignment="Right"
-                    Command="{Binding SendButtonClickedCommand, IsAsync=True}"
-                    Content="{Binding SendButtonText}" />
-                <base:DropDownButton
-                    Name="btnSave"
-                    Width="50"
-                    Margin="5,0"
-                    HorizontalAlignment="Right"
-                    Content="Options">
-                    <base:DropDownButton.Menu>
-                        <ContextMenu>
-                            <MenuItem
-                                Command="{Binding Source={StaticResource MainProxy}, Path=Data.SaveRequestCommand}"
-                                CommandParameter="{Binding}"
-                                Header="Save" />
-                            <MenuItem
-                                Command="{Binding Source={StaticResource MainProxy}, Path=Data.SaveAsRequestCommand}"
-                                CommandParameter="{Binding}"
-                                Header="Save As" />
-                            <MenuItem
-                                Command="{Binding Source={StaticResource MainProxy}, Path=Data.SendEmailCommand}"
-                                CommandParameter="{Binding}"
-                                Header="Send Email" />
-                        </ContextMenu>
-                    </base:DropDownButton.Menu>
-                </base:DropDownButton>
-            </WrapPanel>
-        </Grid>
-        <Border
-            x:Name="grdUrl"
-            Grid.Row="2"
-            BorderThickness="1">
-            <!--<TextBlock Text="Url:" VerticalAlignment="Center" />
+	x:Class="RestClientLibrary.Screen.ucRestClient"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:ava="clr-namespace:AdvanceTextEditor;assembly=AdvanceTextEditor"
+	xmlns:base="clr-namespace:DataLibrary;assembly=DataLibrary"
+	xmlns:baseComm="clr-namespace:DataLibrary.Common;assembly=DataLibrary"
+	xmlns:comm="clr-namespace:RestClientLibrary.Common"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+	xmlns:local="clr-namespace:RestClientLibrary.Screen"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	d:DesignHeight="900"
+	d:DesignWidth="600"
+	Foreground="{DynamicResource PrimaryForeBrush}"
+	mc:Ignorable="d">
+	<UserControl.Resources>
+		<ResourceDictionary Source="/RestClientLibrary;component/Themes/ThemeResourceDictionary.xaml" />
+	</UserControl.Resources>
+	<UserControl.InputBindings>
+		<KeyBinding
+			Key="F11"
+			Command="{Binding SendButtonClickedCommand}"
+			Modifiers="Shift" />
+	</UserControl.InputBindings>
+	<Grid Margin="0,5,0,0">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.Resources>
+			<baseComm:BindingProxy x:Key="RestClientProxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" />
+			<baseComm:BindingProxy x:Key="MainProxy" Data="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
+			<x:Static x:Key="emptyString" Member="sys:String.Empty" />
+			<sys:Boolean x:Key="TrueValue">true</sys:Boolean>
+			<sys:Boolean x:Key="FalseValue">false</sys:Boolean>
+			<base:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+			<CollectionViewSource x:Key="UseVariableMenus" Source="{Binding DataContext.UseVariableMenus, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
+			<CollectionViewSource x:Key="SetMenus" Source="{Binding DataContext.SetMenus, RelativeSource={RelativeSource AncestorType=local:ucWorkspace}}" />
+			<ContextMenu x:Key="CustomVariableContextMenus">
+				<ContextMenu.ItemsSource>
+					<CompositeCollection>
+						<MenuItem Command="ApplicationCommands.Cut" Header="Cut" />
+						<MenuItem Command="ApplicationCommands.Copy" Header="Copy" />
+						<MenuItem Command="ApplicationCommands.Paste" Header="Paste" />
+						<Separator />
+						<CollectionContainer Collection="{Binding Source={StaticResource SetMenus}}" />
+						<Separator />
+						<CollectionContainer Collection="{Binding Source={StaticResource UseVariableMenus}}" />
+					</CompositeCollection>
+				</ContextMenu.ItemsSource>
+				<ContextMenu.Resources>
+					<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
+						<Setter Property="Header" Value="{Binding Header}" />
+						<Setter Property="Command" Value="{Binding Command}" />
+						<Setter Property="CommandParameter" Value="{Binding Key}" />
+						<Setter Property="ItemsSource" Value="{Binding Children}" />
+					</Style>
+				</ContextMenu.Resources>
+			</ContextMenu>
+			<ContextMenu x:Key="CustomVariableResultContextMenus">
+				<ContextMenu.ItemsSource>
+					<CompositeCollection>
+						<MenuItem Command="ApplicationCommands.Cut" Header="Cut" />
+						<MenuItem Command="ApplicationCommands.Copy" Header="Copy" />
+						<MenuItem Command="ApplicationCommands.Paste" Header="Paste" />
+						<Separator />
+						<CollectionContainer Collection="{Binding Source={StaticResource SetMenus}}" />
+					</CompositeCollection>
+				</ContextMenu.ItemsSource>
+				<ContextMenu.Resources>
+					<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
+						<Setter Property="Header" Value="{Binding Header}" />
+						<Setter Property="Command" Value="{Binding Command}" />
+						<Setter Property="CommandParameter" Value="{Binding Key}" />
+						<Setter Property="ItemsSource" Value="{Binding Children}" />
+					</Style>
+				</ContextMenu.Resources>
+			</ContextMenu>
+			<ContextMenu x:Key="FormattedResponseContentContextMenus">
+				<ContextMenu.ItemsSource>
+					<CompositeCollection>
+						<MenuItem
+							Command="{Binding ExpandCollapseAllCommand}"
+							CommandParameter="{StaticResource TrueValue}"
+							Header="Expand All" />
+						<MenuItem
+							Command="{Binding ExpandCollapseAllCommand}"
+							CommandParameter="{StaticResource FalseValue}"
+							Header="Collapse All" />
+						<Separator />
+						<MenuItem Command="ApplicationCommands.Cut" Header="Cut" />
+						<MenuItem Command="ApplicationCommands.Copy" Header="Copy" />
+						<MenuItem Command="ApplicationCommands.Paste" Header="Paste" />
+						<Separator />
+						<CollectionContainer Collection="{Binding Source={StaticResource SetMenus}}" />
+					</CompositeCollection>
+				</ContextMenu.ItemsSource>
+				<ContextMenu.Resources>
+					<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
+						<Setter Property="Header" Value="{Binding Header}" />
+						<Setter Property="Command" Value="{Binding Command}" />
+						<Setter Property="CommandParameter" Value="{Binding Key}" />
+						<Setter Property="ItemsSource" Value="{Binding Children}" />
+					</Style>
+				</ContextMenu.Resources>
+			</ContextMenu>
+			<ContextMenu x:Key="DefaultContextMenus">
+				<ContextMenu.ItemsSource>
+					<CompositeCollection>
+						<MenuItem Command="ApplicationCommands.Cut" Header="Cut" />
+						<MenuItem Command="ApplicationCommands.Copy" Header="Copy" />
+						<MenuItem Command="ApplicationCommands.Paste" Header="Paste" />
+					</CompositeCollection>
+				</ContextMenu.ItemsSource>
+			</ContextMenu>
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+			<base:ToggleBoolToVisibilityConverter x:Key="BooleanToInvisibilityConverter" />
+		</Grid.Resources>
+		<Grid Name="Title" Visibility="{Binding IsSavedRequest, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<TextBlock
+				Margin="3"
+				FontSize="17"
+				Text="{Binding Title}"
+				Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToInvisibilityConverter}}" />
+			<TextBox
+				Name="editableName"
+				Margin="3"
+				base:TextBoxVisibilityBehavior.SetFocus="True"
+				base:TextBoxVisibilityBehavior.TrackCaretIndex="True"
+				FontSize="17"
+				Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<i:Interaction.Triggers>
+					<i:EventTrigger EventName="LostFocus">
+						<i:InvokeCommandAction Command="{Binding RenameTitleCommand}" CommandParameter="{StaticResource FalseValue}" />
+					</i:EventTrigger>
+				</i:Interaction.Triggers>
+			</TextBox>
+			<Button
+				Name="RenameTitle"
+				Grid.Column="1"
+				Margin="3"
+				Command="{Binding RenameTitleCommand}"
+				CommandParameter="{StaticResource TrueValue}"
+				ToolTip="Rename title"
+				Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToInvisibilityConverter}}">
+				<TextBlock FontFamily="Wingdings" Text="!" />
+			</Button>
+		</Grid>
+		<Grid x:Name="grdOperation" Grid.Row="1">
+			<WrapPanel Margin="0,0,130,0" VerticalAlignment="Center">
+				<Grid>
+					<TextBlock
+						Margin="5,1"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Center"
+						Text="Operation:" />
+					<ComboBox
+						Width="100"
+						Margin="70,0,0,5"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Center"
+						DisplayMemberPath="Text"
+						ItemsSource="{Binding Operations}"
+						SelectedItem="{Binding SelectedOperation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<i:Interaction.Triggers>
+							<i:EventTrigger EventName="SelectionChanged">
+								<i:InvokeCommandAction Command="{Binding OperationChangedCommand}" />
+							</i:EventTrigger>
+						</i:Interaction.Triggers>
+					</ComboBox>
+				</Grid>
+				<Grid>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Certificate: " />
+						<ComboBox
+							DisplayMemberPath="Name"
+							SelectedItem="{Binding Certificate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding ParentViewModel.Settings.Certificates}" />
+					</StackPanel>
+				</Grid>
+			</WrapPanel>
+			<WrapPanel Margin="0,-3,0,3.2" HorizontalAlignment="Right">
+				<Button
+					Width="50"
+					Height="25"
+					Margin="5,0"
+					HorizontalAlignment="Right"
+					Command="{Binding SendButtonClickedCommand, IsAsync=True}"
+					Content="{Binding SendButtonText}" />
+				<base:DropDownButton
+					Name="btnSave"
+					Width="50"
+					Margin="5,0"
+					HorizontalAlignment="Right"
+					Content="Options">
+					<base:DropDownButton.Menu>
+						<ContextMenu>
+							<MenuItem
+								Command="{Binding Source={StaticResource MainProxy}, Path=Data.SaveRequestCommand}"
+								CommandParameter="{Binding}"
+								Header="Save" />
+							<MenuItem
+								Command="{Binding Source={StaticResource MainProxy}, Path=Data.SaveAsRequestCommand}"
+								CommandParameter="{Binding}"
+								Header="Save As" />
+							<MenuItem
+								Command="{Binding Source={StaticResource MainProxy}, Path=Data.SendEmailCommand}"
+								CommandParameter="{Binding}"
+								Header="Send Email" />
+						</ContextMenu>
+					</base:DropDownButton.Menu>
+				</base:DropDownButton>
+			</WrapPanel>
+		</Grid>
+		<Border
+			x:Name="grdUrl"
+			Grid.Row="2"
+			BorderThickness="1">
+			<!--<TextBlock Text="Url:" VerticalAlignment="Center" />
                  <ComboBox x:Name="cboUrl" Text="{Binding EnteredUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="1" IsEditable="True"
                  HorizontalAlignment="Stretch"
                  ItemsSource="{Binding Urls}"
                  SelectedItem="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  DisplayMemberPath="Text"  />-->
-            <local:ucUrlClient Margin="0,5,0,0" DataContext="{Binding UrlBase}" />
-        </Border>
-        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="2" MinHeight="150">
-                    <TabControl>
-                        <TabItem Header="Header">
-                            <Grid x:Name="grdHeaders" Margin="0,-6,0,0">
-                                <local:ucHeaders DataContext="{Binding HeadersBase}" />
-                            </Grid>
-                        </TabItem>
-                        <TabItem>
-                            <TabItem.HeaderTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Automation" />
-                                        <Ellipse
-                                            Grid.Column="1"
-                                            Width="12"
-                                            Height="12"
-                                            Margin="7,0,0,0"
-                                            Fill="Orange">
-                                            <Ellipse.Style>
-                                                <Style TargetType="Ellipse">
-                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DataContext.PreScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
-                                                            <Setter Property="Visibility" Value="Visible" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding DataContext.PostScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
-                                                            <Setter Property="Visibility" Value="Visible" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Ellipse.Style>
-                                        </Ellipse>
-                                    </Grid>
-                                </DataTemplate>
-                            </TabItem.HeaderTemplate>
-                            <Grid Name="AutomationSteps" Margin="0,-6,0,0">
-                                <TabControl>
-                                    <TabItem>
-                                        <TabItem.HeaderTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="Auto" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Pre Execution Steps" />
-                                                    <Ellipse
-                                                        Grid.Column="1"
-                                                        Width="12"
-                                                        Height="12"
-                                                        Margin="7,0,0,0"
-                                                        Fill="Orange"
-                                                        Visibility="{Binding DataContext.PreScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </TabItem.HeaderTemplate>
-                                        <local:ucRuntimeCode DataContext="{Binding PreScript}" />
-                                    </TabItem>
-                                    <TabItem Header="Post Execution Steps">
-                                        <TabItem.HeaderTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="Auto" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="Post Execution Steps" />
-                                                    <Ellipse
-                                                        Grid.Column="1"
-                                                        Width="12"
-                                                        Height="12"
-                                                        Margin="8.2,2,-1,2"
-                                                        Fill="Orange"
-                                                        Visibility="{Binding DataContext.PostScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </TabItem.HeaderTemplate>
-                                        <local:ucRuntimeCode DataContext="{Binding PostScript}" />
-                                    </TabItem>
-                                </TabControl>
-                            </Grid>
-                        </TabItem>
-                        <TabItem>
-                            <TabItem.HeaderTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Validations" />
-                                        <Ellipse
-                                            Grid.Column="1"
-                                            Width="12"
-                                            Height="12"
-                                            Margin="7,0,0,0">
-                                            <Ellipse.Style>
-                                                <Style TargetType="Ellipse">
-                                                    <Setter Property="Fill" Value="Orange" />
-                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DataContext.ValidationsScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
-                                                            <Setter Property="Visibility" Value="Visible" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding DataContext.Validations.IsValidationSetup, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
-                                                            <Setter Property="Visibility" Value="Visible" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding DataContext.Validations.Result, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="{x:Static comm:ResultState.Pass}">
-                                                            <Setter Property="Fill" Value="{DynamicResource SuccessColorBrush}" />
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding DataContext.Validations.Result, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="{x:Static comm:ResultState.Fail}">
-                                                            <Setter Property="Fill" Value="{DynamicResource ErrorColorBrush}" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Ellipse.Style>
-                                        </Ellipse>
-                                    </Grid>
-                                </DataTemplate>
-                            </TabItem.HeaderTemplate>
-                            <Grid x:Name="grdValidations" Margin="0,-6,0,0">
-                                <local:ucRuntimeCode DataContext="{Binding ValidationsScript}" />
-                            </Grid>
-                        </TabItem>
-                    </TabControl>
-                </Grid>
-                <Grid
-                    x:Name="grdRequestContent"
-                    Grid.Row="3"
-                    MinHeight="80"
-                    Visibility="{Binding IsRequestContentVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <WrapPanel Margin="0,5,0,0">
-                        <TextBlock
-                            Margin="5,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Text="Request Content:" />
-                        <ComboBox
-                            Name="RequestContentCategory"
-                            Margin="20,0"
-                            VerticalAlignment="Center"
-                            DisplayMemberPath="Name"
-                            ItemsSource="{Binding RequestContentCategories}"
-                            SelectedItem="{Binding SelectedRequestContentCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding RequestContentCategoriesChangedCommand}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ComboBox>
-                        <ComboBox
-                            Name="RawContentType"
-                            Margin="20,0"
-                            VerticalAlignment="Center"
-                            DisplayMemberPath="Text"
-                            ItemsSource="{Binding RawContentTypes}"
-                            SelectedItem="{Binding SelectedRawContentType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Visibility="{Binding IsRawContentType, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <i:InvokeCommandAction Command="{Binding RequestContentTypeChangedCommand}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ComboBox>
-                    </WrapPanel>
-                    <Border
-                        Grid.Row="1"
-                        Margin="5"
-                        Background="{DynamicResource PrimaryBackBrush}"
-                        BorderBrush="{DynamicResource PrimaryBorderBrush}"
-                        CornerRadius="2">
-                        <ava:TextEditor
-                            Name="txtRequestContent"
-                            MinHeight="50"
-                            comm:SelectionBindingBehavior.Selection="{Binding SelectedText}"
-                            Background="{DynamicResource PrimaryBackBrush}"
-                            BindableText="{Binding RequestContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            ContextMenu="{DynamicResource CustomVariableContextMenus}"
-                            EditorTheme="{DynamicResource EditorThemeKey}"
-                            Foreground="{DynamicResource PrimaryForeBrush}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"
-                            ShowLineNumbers="False"
-                            SyntaxHighlightingKey="{Binding RequestHighlightType}"
-                            Visibility="{Binding IsRawContentType, Converter={StaticResource BoolToVisibilityConverter}}"
-                            WordWrap="True">
-                            <ava:TextEditor.Style>
-                                <Style BasedOn="{StaticResource {x:Type ava:TextEditor}}" TargetType="{x:Type ava:TextEditor}">
-                                    <Setter Property="OverridesDefaultStyle" Value="True" />
-                                    <Setter Property="ContextMenu" Value="{StaticResource CustomVariableContextMenus}" />
-                                    <Style.Triggers>
-                                        <Trigger Property="comm:SelectionBindingBehavior.Selection" Value="{StaticResource emptyString}">
-                                            <Setter Property="ContextMenu" Value="{StaticResource DefaultContextMenus}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ava:TextEditor.Style>
-                        </ava:TextEditor>
-                    </Border>
+			<local:ucUrlClient Margin="0,5,0,0" DataContext="{Binding UrlBase}" />
+		</Border>
+		<ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<Grid Grid.Row="2" MinHeight="150">
+					<TabControl>
+						<TabItem Header="Header">
+							<Grid x:Name="grdHeaders" Margin="0,-6,0,0">
+								<local:ucHeaders DataContext="{Binding HeadersBase}" />
+							</Grid>
+						</TabItem>
+						<TabItem>
+							<TabItem.HeaderTemplate>
+								<DataTemplate>
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*" />
+											<ColumnDefinition Width="Auto" />
+										</Grid.ColumnDefinitions>
+										<TextBlock Text="Automation" />
+										<Ellipse
+											Grid.Column="1"
+											Width="12"
+											Height="12"
+											Margin="7,0,0,0"
+											Fill="Orange">
+											<Ellipse.Style>
+												<Style TargetType="Ellipse">
+													<Setter Property="Visibility" Value="Collapsed" />
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding DataContext.PreScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
+															<Setter Property="Visibility" Value="Visible" />
+														</DataTrigger>
+														<DataTrigger Binding="{Binding DataContext.PostScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
+															<Setter Property="Visibility" Value="Visible" />
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</Ellipse.Style>
+										</Ellipse>
+									</Grid>
+								</DataTemplate>
+							</TabItem.HeaderTemplate>
+							<Grid Name="AutomationSteps" Margin="0,-6,0,0">
+								<TabControl>
+									<TabItem>
+										<TabItem.HeaderTemplate>
+											<DataTemplate>
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*" />
+														<ColumnDefinition Width="Auto" />
+													</Grid.ColumnDefinitions>
+													<TextBlock Text="Pre Execution Steps" />
+													<Ellipse
+														Grid.Column="1"
+														Width="12"
+														Height="12"
+														Margin="7,0,0,0"
+														Fill="Orange"
+														Visibility="{Binding DataContext.PreScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}, Converter={StaticResource BoolToVisibilityConverter}}" />
+												</Grid>
+											</DataTemplate>
+										</TabItem.HeaderTemplate>
+										<local:ucRuntimeCode DataContext="{Binding PreScript}" />
+									</TabItem>
+									<TabItem Header="Post Execution Steps">
+										<TabItem.HeaderTemplate>
+											<DataTemplate>
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="*" />
+														<ColumnDefinition Width="Auto" />
+													</Grid.ColumnDefinitions>
+													<TextBlock Text="Post Execution Steps" />
+													<Ellipse
+														Grid.Column="1"
+														Width="12"
+														Height="12"
+														Margin="8.2,2,-1,2"
+														Fill="Orange"
+														Visibility="{Binding DataContext.PostScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}, Converter={StaticResource BoolToVisibilityConverter}}" />
+												</Grid>
+											</DataTemplate>
+										</TabItem.HeaderTemplate>
+										<local:ucRuntimeCode DataContext="{Binding PostScript}" />
+									</TabItem>
+								</TabControl>
+							</Grid>
+						</TabItem>
+						<TabItem>
+							<TabItem.HeaderTemplate>
+								<DataTemplate>
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="*" />
+											<ColumnDefinition Width="Auto" />
+										</Grid.ColumnDefinitions>
+										<TextBlock Text="Validations" />
+										<Ellipse
+											Grid.Column="1"
+											Width="12"
+											Height="12"
+											Margin="7,0,0,0">
+											<Ellipse.Style>
+												<Style TargetType="Ellipse">
+													<Setter Property="Fill" Value="Orange" />
+													<Setter Property="Visibility" Value="Collapsed" />
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding DataContext.ValidationsScript.IsCodePresent, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
+															<Setter Property="Visibility" Value="Visible" />
+														</DataTrigger>
+														<DataTrigger Binding="{Binding DataContext.Validations.IsValidationSetup, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
+															<Setter Property="Visibility" Value="Visible" />
+														</DataTrigger>
+														<DataTrigger Binding="{Binding DataContext.Validations.Result, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="{x:Static comm:ResultState.Pass}">
+															<Setter Property="Fill" Value="{DynamicResource SuccessColorBrush}" />
+														</DataTrigger>
+														<DataTrigger Binding="{Binding DataContext.Validations.Result, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="{x:Static comm:ResultState.Fail}">
+															<Setter Property="Fill" Value="{DynamicResource ErrorColorBrush}" />
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</Ellipse.Style>
+										</Ellipse>
+									</Grid>
+								</DataTemplate>
+							</TabItem.HeaderTemplate>
+							<Grid x:Name="grdValidations" Margin="0,-6,0,0">
+								<local:ucRuntimeCode DataContext="{Binding ValidationsScript}" />
+							</Grid>
+						</TabItem>
+					</TabControl>
+				</Grid>
+				<Grid
+					x:Name="grdRequestContent"
+					Grid.Row="3"
+					MinHeight="80"
+					Visibility="{Binding IsRequestContentVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					<WrapPanel Margin="0,5,0,0">
+						<TextBlock
+							Margin="5,0"
+							HorizontalAlignment="Left"
+							VerticalAlignment="Center"
+							Text="Request Content:" />
+						<ComboBox
+							Name="RequestContentCategory"
+							Margin="20,0"
+							VerticalAlignment="Center"
+							DisplayMemberPath="Name"
+							ItemsSource="{Binding RequestContentCategories}"
+							SelectedItem="{Binding SelectedRequestContentCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="SelectionChanged">
+									<i:InvokeCommandAction Command="{Binding RequestContentCategoriesChangedCommand}" />
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</ComboBox>
+						<ComboBox
+							Name="RawContentType"
+							Margin="20,0"
+							VerticalAlignment="Center"
+							DisplayMemberPath="Text"
+							ItemsSource="{Binding RawContentTypes}"
+							SelectedItem="{Binding SelectedRawContentType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							Visibility="{Binding IsRawContentType, Converter={StaticResource BoolToVisibilityConverter}}">
+							<i:Interaction.Triggers>
+								<i:EventTrigger EventName="SelectionChanged">
+									<i:InvokeCommandAction Command="{Binding RequestContentTypeChangedCommand}" />
+								</i:EventTrigger>
+							</i:Interaction.Triggers>
+						</ComboBox>
+					</WrapPanel>
+					<Border
+						Grid.Row="1"
+						Margin="5"
+						Background="{DynamicResource PrimaryBackBrush}"
+						BorderBrush="{DynamicResource PrimaryBorderBrush}"
+						CornerRadius="2">
+						<ava:TextEditor
+							Name="txtRequestContent"
+							MinHeight="50"
+							comm:SelectionBindingBehavior.Selection="{Binding SelectedText}"
+							Background="{DynamicResource PrimaryBackBrush}"
+							BindableText="{Binding RequestContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							ContextMenu="{DynamicResource CustomVariableContextMenus}"
+							EditorTheme="{DynamicResource EditorThemeKey}"
+							Foreground="{DynamicResource PrimaryForeBrush}"
+							ScrollViewer.HorizontalScrollBarVisibility="Auto"
+							ScrollViewer.VerticalScrollBarVisibility="Auto"
+							ShowLineNumbers="False"
+							SyntaxHighlightingKey="{Binding RequestHighlightType}"
+							Visibility="{Binding IsRawContentType, Converter={StaticResource BoolToVisibilityConverter}}"
+							WordWrap="True">
+							<ava:TextEditor.Style>
+								<Style BasedOn="{StaticResource {x:Type ava:TextEditor}}" TargetType="{x:Type ava:TextEditor}">
+									<Setter Property="OverridesDefaultStyle" Value="True" />
+									<Setter Property="ContextMenu" Value="{StaticResource CustomVariableContextMenus}" />
+									<Style.Triggers>
+										<Trigger Property="comm:SelectionBindingBehavior.Selection" Value="{StaticResource emptyString}">
+											<Setter Property="ContextMenu" Value="{StaticResource DefaultContextMenus}" />
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</ava:TextEditor.Style>
+						</ava:TextEditor>
+					</Border>
 
-                    <Border
-                        Grid.Row="2"
-                        BorderBrush="{DynamicResource PrimaryBorderBrush}"
-                        BorderThickness="1"
-                        CornerRadius="2">
-                        <Grid
-                            Name="NonRawRequestContent"
-                            Grid.Row="2"
-                            Background="{DynamicResource PrimaryBackBrush}">
-                            <local:ucKeyValuePairs Margin="3" DataContext="{Binding RequestParameters}" />
-                        </Grid>
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsRawContentType}" Value="False">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                    </Border>
+					<Border
+						Grid.Row="2"
+						BorderBrush="{DynamicResource PrimaryBorderBrush}"
+						BorderThickness="1"
+						CornerRadius="2">
+						<Grid
+							Name="NonRawRequestContent"
+							Grid.Row="2"
+							Background="{DynamicResource PrimaryBackBrush}">
+							<local:ucKeyValuePairs Margin="3" DataContext="{Binding RequestParameters}" />
+						</Grid>
+						<Border.Style>
+							<Style TargetType="Border">
+								<Setter Property="Visibility" Value="Collapsed" />
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding IsRawContentType}" Value="False">
+										<Setter Property="Visibility" Value="Visible" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</Border.Style>
+					</Border>
 
-                </Grid>
-                <Grid
-                    x:Name="grdResponse"
-                    Grid.Row="4"
-                    Visibility="{Binding IsResponseVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid x:Name="grdResponseMessage" Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            Margin="5,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            Text="Response:" />
-                        <TextBlock
-                            Grid.Column="1"
-                            Margin="5,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            FontWeight="Bold"
-                            Text="{Binding ResponseMessage}">
-                            <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsCallSuccessFul}" Value="True">
-                                            <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsCallSuccessFul}" Value="False">
-                                            <Setter Property="Foreground" Value="{DynamicResource ErrorColorBrush}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </Grid>
-                    <Grid x:Name="grdResponseContent" Grid.Row="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TabControl
-                            Margin="5"
-                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                            SelectedIndex="{Binding SelectedResponseTab}">
+				</Grid>
+				<Grid
+					x:Name="grdResponse"
+					Grid.Row="4"
+					Visibility="{Binding IsResponseVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					<Grid x:Name="grdResponseMessage" Grid.Row="1">
+						<Grid.RowDefinitions>
+							<RowDefinition />
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<TextBlock
+							Margin="5,0"
+							HorizontalAlignment="Left"
+							VerticalAlignment="Bottom"
+							Text="Response:" />
+						<TextBlock
+							Grid.Column="1"
+							Margin="5,0"
+							HorizontalAlignment="Left"
+							VerticalAlignment="Bottom"
+							FontWeight="Bold"
+							Text="{Binding ResponseMessage}">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding IsCallSuccessFul}" Value="True">
+											<Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}" />
+										</DataTrigger>
+										<DataTrigger Binding="{Binding IsCallSuccessFul}" Value="False">
+											<Setter Property="Foreground" Value="{DynamicResource ErrorColorBrush}" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
+					</Grid>
+					<Grid x:Name="grdResponseContent" Grid.Row="2">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="*" />
+						</Grid.RowDefinitions>
+						<TabControl
+							Margin="5"
+							ScrollViewer.HorizontalScrollBarVisibility="Auto"
+							SelectedIndex="{Binding SelectedResponseTab}">
 
-                            <TabItem Header="Json" Visibility="{Binding IsJsonResponse, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <ava:TextEditor
-                                    Name="JsonResponse"
-                                    Background="{DynamicResource PrimaryBackBrush}"
-                                    BindableText="{Binding JsonResponseContent}"
-                                    ContextMenu="{StaticResource FormattedResponseContentContextMenus}"
-                                    EditorTheme="{DynamicResource EditorThemeKey}"
-                                    Foreground="{DynamicResource PrimaryForeBrush}"
-                                    IsReadOnly="True"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                    ShowLineNumbers="True"
-                                    SyntaxHighlightingKey="Json"
-                                    WordWrap="True">
-                                    <i:Interaction.Behaviors>
-                                        <comm:ExpandCollapseBehavior CollapseAllFolding="{Binding CollapseAllFoldings, Mode=TwoWay}" ExpandAllFolding="{Binding ExpandAllFoldings, Mode=TwoWay}" />
-                                    </i:Interaction.Behaviors>
-                                </ava:TextEditor>
-                            </TabItem>
-                            <TabItem Header="Xml" Visibility="{Binding IsXmlResponse, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <ava:TextEditor
-                                    Name="XmlResponse"
-                                    BindableText="{Binding XmlResponseContent}"
-                                    ContextMenu="{StaticResource FormattedResponseContentContextMenus}"
-                                    EditorTheme="{DynamicResource EditorThemeKey}"
-                                    IsReadOnly="True"
-                                    LineNumbersBackground="White"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                    SyntaxHighlightingKey="XML">
-                                    <i:Interaction.Behaviors>
-                                        <comm:ExpandCollapseBehavior CollapseAllFolding="{Binding CollapseAllFoldings, Mode=TwoWay}" ExpandAllFolding="{Binding ExpandAllFoldings, Mode=TwoWay}" />
-                                    </i:Interaction.Behaviors>
-                                </ava:TextEditor>
-                            </TabItem>
-                            <TabItem Header="Html" Visibility="{Binding IsHtmlResponse, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <WebBrowser base:BrowserBehavior.Html="{Binding HtmlResponseContent}" />
-                            </TabItem>
-                            <TabItem Header="Raw">
-                                <TextBox
-                                    ContextMenu="{StaticResource CustomVariableResultContextMenus}"
-                                    IsReadOnly="True"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                    Text="{Binding RawResponseContent}"
-                                    TextWrapping="Wrap" />
-                            </TabItem>
-                            <TabItem Header="Headers">
-                                <TextBox
-                                    ContextMenu="{StaticResource CustomVariableResultContextMenus}"
-                                    IsReadOnly="True"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                    Text="{Binding ResponseHeaders}"
-                                    TextWrapping="Wrap" />
-                            </TabItem>
-                            <TabItem>
-                                <TabItem.HeaderTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="Validation Results" />
-                                            <Ellipse
-                                                Grid.Column="1"
-                                                Width="12"
-                                                Height="12"
-                                                Margin="7,0,0,0">
-                                                <Ellipse.Style>
-                                                    <Style TargetType="Ellipse">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding DataContext.IsValidationSuccessful, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
-                                                                <Setter Property="Fill" Value="{DynamicResource SuccessColorBrush}" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding DataContext.IsValidationSuccessful, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="false">
-                                                                <Setter Property="Fill" Value="{DynamicResource ErrorColorBrush}" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Ellipse.Style>
-                                            </Ellipse>
-                                        </Grid>
-                                    </DataTemplate>
-                                </TabItem.HeaderTemplate>
-                                <TabItem.Resources>
-                                    <Style x:Key="StatusTextBlockStyle" TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsSuccess}" Value="True">
-                                                <Setter Property="Text" Value="P" />
-                                                <Setter Property="FontFamily" Value="Wingdings 2" />
-                                                <Setter Property="FontWeight" Value="Bold" />
-                                                <Setter Property="FontSize" Value="20" />
-                                                <Setter Property="VerticalAlignment" Value="Center" />
-                                                <Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsSuccess}" Value="False">
-                                                <Setter Property="Text" Value="O" />
-                                                <Setter Property="FontFamily" Value="Wingdings 2" />
-                                                <Setter Property="FontWeight" Value="Bold" />
-                                                <Setter Property="FontSize" Value="20" />
-                                                <Setter Property="VerticalAlignment" Value="Center" />
-                                                <Setter Property="Foreground" Value="{DynamicResource ErrorColorBrush}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TabItem.Resources>
-                                <ListView ItemContainerStyle="{DynamicResource GridViewListViewItem}" ItemsSource="{Binding Validations}">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="Result">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock
-                                                            Name="image"
-                                                            VerticalAlignment="Center"
-                                                            Style="{StaticResource StatusTextBlockStyle}" />
-                                                    </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
-                                            <GridViewColumn DisplayMemberBinding="{Binding TestName}" Header="Test Name" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding ExpectedValue}" Header="Expected Value" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding ActualValue}" Header="Actual Value" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                                <TabItem.Style>
-                                    <Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding DataContext.IsValidationSuccessful, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="{x:Null}">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TabItem.Style>
-                            </TabItem>
-                            <TabItem Header="Summary">
-                                <TextBox
-                                    ContextMenu="{StaticResource CustomVariableResultContextMenus}"
-                                    IsReadOnly="True"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                    Text="{Binding SummaryText}"
-                                    TextWrapping="Wrap" />
-                            </TabItem>
-                        </TabControl>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </ScrollViewer>
-        <base:FluidProgressBar
-            Grid.Row="4"
-            Height="10"
-            IsBusy="{Binding IsBusy}" />
-    </Grid>
+							<TabItem Header="Json" Visibility="{Binding IsJsonResponse, Converter={StaticResource BoolToVisibilityConverter}}">
+								<ava:TextEditor
+									Name="JsonResponse"
+									Background="{DynamicResource PrimaryBackBrush}"
+									BindableText="{Binding JsonResponseContent}"
+									ContextMenu="{StaticResource FormattedResponseContentContextMenus}"
+									EditorTheme="{DynamicResource EditorThemeKey}"
+									Foreground="{DynamicResource PrimaryForeBrush}"
+									IsReadOnly="True"
+									ScrollViewer.HorizontalScrollBarVisibility="Auto"
+									ScrollViewer.VerticalScrollBarVisibility="Auto"
+									ShowLineNumbers="True"
+									SyntaxHighlightingKey="Json"
+									WordWrap="True">
+									<i:Interaction.Behaviors>
+										<comm:ExpandCollapseBehavior CollapseAllFolding="{Binding CollapseAllFoldings, Mode=TwoWay}" ExpandAllFolding="{Binding ExpandAllFoldings, Mode=TwoWay}" />
+									</i:Interaction.Behaviors>
+								</ava:TextEditor>
+							</TabItem>
+							<TabItem Header="Xml" Visibility="{Binding IsXmlResponse, Converter={StaticResource BoolToVisibilityConverter}}">
+								<ava:TextEditor
+									Name="XmlResponse"
+									BindableText="{Binding XmlResponseContent}"
+									ContextMenu="{StaticResource FormattedResponseContentContextMenus}"
+									EditorTheme="{DynamicResource EditorThemeKey}"
+									IsReadOnly="True"
+									LineNumbersBackground="White"
+									ScrollViewer.HorizontalScrollBarVisibility="Auto"
+									ScrollViewer.VerticalScrollBarVisibility="Auto"
+									SyntaxHighlightingKey="XML">
+									<i:Interaction.Behaviors>
+										<comm:ExpandCollapseBehavior CollapseAllFolding="{Binding CollapseAllFoldings, Mode=TwoWay}" ExpandAllFolding="{Binding ExpandAllFoldings, Mode=TwoWay}" />
+									</i:Interaction.Behaviors>
+								</ava:TextEditor>
+							</TabItem>
+							<TabItem Header="Html" Visibility="{Binding IsHtmlResponse, Converter={StaticResource BoolToVisibilityConverter}}">
+								<WebBrowser base:BrowserBehavior.Html="{Binding HtmlResponseContent}" />
+							</TabItem>
+							<TabItem Header="Raw">
+								<TextBox
+									ContextMenu="{StaticResource CustomVariableResultContextMenus}"
+									IsReadOnly="True"
+									ScrollViewer.HorizontalScrollBarVisibility="Auto"
+									ScrollViewer.VerticalScrollBarVisibility="Auto"
+									Text="{Binding RawResponseContent}"
+									TextWrapping="Wrap" />
+							</TabItem>
+							<TabItem Header="Headers">
+								<TextBox
+									ContextMenu="{StaticResource CustomVariableResultContextMenus}"
+									IsReadOnly="True"
+									ScrollViewer.HorizontalScrollBarVisibility="Auto"
+									ScrollViewer.VerticalScrollBarVisibility="Auto"
+									Text="{Binding ResponseHeaders}"
+									TextWrapping="Wrap" />
+							</TabItem>
+							<TabItem>
+								<TabItem.HeaderTemplate>
+									<DataTemplate>
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="*" />
+												<ColumnDefinition Width="Auto" />
+											</Grid.ColumnDefinitions>
+											<TextBlock Text="Validation Results" />
+											<Ellipse
+												Grid.Column="1"
+												Width="12"
+												Height="12"
+												Margin="7,0,0,0">
+												<Ellipse.Style>
+													<Style TargetType="Ellipse">
+														<Style.Triggers>
+															<DataTrigger Binding="{Binding DataContext.IsValidationSuccessful, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="true">
+																<Setter Property="Fill" Value="{DynamicResource SuccessColorBrush}" />
+															</DataTrigger>
+															<DataTrigger Binding="{Binding DataContext.IsValidationSuccessful, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="false">
+																<Setter Property="Fill" Value="{DynamicResource ErrorColorBrush}" />
+															</DataTrigger>
+														</Style.Triggers>
+													</Style>
+												</Ellipse.Style>
+											</Ellipse>
+										</Grid>
+									</DataTemplate>
+								</TabItem.HeaderTemplate>
+								<TabItem.Resources>
+									<Style x:Key="StatusTextBlockStyle" TargetType="TextBlock">
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding IsSuccess}" Value="True">
+												<Setter Property="Text" Value="P" />
+												<Setter Property="FontFamily" Value="Wingdings 2" />
+												<Setter Property="FontWeight" Value="Bold" />
+												<Setter Property="FontSize" Value="20" />
+												<Setter Property="VerticalAlignment" Value="Center" />
+												<Setter Property="Foreground" Value="{DynamicResource SuccessColorBrush}" />
+											</DataTrigger>
+											<DataTrigger Binding="{Binding IsSuccess}" Value="False">
+												<Setter Property="Text" Value="O" />
+												<Setter Property="FontFamily" Value="Wingdings 2" />
+												<Setter Property="FontWeight" Value="Bold" />
+												<Setter Property="FontSize" Value="20" />
+												<Setter Property="VerticalAlignment" Value="Center" />
+												<Setter Property="Foreground" Value="{DynamicResource ErrorColorBrush}" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TabItem.Resources>
+								<ListView ItemContainerStyle="{DynamicResource GridViewListViewItem}" ItemsSource="{Binding Validations}">
+									<ListView.View>
+										<GridView>
+											<GridViewColumn Header="Result">
+												<GridViewColumn.CellTemplate>
+													<DataTemplate>
+														<TextBlock
+															Name="image"
+															VerticalAlignment="Center"
+															Style="{StaticResource StatusTextBlockStyle}" />
+													</DataTemplate>
+												</GridViewColumn.CellTemplate>
+											</GridViewColumn>
+											<GridViewColumn DisplayMemberBinding="{Binding TestName}" Header="Test Name" />
+											<GridViewColumn DisplayMemberBinding="{Binding ExpectedValue}" Header="Expected Value" />
+											<GridViewColumn DisplayMemberBinding="{Binding ActualValue}" Header="Actual Value" />
+										</GridView>
+									</ListView.View>
+								</ListView>
+								<TabItem.Style>
+									<Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
+										<Setter Property="Visibility" Value="Visible" />
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding DataContext.IsValidationSuccessful, RelativeSource={RelativeSource AncestorType=local:ucRestClient}}" Value="{x:Null}">
+												<Setter Property="Visibility" Value="Collapsed" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TabItem.Style>
+							</TabItem>
+							<TabItem Header="Summary">
+								<TextBox
+									ContextMenu="{StaticResource CustomVariableResultContextMenus}"
+									IsReadOnly="True"
+									ScrollViewer.HorizontalScrollBarVisibility="Auto"
+									ScrollViewer.VerticalScrollBarVisibility="Auto"
+									Text="{Binding SummaryText}"
+									TextWrapping="Wrap" />
+							</TabItem>
+						</TabControl>
+					</Grid>
+				</Grid>
+			</Grid>
+		</ScrollViewer>
+		<base:FluidProgressBar
+			Grid.Row="4"
+			Height="10"
+			IsBusy="{Binding IsBusy}" />
+	</Grid>
 </base:BaseUserControl>

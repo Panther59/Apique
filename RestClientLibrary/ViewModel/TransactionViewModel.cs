@@ -7,7 +7,8 @@
 namespace RestClientLibrary.ViewModel
 {
     using DataLibrary;
-    using RestClientLibrary.Common;
+	using Newtonsoft.Json;
+	using RestClientLibrary.Common;
     using RestClientLibrary.Model;
     using System;
     using System.Collections.Generic;
@@ -153,7 +154,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the ParentViewModel
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public WorkspaceViewModel ParentViewModel { get; set; }
 
         /// <summary>
@@ -310,7 +311,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets the RenameRequestCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand<bool> RenameRequestCommand
         {
             get
@@ -327,7 +328,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the RequestSelectedCommand
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public RelayCommand RequestSelectedCommand
         {
             get
