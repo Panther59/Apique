@@ -6,22 +6,28 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Xml.Linq;
 using System.Xml;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace DataLibrary
 {
-    public static class XMLHelper
+    public static class JSONHelper
     {
-        public static string SerializeToXml<T>(T obj)
+		public static readonly JsonSerializerSettings JsonSettings;
+        static JSONHelper()
+        {
+            JsonSettings = new Newtonsoft.Json.JsonSerializerSettings();
+            JsonSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            JsonSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            JsonSettings.Formatting = Newtonsoft.Json.Formatting.None;
+            JsonSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        }
+
+        public static string SerializeToJson<T>(T obj)
         {
             try
             {
-                var serializer = new XmlSerializer(typeof(T));
-
-                TextWriter writer = new StringWriter();
-                serializer.Serialize(writer, obj);
-
-                return writer.ToString();
-
+                return Newtonsoft.Json.JsonConvert.SerializeObject(obj, JsonSettings);
             }
             catch (Exception ex)
             {
@@ -30,20 +36,11 @@ namespace DataLibrary
             }
         }
 
-        public static T DeserializeFromXml<T>(string xml)
+        public static T DeserializeFromJson<T>(string json)
         {
             try
             {
-                T result = default(T);
-                if (!string.IsNullOrEmpty(xml))
-                {
-                    XmlSerializer ser = new XmlSerializer(typeof(T));
-                    using (TextReader tr = new StringReader(xml))
-                    {
-                        result = (T)ser.Deserialize(tr);
-                    }
-                }
-                return result;
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json, JsonSettings);
             }
             catch (Exception ex)
             {

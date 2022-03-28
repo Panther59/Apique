@@ -20,6 +20,14 @@ namespace RestClientLibrary.ViewModel
     [Serializable]
     public class TransactionViewModel : BaseViewModel
     {
+		public TransactionViewModel()
+		{
+            if (string.IsNullOrEmpty(this.Guid))
+            {
+                this.Guid = System.Guid.NewGuid().ToString();   
+            }
+		}
+
         #region Fields
 
         /// <summary>

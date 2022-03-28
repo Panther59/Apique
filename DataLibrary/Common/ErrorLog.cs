@@ -354,7 +354,6 @@ namespace DataLibrary
             {
                 // get the base directory
                 string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\" +
-                        ApplicationDetail.CompanyName + "\\" +
                         ApplicationDetail.ProductName + "\\";
 
                 // search the file below the current directory

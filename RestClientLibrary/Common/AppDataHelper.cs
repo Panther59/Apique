@@ -22,7 +22,6 @@ namespace RestClientLibrary.Common
     /// </summary>
     public static class AppDataHelper
     {
-		private static readonly JsonSerializerSettings jsonSettings;
 		#region Constructors
 
 		/// <summary>
@@ -31,8 +30,8 @@ namespace RestClientLibrary.Common
 		static AppDataHelper()
         {
             string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            OldAppDataDirectory = baseDir + "\\VSPackage\\RestClient";
-            AppDataDirectory = baseDir + "\\Ayvan\\Rest Client\\Data";
+            OldAppDataDirectory = baseDir + "\\Ayvan\\Rest Client\\Data";
+            AppDataDirectory = baseDir + "\\Apique\\Data";
             SessionHistoryPath = AppDataDirectory + "\\SessionHistory.json";
             SettingFilePath = AppDataDirectory + "\\Settings.json";
             CertificateFilePath = AppDataDirectory + "\\Certifcates.json";
@@ -42,12 +41,6 @@ namespace RestClientLibrary.Common
             TestRunsFilePath = AppDataDirectory + "\\TestRuns.json";
 
             MoveDataToNewDirectory(OldAppDataDirectory, AppDataDirectory);
-
-            jsonSettings = new Newtonsoft.Json.JsonSerializerSettings();
-            jsonSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            jsonSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-            jsonSettings.Formatting = Formatting.None;
-            jsonSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         }
 
         #endregion
@@ -129,8 +122,8 @@ namespace RestClientLibrary.Common
                 return default(T);
             }
 
-            string xml = XMLHelper.SerializeToXml<T>(source);
-            T obj = XMLHelper.DeserializeFromXml<T>(xml);
+            string json = JSONHelper.SerializeToJson<T>(source);
+            T obj = JSONHelper.DeserializeFromJson<T>(json);
 
             return obj;
         }
@@ -409,11 +402,8 @@ namespace RestClientLibrary.Common
             {
                 if (File.Exists(path))
                 {
-                    StreamReader reader = new StreamReader(path);
-                    string json = reader.ReadToEnd();
-                    output = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json, jsonSettings);
-                    reader.Close();
-                    reader.Dispose();
+                    string json = File.ReadAllText(path);
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json, JSONHelper.JsonSettings);
                 }
             }
             catch (Exception ex)
@@ -445,7 +435,7 @@ namespace RestClientLibrary.Common
                         Directory.CreateDirectory(AppDataDirectory);
                     }
 
-                    string outJson = Newtonsoft.Json.JsonConvert.SerializeObject(data, jsonSettings);
+                    string outJson = Newtonsoft.Json.JsonConvert.SerializeObject(data, JSONHelper.JsonSettings);
                     System.IO.File.WriteAllText(path, outJson);
                 }
                 catch (Exception ex)

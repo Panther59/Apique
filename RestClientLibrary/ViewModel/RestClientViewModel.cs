@@ -1896,7 +1896,7 @@ namespace RestClientLibrary.ViewModel
 		/// <returns>The <see cref = "string "/></returns>
 		private string ConvertToXmlFormat(string raw)
 		{
-			return XMLHelper.FormatXml(raw);
+			return JSONHelper.FormatXml(raw);
 		}
 
 		/// <summary>

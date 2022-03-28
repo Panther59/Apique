@@ -199,7 +199,7 @@ namespace RestClientLibrary.ViewModel
             {
                 StreamReader reader = new StreamReader(path);
                 string xml = reader.ReadToEnd();
-                ExportDataModel importData = XMLHelper.DeserializeFromXml<ExportDataModel>(xml);
+                ExportDataModel importData = JSONHelper.DeserializeFromJson<ExportDataModel>(xml);
                 reader.Close();
                 reader.Dispose();
                 this.importedData = importData;
@@ -378,11 +378,8 @@ namespace RestClientLibrary.ViewModel
                     exportData.History = AppDataHelper.LoadSessionHistoryData();
                 }
 
-                string outxml = XMLHelper.SerializeToXml<ExportDataModel>(exportData);
-                StreamWriter writer = System.IO.File.CreateText(path);
-                writer.Write(outxml);
-                writer.Flush();
-                writer.Dispose();
+                string outJson = JSONHelper.SerializeToJson<ExportDataModel>(exportData);
+                System.IO.File.WriteAllText(path, outJson);
 
                 this.view.MessageShow("Export Data", "Export was successful");
                 this.view.CloseParentWindow();
