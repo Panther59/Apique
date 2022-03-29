@@ -106,5 +106,15 @@ namespace RestClientLibrary.Common
                 ReloadSavedRequest();
             }
         }
+
+        public delegate void OnAppClosingHandler();
+        public static event OnAppClosingHandler AppClosing;
+        public static void RaiseAppClosingEvent()
+        {
+            if (AppClosing != null)
+            {
+                AppClosing();
+            }
+        }
     }
 }

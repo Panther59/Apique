@@ -1,4 +1,5 @@
 ﻿using DataLibrary;
+using Newtonsoft.Json;
 
 namespace RestClientLibrary.ViewModel.Authorization
 {
@@ -29,7 +30,7 @@ namespace RestClientLibrary.ViewModel.Authorization
             }
         }
 
-        public abstract KeyValueViewModel GetAuthorizationHeader();
+		public abstract KeyValueViewModel GetAuthorizationHeader();
 
         public abstract void SetAuthorizationHeader(KeyValueViewModel header);
 

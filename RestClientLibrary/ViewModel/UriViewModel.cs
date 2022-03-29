@@ -12,11 +12,12 @@ namespace RestClientLibrary.ViewModel
     using System.Linq;
     using System.Text;
     using DataLibrary;
+	using Newtonsoft.Json;
 
-    /// <summary>
-    /// Defines the <see cref="UriViewModel" />
-    /// </summary>
-    public class UriViewModel : BaseViewModel
+	/// <summary>
+	/// Defines the <see cref="UriViewModel" />
+	/// </summary>
+	public class UriViewModel : BaseViewModel
     {
         #region Fields
 
@@ -131,6 +132,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets a value indicating whether IsExpanded
         /// </summary>
+		[JsonIgnore]
         public bool IsExpanded
         {
             get { return _isExpanded; }
@@ -224,6 +226,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the AddNewQueryStringClickedCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand AddNewQueryStringClickedCommand
         {
             get
@@ -240,6 +243,7 @@ namespace RestClientLibrary.ViewModel
         /// <summary>
         /// Gets or sets the UrlExpandedCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand UrlExpandedCommand
         {
             get

@@ -1,4 +1,5 @@
 ﻿using DataLibrary;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,7 +24,10 @@ namespace RestClientLibrary.ViewModel
 
         public KeyValueViewModel()
         {
-            GUID = Guid.NewGuid().ToString();
+            if (string.IsNullOrEmpty(GUID))
+            {
+                GUID = Guid.NewGuid().ToString();
+            }
         }
 
         private string _guid;
@@ -57,6 +61,7 @@ namespace RestClientLibrary.ViewModel
         }
 
         private RelayCommand _removeClickedCommand;
+		[JsonIgnore]
         public RelayCommand RemoveClickedCommand
         {
             get

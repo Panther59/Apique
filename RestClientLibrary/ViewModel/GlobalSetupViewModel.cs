@@ -626,7 +626,7 @@ namespace RestClientLibrary.ViewModel
 				output.Certificates = this.Certificates.Select(x => x.ToModel()).ToList();
 			}
 
-			if (this.Environments != null)
+			if (this.allEnvironments != null)
 			{
 				var environmentsToSave = this.allEnvironments.Where(x => x.Name != Constants.AddNew && x.Name != Constants.Select);
 				output.Environments = environmentsToSave.Select(x => x.ToModel()).ToList();

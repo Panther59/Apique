@@ -17,7 +17,8 @@ namespace RestClientLibrary.ViewModel.Automations
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Emit;
-    using RestClientLibrary.View;
+	using Newtonsoft.Json;
+	using RestClientLibrary.View;
 
     /// <summary>
     /// Defines the <see cref = "RuntimeCodeViewModel"/>
@@ -112,6 +113,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets or sets the Code
         /// </summary>
+		[JsonIgnore]
         public string Code
         {
             get
@@ -158,6 +160,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets or sets the Errors
         /// </summary>
+		[JsonIgnore]
         public ObservableCollection<CodeErrorViewModel> Errors
         {
             get
@@ -175,6 +178,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets or sets a value indicating whether HasBuildErrors
         /// </summary>
+		[JsonIgnore]
         public bool HasBuildErrors
         {
             get
@@ -209,6 +213,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets or sets the Snippets
         /// </summary>
+		[JsonIgnore]
         public List<SnippetViewModel> Snippets
         {
             get
@@ -226,6 +231,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets or sets the StatusMessage
         /// </summary>
+		[JsonIgnore]
         public string StatusMessage
         {
             get
@@ -245,6 +251,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets the AddCodeSnippetCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand<SnippetViewModel> AddCodeSnippetCommand
         {
             get
@@ -261,6 +268,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets the CodeChangedCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand CodeChangedCommand
         {
             get
@@ -277,6 +285,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets the CompileCodeCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand CompileCodeCommand
         {
             get
@@ -293,6 +302,7 @@ namespace RestClientLibrary.ViewModel.Automations
         /// <summary>
         /// Gets the PreviewCodeCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand PreviewCodeCommand
         {
             get

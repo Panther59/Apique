@@ -2,11 +2,12 @@
 {
     using System;
     using DataLibrary;
+	using Newtonsoft.Json;
 
-    /// <summary>
-    /// Defines the <see cref="QueryStringViewModel" />
-    /// </summary>
-    public class QueryStringViewModel : BaseViewModel
+	/// <summary>
+	/// Defines the <see cref="QueryStringViewModel" />
+	/// </summary>
+	public class QueryStringViewModel : BaseViewModel
     {
         /// <summary>
         /// Defines the _decodeClickedCommand
@@ -41,6 +42,7 @@
         /// <summary>
         /// Gets or sets the DecodeClickedCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand DecodeClickedCommand
         {
             get
@@ -62,6 +64,7 @@
         /// <summary>
         /// Gets or sets the EncodeClickedCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand EncodeClickedCommand
         {
             get
@@ -100,6 +103,7 @@
         /// <summary>
         /// Gets or sets the RemoveClickedCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand RemoveClickedCommand
         {
             get

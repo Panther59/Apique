@@ -6,28 +6,50 @@
 
 namespace RestClientLibrary.ViewModel
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Linq;
-	using System.Security.Cryptography.X509Certificates;
-	using System.Text;
-	using System.Text.RegularExpressions;
-	using System.Threading;
-	using System.Threading.Tasks;
 	using DataLibrary;
 	using Newtonsoft.Json;
 	using RestClientLibrary.Common;
 	using RestClientLibrary.Model;
 	using RestClientLibrary.View;
 	using RestClientLibrary.ViewModel.Automations;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Security.Cryptography.X509Certificates;
+	using System.Text;
+	using System.Text.RegularExpressions;
+	using System.Threading;
+	using System.Threading.Tasks;
 
 	/// <summary>
 	/// Defines the <see cref = "RestClientViewModel"/>
 	/// </summary>
 	public class RestClientViewModel : BaseViewModel
 	{
-		#region Fields
+		/// <summary>
+		/// Defines the _certificateChangedCommand
+		/// </summary>
+		private RelayCommand _certificateChangedCommand;
+
+		/// <summary>
+		/// Defines the _clearButtonClickedCommand
+		/// </summary>
+		private RelayCommand _clearButtonClickedCommand;
+
+		/// <summary>
+		/// Defines the _collapseAllJsonNodeCommand
+		/// </summary>
+		private RelayCommand _collapseAllJsonNodeCommand;
+
+		/// <summary>
+		/// Defines the _copyJsonDataToClipboardCommand
+		/// </summary>
+		private RelayCommand _copyJsonDataToClipboardCommand;
+
+		/// <summary>
+		/// Defines the _expandAllJsonNodeCommand
+		/// </summary>
+		private RelayCommand _expandAllJsonNodeCommand;
 
 		/// <summary>
 		/// Defines the _headersBase
@@ -65,6 +87,11 @@ namespace RestClientLibrary.ViewModel
 		private string _jsonResponseContent;
 
 		/// <summary>
+		/// Defines the _operationChangedCommand
+		/// </summary>
+		private RelayCommand _operationChangedCommand;
+
+		/// <summary>
 		/// Defines the _operations
 		/// </summary>
 		private List<TextType> _operations;
@@ -100,6 +127,11 @@ namespace RestClientLibrary.ViewModel
 		private int _selectedResponseTab;
 
 		/// <summary>
+		/// Defines the _sendButtonClickedCommand
+		/// </summary>
+		private RelayCommand _sendButtonClickedCommand;
+
+		/// <summary>
 		/// Defines the _sendButtonText
 		/// </summary>
 		private string _sendButtonText = "Send";
@@ -125,6 +157,11 @@ namespace RestClientLibrary.ViewModel
 		private CertificateViewModel certificate;
 
 		/// <summary>
+		/// The closeRestClientCommand field
+		/// </summary>
+		private RelayCommand closeRestClientCommand;
+
+		/// <summary>
 		/// The collapseAllFoldings field
 		/// </summary>
 		private Action collapseAllFoldings;
@@ -133,6 +170,11 @@ namespace RestClientLibrary.ViewModel
 		/// The expandAllFoldings field
 		/// </summary>
 		private Action expandAllFoldings;
+
+		/// <summary>
+		/// The expandCollapseAllCommand field
+		/// </summary>
+		private RelayCommand<bool> expandCollapseAllCommand;
 
 		/// <summary>
 		/// The htmlResponseContent field
@@ -180,9 +222,24 @@ namespace RestClientLibrary.ViewModel
 		private List<TextType> rawContentTypes;
 
 		/// <summary>
+		/// The renameTitleCommand field
+		/// </summary>
+		private RelayCommand<bool> renameTitleCommand;
+
+		/// <summary>
 		/// The requestContentCategories field
 		/// </summary>
 		private List<RequestContentTypeCategoryViewModel> requestContentCategories;
+
+		/// <summary>
+		/// The requestContentCategoriesChangedCommand field
+		/// </summary>
+		private RelayCommand requestContentCategoriesChangedCommand;
+
+		/// <summary>
+		/// The requestContentTypeChangedCommand field
+		/// </summary>
+		private RelayCommand requestContentTypeChangedCommand;
 
 		/// <summary>
 		/// The requestHighlightType field
@@ -244,74 +301,6 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private RuntimeCodeViewModel validationsScript;
 
-		#region Commands
-
-		/// <summary>
-		/// Defines the _certificateChangedCommand
-		/// </summary>
-		private RelayCommand _certificateChangedCommand;
-
-		/// <summary>
-		/// Defines the _clearButtonClickedCommand
-		/// </summary>
-		private RelayCommand _clearButtonClickedCommand;
-
-		/// <summary>
-		/// Defines the _collapseAllJsonNodeCommand
-		/// </summary>
-		private RelayCommand _collapseAllJsonNodeCommand;
-
-		/// <summary>
-		/// Defines the _copyJsonDataToClipboardCommand
-		/// </summary>
-		private RelayCommand _copyJsonDataToClipboardCommand;
-
-		/// <summary>
-		/// Defines the _expandAllJsonNodeCommand
-		/// </summary>
-		private RelayCommand _expandAllJsonNodeCommand;
-
-		/// <summary>
-		/// Defines the _operationChangedCommand
-		/// </summary>
-		private RelayCommand _operationChangedCommand;
-
-		/// <summary>
-		/// Defines the _sendButtonClickedCommand
-		/// </summary>
-		private RelayCommand _sendButtonClickedCommand;
-
-		/// <summary>
-		/// The closeRestClientCommand field
-		/// </summary>
-		private RelayCommand closeRestClientCommand;
-
-		/// <summary>
-		/// The expandCollapseAllCommand field
-		/// </summary>
-		private RelayCommand<bool> expandCollapseAllCommand;
-
-		/// <summary>
-		/// The renameTitleCommand field
-		/// </summary>
-		private RelayCommand<bool> renameTitleCommand;
-
-		/// <summary>
-		/// The requestContentCategoriesChangedCommand field
-		/// </summary>
-		private RelayCommand requestContentCategoriesChangedCommand;
-
-		/// <summary>
-		/// The requestContentTypeChangedCommand field
-		/// </summary>
-		private RelayCommand requestContentTypeChangedCommand;
-
-		#endregion
-
-		#endregion
-
-		#region Constructors
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref = "RestClientViewModel"/> class.
 		/// </summary>
@@ -321,28 +310,16 @@ namespace RestClientLibrary.ViewModel
 			LoadData();
 		}
 
-		#endregion
-
-		#region Delegates
-
 		/// <summary>
 		/// The OnResposeReceivedHandler
 		/// </summary>
 		/// <param name="restresponse">The <see cref="RestResponse"/></param>
 		public delegate void OnResposeReceivedHandler(RestResponse restresponse);
 
-		#endregion
-
-		#region Events
-
 		/// <summary>
 		/// Defines the ResposeReceived
 		/// </summary>
 		public event OnResposeReceivedHandler ResposeReceived;
-
-		#endregion
-
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets the Certificate
@@ -362,8 +339,31 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
+		/// Gets or sets the ClearButtonClickedCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand ClearButtonClickedCommand
+		{
+			get
+			{
+				if (_clearButtonClickedCommand == null)
+				{
+					_clearButtonClickedCommand = new RelayCommand(command => ClearButtonClicked());
+				}
+
+				return _clearButtonClickedCommand;
+			}
+
+			set
+			{
+				_clearButtonClickedCommand = value;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the CollapseAllFoldings
 		/// </summary>
+		[JsonIgnore]
 		public Action CollapseAllFoldings
 		{
 			get
@@ -379,8 +379,53 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
+		/// Gets or sets the CollapseAllJsonNodeCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand CollapseAllJsonNodeCommand
+		{
+			get
+			{
+				if (_collapseAllJsonNodeCommand == null)
+				{
+					_collapseAllJsonNodeCommand = new RelayCommand(command => CollapseAllJsonNode());
+				}
+
+				return _collapseAllJsonNodeCommand;
+			}
+
+			set
+			{
+				_collapseAllJsonNodeCommand = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the CopyJsonDataToClipboardCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand CopyJsonDataToClipboardCommand
+		{
+			get
+			{
+				if (_copyJsonDataToClipboardCommand == null)
+				{
+					_copyJsonDataToClipboardCommand = new RelayCommand(command => CopyJsonDataToClipboard());
+				}
+
+				return _copyJsonDataToClipboardCommand;
+			}
+
+			set
+			{
+				_copyJsonDataToClipboardCommand = value;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the ExpandAllFoldings
 		/// </summary>
+		[JsonIgnore]
 		public Action ExpandAllFoldings
 		{
 			get
@@ -392,6 +437,45 @@ namespace RestClientLibrary.ViewModel
 			{
 				this.expandAllFoldings = value;
 				this.OnPropertyChanged("ExpandAllFoldings");
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the ExpandAllJsonNodeCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand ExpandAllJsonNodeCommand
+		{
+			get
+			{
+				if (_expandAllJsonNodeCommand == null)
+				{
+					_expandAllJsonNodeCommand = new RelayCommand(command => ExpandAllJsonNode());
+				}
+
+				return _expandAllJsonNodeCommand;
+			}
+
+			set
+			{
+				_expandAllJsonNodeCommand = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets the ExpandCollapseAllCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand<bool> ExpandCollapseAllCommand
+		{
+			get
+			{
+				if (this.expandCollapseAllCommand == null)
+				{
+					this.expandCollapseAllCommand = new RelayCommand<bool>(command => this.ExecuteExpandCollapseAll(command), can => this.CanExpandCollapseAllExecute());
+				}
+
+				return this.expandCollapseAllCommand;
 			}
 		}
 
@@ -510,6 +594,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets a value indicating whether IsRenaming
 		/// </summary>
+		[JsonIgnore]
 		public bool IsRenaming
 		{
 			get
@@ -627,8 +712,31 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
+		/// Gets or sets the OperationChangedCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand OperationChangedCommand
+		{
+			get
+			{
+				if (_operationChangedCommand == null)
+				{
+					_operationChangedCommand = new RelayCommand(command => OperationChanged());
+				}
+
+				return _operationChangedCommand;
+			}
+
+			set
+			{
+				_operationChangedCommand = value;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the Operations
 		/// </summary>
+		[JsonIgnore]
 		public List<TextType> Operations
 		{
 			get
@@ -646,6 +754,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets the ParentViewModel
 		/// </summary>
+		[JsonIgnore]
 		public WorkspaceViewModel ParentViewModel { get; set; }
 
 		/// <summary>
@@ -685,6 +794,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets the RawContentTypes
 		/// </summary>
+		[JsonIgnore]
 		public List<TextType> RawContentTypes
 		{
 			get
@@ -717,6 +827,23 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
+		/// Gets the RenameTitleCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand<bool> RenameTitleCommand
+		{
+			get
+			{
+				if (this.renameTitleCommand == null)
+				{
+					this.renameTitleCommand = new RelayCommand<bool>(command => this.ExecuteRenameTitle(command));
+				}
+
+				return this.renameTitleCommand;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the RequestContent
 		/// </summary>
 		public string RequestContent
@@ -736,6 +863,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets the RequestContentCategories
 		/// </summary>
+		[JsonIgnore]
 		public List<RequestContentTypeCategoryViewModel> RequestContentCategories
 		{
 			get
@@ -747,6 +875,23 @@ namespace RestClientLibrary.ViewModel
 			{
 				this.requestContentCategories = value;
 				this.OnPropertyChanged("RequestContentCategories");
+			}
+		}
+
+		/// <summary>
+		/// Gets the RequestContentCategoriesChangedCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand RequestContentCategoriesChangedCommand
+		{
+			get
+			{
+				if (this.requestContentCategoriesChangedCommand == null)
+				{
+					this.requestContentCategoriesChangedCommand = new RelayCommand(command => this.ExecuteRequestContentCategoriesChanged());
+				}
+
+				return this.requestContentCategoriesChangedCommand;
 			}
 		}
 
@@ -796,6 +941,23 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
+		/// Gets the RequestContentTypeChangedCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand RequestContentTypeChangedCommand
+		{
+			get
+			{
+				if (this.requestContentTypeChangedCommand == null)
+				{
+					this.requestContentTypeChangedCommand = new RelayCommand(command => this.ExecuteRequestContentTypeChanged());
+				}
+
+				return this.requestContentTypeChangedCommand;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the RequestHighlightType
 		/// </summary>
 		public string RequestHighlightType
@@ -815,6 +977,7 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Gets or sets the RequestParameters
 		/// </summary>
+		[JsonIgnore]
 		public KeyValuePairsViewModel RequestParameters
 		{
 			get
@@ -964,8 +1127,31 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
+		/// Gets or sets the SendButtonClickedCommand
+		/// </summary>
+		[JsonIgnore]
+		public RelayCommand SendButtonClickedCommand
+		{
+			get
+			{
+				if (_sendButtonClickedCommand == null)
+				{
+					_sendButtonClickedCommand = new RelayCommand(command => SendButtonClicked(), can => CanSaveButtonClicked());
+				}
+
+				return _sendButtonClickedCommand;
+			}
+
+			set
+			{
+				_sendButtonClickedCommand = value;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the SendButtonText
 		/// </summary>
+		[JsonIgnore]
 		public string SendButtonText
 		{
 			get
@@ -1081,211 +1267,6 @@ namespace RestClientLibrary.ViewModel
 				OnPropertyChanged("XmlResponseContent");
 			}
 		}
-
-		#region Commands
-
-		/// <summary>
-		/// Gets or sets the ClearButtonClickedCommand
-		/// </summary>
-		public RelayCommand ClearButtonClickedCommand
-		{
-			get
-			{
-				if (_clearButtonClickedCommand == null)
-				{
-					_clearButtonClickedCommand = new RelayCommand(command => ClearButtonClicked());
-				}
-
-				return _clearButtonClickedCommand;
-			}
-
-			set
-			{
-				_clearButtonClickedCommand = value;
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the CollapseAllJsonNodeCommand
-		/// </summary>
-		public RelayCommand CollapseAllJsonNodeCommand
-		{
-			get
-			{
-				if (_collapseAllJsonNodeCommand == null)
-				{
-					_collapseAllJsonNodeCommand = new RelayCommand(command => CollapseAllJsonNode());
-				}
-
-				return _collapseAllJsonNodeCommand;
-			}
-
-			set
-			{
-				_collapseAllJsonNodeCommand = value;
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the CopyJsonDataToClipboardCommand
-		/// </summary>
-		public RelayCommand CopyJsonDataToClipboardCommand
-		{
-			get
-			{
-				if (_copyJsonDataToClipboardCommand == null)
-				{
-					_copyJsonDataToClipboardCommand = new RelayCommand(command => CopyJsonDataToClipboard());
-				}
-
-				return _copyJsonDataToClipboardCommand;
-			}
-
-			set
-			{
-				_copyJsonDataToClipboardCommand = value;
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the ExpandAllJsonNodeCommand
-		/// </summary>
-		public RelayCommand ExpandAllJsonNodeCommand
-		{
-			get
-			{
-				if (_expandAllJsonNodeCommand == null)
-				{
-					_expandAllJsonNodeCommand = new RelayCommand(command => ExpandAllJsonNode());
-				}
-
-				return _expandAllJsonNodeCommand;
-			}
-
-			set
-			{
-				_expandAllJsonNodeCommand = value;
-			}
-		}
-
-		/// <summary>
-		/// Gets the ExpandCollapseAllCommand
-		/// </summary>
-		public RelayCommand<bool> ExpandCollapseAllCommand
-		{
-			get
-			{
-				if (this.expandCollapseAllCommand == null)
-				{
-					this.expandCollapseAllCommand = new RelayCommand<bool>(command => this.ExecuteExpandCollapseAll(command), can => this.CanExpandCollapseAllExecute());
-				}
-
-				return this.expandCollapseAllCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the OperationChangedCommand
-		/// </summary>
-		public RelayCommand OperationChangedCommand
-		{
-			get
-			{
-				if (_operationChangedCommand == null)
-				{
-					_operationChangedCommand = new RelayCommand(command => OperationChanged());
-				}
-
-				return _operationChangedCommand;
-			}
-
-			set
-			{
-				_operationChangedCommand = value;
-			}
-		}
-
-		/// <summary>
-		/// Gets the RenameTitleCommand
-		/// </summary>
-		public RelayCommand<bool> RenameTitleCommand
-		{
-			get
-			{
-				if (this.renameTitleCommand == null)
-				{
-					this.renameTitleCommand = new RelayCommand<bool>(command => this.ExecuteRenameTitle(command));
-				}
-
-				return this.renameTitleCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets the RequestContentCategoriesChangedCommand
-		/// </summary>
-		public RelayCommand RequestContentCategoriesChangedCommand
-		{
-			get
-			{
-				if (this.requestContentCategoriesChangedCommand == null)
-				{
-					this.requestContentCategoriesChangedCommand = new RelayCommand(command => this.ExecuteRequestContentCategoriesChanged());
-				}
-
-				return this.requestContentCategoriesChangedCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets the RequestContentTypeChangedCommand
-		/// </summary>
-		public RelayCommand RequestContentTypeChangedCommand
-		{
-			get
-			{
-				if (this.requestContentTypeChangedCommand == null)
-				{
-					this.requestContentTypeChangedCommand = new RelayCommand(command => this.ExecuteRequestContentTypeChanged());
-				}
-
-				return this.requestContentTypeChangedCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the SendButtonClickedCommand
-		/// </summary>
-		public RelayCommand SendButtonClickedCommand
-		{
-			get
-			{
-				if (_sendButtonClickedCommand == null)
-				{
-					_sendButtonClickedCommand = new RelayCommand(command => SendButtonClicked(), can => CanSaveButtonClicked());
-				}
-
-				return _sendButtonClickedCommand;
-			}
-
-			set
-			{
-				_sendButtonClickedCommand = value;
-			}
-		}
-
-		public void SelectCertificate(string certName)
-		{
-			this.Certificate = this.ParentViewModel.Settings.Certificates.FirstOrDefault(x => x.Name == certName);
-		}
-
-		#endregion
-
-		#endregion
-
-		#region Methods
-
-		#region Public Methods
 
 		/// <summary>
 		/// The AttachView
@@ -1458,7 +1439,10 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		public void LoadData()
 		{
-			this.GUID = Guid.NewGuid().ToString();
+			if (string.IsNullOrEmpty(this.GUID))
+			{
+				this.GUID = Guid.NewGuid().ToString();
+			}
 
 			this.UrlBase = new UriViewModel();
 			this.HeadersBase = new HeadersViewModel();
@@ -1666,6 +1650,11 @@ namespace RestClientLibrary.ViewModel
 			return result;
 		}
 
+		public void SelectCertificate(string certName)
+		{
+			this.Certificate = this.ParentViewModel.Settings.Certificates.FirstOrDefault(x => x.Name == certName);
+		}
+
 		/// <summary>
 		/// The SelectOperation
 		/// </summary>
@@ -1741,10 +1730,6 @@ namespace RestClientLibrary.ViewModel
 			ResposeReceived += handler;
 		}
 
-		#endregion
-
-		#region Private Methods
-
 		///// <summary>
 		///// The ApplyVariables
 		///// </summary>
@@ -1773,6 +1758,11 @@ namespace RestClientLibrary.ViewModel
 			}
 
 			return list.Select(x => new KeyValuePair<string, string>(this.ReplaceVariables(x.Key, variables), this.ReplaceVariables(x.Value, variables))).ToList();
+		}
+
+		private void BuildSummaryText(TransactionViewModel transaction)
+		{
+			this.SummaryText = this.GetRequestResponseText(transaction);
 		}
 
 		/// <summary>
@@ -2015,6 +2005,43 @@ namespace RestClientLibrary.ViewModel
 			return usedVariables;
 		}
 
+		private X509Certificate2 GetCertificate()
+		{
+			X509Certificate2 clientCert = null;
+			if (this.Certificate != null)
+			{
+				var cert = this.ParentViewModel?.Settings.Certificates.LastOrDefault(x => x.Name.Equals(this.Certificate.Name.Trim(), StringComparison.CurrentCultureIgnoreCase));
+				if (!string.IsNullOrEmpty(cert.Thumbprint))
+				{
+					clientCert = this.GetCertificateFromThumprint(cert?.Thumbprint);
+				}
+				else if (!string.IsNullOrEmpty(cert.FilePath))
+				{
+					clientCert = this.GetCertificateFromFile(cert?.FilePath, cert.FilePassword);
+				}
+			}
+
+			return clientCert;
+		}
+
+		private X509Certificate2 GetCertificateFromFile(string file, string password)
+		{
+			if (string.IsNullOrEmpty(file) || string.IsNullOrEmpty(password))
+			{
+				return null;
+			}
+
+			try
+			{
+				return new X509Certificate2(file, password);
+			}
+			catch (Exception ex)
+			{
+				this.LogException(ex);
+				return null;
+			}
+		}
+
 		/// <summary>
 		/// The GetCertificateFromThumprint
 		/// </summary>
@@ -2026,7 +2053,7 @@ namespace RestClientLibrary.ViewModel
 			{
 				return null;
 			}
-			
+
 			List<X509Certificate2> certs = new List<X509Certificate2>();
 
 			var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
@@ -2060,24 +2087,6 @@ namespace RestClientLibrary.ViewModel
 			}
 
 			return null;
-		}
-
-		private X509Certificate2 GetCertificateFromFile(string file, string password)
-		{
-			if (string.IsNullOrEmpty(file) || string.IsNullOrEmpty(password))
-			{
-				return null;
-			}
-
-			try
-			{
-				return new X509Certificate2(file, password);
-			}
-			catch (Exception ex)
-			{
-				this.LogException(ex);
-				return null;
-			}
 		}
 
 		/// <summary>
@@ -2157,11 +2166,6 @@ namespace RestClientLibrary.ViewModel
 			{
 				return false;
 			}
-		}
-
-		private void BuildSummaryText(TransactionViewModel transaction)
-		{
-			this.SummaryText = this.GetRequestResponseText(transaction);
 		}
 
 		/// <summary>
@@ -2351,25 +2355,6 @@ namespace RestClientLibrary.ViewModel
 					this.SendButtonText = "Send";
 				}));
 			}
-		}
-
-		private X509Certificate2 GetCertificate()
-		{
-			X509Certificate2 clientCert = null;
-			if (this.Certificate != null)
-			{
-				var cert = this.ParentViewModel?.Settings.Certificates.LastOrDefault(x => x.Name.Equals(this.Certificate.Name.Trim(), StringComparison.CurrentCultureIgnoreCase));
-				if (!string.IsNullOrEmpty(cert.Thumbprint))
-				{
-					clientCert = this.GetCertificateFromThumprint(cert?.Thumbprint);
-				}
-				else if (!string.IsNullOrEmpty(cert.FilePath))
-				{
-					clientCert = this.GetCertificateFromFile(cert?.FilePath, cert.FilePassword);
-				}
-			}
-
-			return clientCert;
 		}
 
 		/// <summary>
@@ -2596,9 +2581,5 @@ namespace RestClientLibrary.ViewModel
 				return false;
 			}
 		}
-
-		#endregion
-
-		#endregion
 	}
 }

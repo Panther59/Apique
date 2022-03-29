@@ -1,7 +1,8 @@
 ﻿namespace RestClientLibrary.ViewModel
 {
     using DataLibrary;
-    using System;
+	using Newtonsoft.Json;
+	using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
@@ -67,6 +68,7 @@
         /// <summary>
         /// Gets or sets the AddNewHeaderCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand AddNewHeaderCommand
         {
             get
@@ -139,6 +141,7 @@
         /// <summary>
         /// Gets or sets the HeaderTabChangedCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand HeaderTabChangedCommand
         {
             get
@@ -160,6 +163,7 @@
         /// <summary>
         /// Gets or sets the KnownHeaders
         /// </summary>
+        [JsonIgnore]
         public List<string> KnownHeaders
         {
             get

@@ -264,7 +264,7 @@
 					Command="{Binding DeleteEnvironmentCommand}"
 					Content="Delete Environment" />
 			</Grid>
-			
+
 		</Grid>
 	</Grid>
 </base:BaseUserControl>

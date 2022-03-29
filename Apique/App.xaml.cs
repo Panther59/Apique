@@ -1,5 +1,6 @@
 ﻿using Apique.Startup;
 using DataLibrary;
+using RestClientLibrary.Common;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -22,6 +23,7 @@ namespace Apique
         {
             App.Current.DispatcherUnhandledException += this.Current_DispatcherUnhandledException;
             UnityConfig.RegisterTypes();
+            MasterEventHandler.RaiseAppClosingEvent();
         }
 
         /// <summary>
@@ -33,5 +35,11 @@ namespace Apique
         {
             ErrorLog.LogException(e.Exception);
         }
-    }
+
+		protected override void OnExit(ExitEventArgs e)
+		{
+            MasterEventHandler.RaiseAppClosingEvent();
+			base.OnExit(e);
+		}
+	}
 }

@@ -3,7 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using DataLibrary;
-    using RestClientLibrary.ViewModel.Authorization;
+	using Newtonsoft.Json;
+	using RestClientLibrary.ViewModel.Authorization;
 
     /// <summary>
     /// Defines the <see cref = "AuthorizationViewModel"/>
@@ -28,6 +29,7 @@
         /// <summary>
         /// Gets the AuthorizationTypeChangedCommand
         /// </summary>
+		[JsonIgnore]
         public RelayCommand AuthorizationTypeChangedCommand
         {
             get
@@ -44,6 +46,7 @@
         /// <summary>
         /// Gets or sets the AuthorizationTypes
         /// </summary>
+        [JsonIgnore]
         public List<BaseAuthorizationViewModel> AuthorizationTypes
         {
             get
@@ -66,6 +69,7 @@
         /// <summary>
         /// Gets or sets the AuthView
         /// </summary>
+        [JsonIgnore]
         public BaseAuthorizationViewModel AuthView
         {
             get

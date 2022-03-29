@@ -15,6 +15,7 @@ namespace RestClientLibrary.ViewModel
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using System.Timers;
 	using System.Windows.Input;
 
 	/// <summary>
@@ -171,11 +172,21 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		public WorkspaceViewModel()
 		{
+			var timer = new Timer();
+			timer.Interval = 60 * 1000; // 60 secs
+			timer.Elapsed += Timer_Elapsed;
+			//timer.Start();
 			MasterEventHandler.SaveSession += MasterEventHandler_SaveSession;
 			MasterEventHandler.RemoveSession += MasterEventHandler_RemoveSession;
 			MasterEventHandler.ReloadSavedRequest += MasterEventHandler_ReloadSavedRequest;
+			MasterEventHandler.AppClosing += MasterEventHandler_AppClosing; ;
 
 			Common.AppCommandManager.SetVariableValue += this.AppCommandManager_SetVariableValue;
+		}
+
+		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Task.Run(() => MasterEventHandler_AppClosing());
 		}
 
 		/// <summary>
@@ -833,7 +844,7 @@ namespace RestClientLibrary.ViewModel
 			var blankRC = new RestClientViewModel() { Title = "Request " + ++counter };
 			blankRC.ParentViewModel = this;
 			blankRC.IsDefaultRestClient = true;
-			blankRC.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate);
+			blankRC.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate ?? this.Settings.DefaultCertificate?.Name);
 			if (this.History.SessionHistory != null)
 			{
 				var listUrl = this.History.SessionHistory
@@ -1019,9 +1030,9 @@ namespace RestClientLibrary.ViewModel
 			List<CertificateViewModel> certs = new List<CertificateViewModel>();
 
 			EnvironmentViewModel environment = null;
-			if (global.Environments != null)
+			if (global.allEnvironments != null)
 			{
-				environment = global.Environments.FirstOrDefault(x => this.SelectedEnvironment != null && x.Name == this.SelectedEnvironment.Name);
+				environment = global.allEnvironments.FirstOrDefault(x => this.SelectedEnvironment != null && x.Name == this.SelectedEnvironment.Name);
 			}
 
 			if (environment != null)
@@ -1095,7 +1106,7 @@ namespace RestClientLibrary.ViewModel
 			this.BuildVariables(this.GlobalVariables);
 			foreach (var item in this.RestClients)
 			{
-				item.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate);
+				item.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate ?? this.Settings.DefaultCertificate?.Name);
 			}
 		}
 
@@ -1223,8 +1234,43 @@ namespace RestClientLibrary.ViewModel
 			var basicData = sessionData != null ? sessionData.Select(x => new BasicHistoryViewModel(x)) : null;
 			History.LoadData(basicData != null ? basicData : null);
 
-			var blank = this.AddNewRestClient();
-			this.SelectedRestClient = blank;
+			var appStatus = AppDataHelper.LoadAppState();
+			this.RestClients = new ObservableCollection<RestClientViewModel>(appStatus.RestClients ?? new ObservableCollection<RestClientViewModel>());
+			if (!string.IsNullOrEmpty(appStatus.SelectedRestClient))
+			{
+				this.SelectedRestClient = this.RestClients.FirstOrDefault(x => x.GUID == appStatus.SelectedRestClient);
+			}
+
+			if (this.RestClients.Count == 0)
+			{
+				var blank = this.AddNewRestClient();
+				this.SelectedRestClient = blank;
+			}
+			else
+			{
+				foreach (var rc in this.RestClients)
+				{
+					rc.ParentViewModel = this;
+				}
+			}
+
+			if (!string.IsNullOrEmpty(appStatus.SelectedWorkspace))
+			{
+				this.SelectedWorkspace = this.GlobalVariables.Workspaces.FirstOrDefault(x => x == appStatus.SelectedWorkspace);
+				var finalEnvs = this.GlobalVariables.allEnvironments.Where(x => x.Workspace == this.SelectedWorkspace).ToList();
+				finalEnvs.Insert(0, new EnvironmentViewModel() { Name = Constants.Select });
+
+				this.Environments = new ObservableCollection<EnvironmentViewModel>(finalEnvs);
+			}
+
+			if (!string.IsNullOrEmpty(appStatus.SelectedEnvironment))
+			{
+				this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Name == appStatus.SelectedEnvironment);
+				if (this.SelectedEnvironment != null)
+				{
+					ExecuteEnvironmentChanged(this.SelectedEnvironment);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1281,6 +1327,19 @@ namespace RestClientLibrary.ViewModel
 			}
 
 			this.BuildVariables(this.GlobalVariables);
+		}
+
+		private void MasterEventHandler_AppClosing()
+		{
+			var appStatus = new AppStatus()
+			{
+				RestClients = RestClients,
+				SelectedRestClient = this.SelectedRestClient?.GUID,
+				SelectedWorkspace = this.SelectedWorkspace,
+				SelectedEnvironment = this.SelectedEnvironment?.Name
+			};
+
+			AppDataHelper.SaveAppState(appStatus);
 		}
 
 		/// <summary>
