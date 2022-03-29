@@ -6,33 +6,34 @@
 
 namespace RestClientLibrary.ViewModel
 {
-	using System;
-	using System.Collections.ObjectModel;
-	using System.Linq;
 	using DataLibrary;
 	using RestClientLibrary.Common;
 	using RestClientLibrary.Model;
 	using RestClientLibrary.View;
+	using System.Collections.ObjectModel;
+	using System.Linq;
 
 	/// <summary>
 	/// Defines the <see cref = "EnvironmentViewModel"/>
 	/// </summary>
 	public class EnvironmentViewModel : BaseViewModel
 	{
-		public EnvironmentViewModel()
-		{
-			if (string.IsNullOrEmpty(this.Guid))
-			{
-				this.Guid = System.Guid.NewGuid().ToString();
-			}
-		}
+		/// <summary>
+		/// The addNewCertificateCommand field
+		/// </summary>
+		private RelayCommand addNewCertificateCommand;
 
-		#region Fields
+		/// <summary>
+		/// The addNewVariableCommand field
+		/// </summary>
+		private RelayCommand addNewVariableCommand;
 
 		/// <summary>
 		/// The certificates field
 		/// </summary>
 		private ObservableCollection<CertificateViewModel> certificates;
+
+		private string defaultDertificate;
 
 		/// <summary>
 		/// The guid field
@@ -45,65 +46,6 @@ namespace RestClientLibrary.ViewModel
 		private string name;
 
 		/// <summary>
-		/// The variables field
-		/// </summary>
-		private ObservableCollection<KeyValueViewModel> variables;
-		private ObservableCollection<string> workspaces;
-		private string workspace;
-		private string defaultDertificate;
-		
-
-		public string DefaultCertificate
-		{
-			get
-			{
-				return this.defaultDertificate;
-			}
-
-			set
-			{
-				this.defaultDertificate = value;
-				this.OnPropertyChanged("DefaultCertificate");
-			}
-		}
-		/// <summary>
-		/// Defines the view
-		/// </summary>
-		private IEnvironmentView view;
-
-		public void LoadData(GlobalSetupViewModel globalVariables)
-		{
-			var settings = AppDataHelper.LoadSettingsData(null);
-			this.Workspaces = globalVariables.Workspaces;
-			if (string.IsNullOrEmpty(this.Workspace))
-			{
-				this.Workspace = Constants.DefaultWorkspace;
-			}
-
-			if (settings.Certificates != null)
-			{
-				this.Certificates = new ObservableCollection<CertificateViewModel>(settings.Certificates);
-			}
-
-			if (this.DefaultCertificate != null)
-			{
-				this.DefaultCertificate = this.Certificates.FirstOrDefault(x => x.Name == this.DefaultCertificate)?.Name;
-			}
-		}
-
-		#region Commands
-
-		/// <summary>
-		/// The addNewCertificateCommand field
-		/// </summary>
-		private RelayCommand addNewCertificateCommand;
-
-		/// <summary>
-		/// The addNewVariableCommand field
-		/// </summary>
-		private RelayCommand addNewVariableCommand;
-
-		/// <summary>
 		/// The removeCertificateCommand field
 		/// </summary>
 		private RelayCommand<CertificateViewModel> removeCertificateCommand;
@@ -113,11 +55,59 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private RelayCommand<KeyValueViewModel> removeVariableCommand;
 
-		#endregion
+		/// <summary>
+		/// The variables field
+		/// </summary>
+		private ObservableCollection<KeyValueViewModel> variables;
 
-		#endregion
+		/// <summary>
+		/// Defines the view
+		/// </summary>
+		private IEnvironmentView view;
 
-		#region Properties
+		private string workspace;
+
+		private ObservableCollection<string> workspaces;
+
+		public EnvironmentViewModel()
+		{
+			if (string.IsNullOrEmpty(this.Guid))
+			{
+				this.Guid = System.Guid.NewGuid().ToString();
+			}
+		}
+
+		/// <summary>
+		/// Gets the AddNewCertificateCommand
+		/// </summary>
+		public RelayCommand AddNewCertificateCommand
+		{
+			get
+			{
+				if (this.addNewCertificateCommand == null)
+				{
+					this.addNewCertificateCommand = new RelayCommand(command => this.ExecuteAddNewCertificate());
+				}
+
+				return this.addNewCertificateCommand;
+			}
+		}
+
+		/// <summary>
+		/// Gets the AddNewVariableCommand
+		/// </summary>
+		public RelayCommand AddNewVariableCommand
+		{
+			get
+			{
+				if (this.addNewVariableCommand == null)
+				{
+					this.addNewVariableCommand = new RelayCommand(command => this.ExecuteAddNewVariable());
+				}
+
+				return this.addNewVariableCommand;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the Certificates
@@ -135,31 +125,18 @@ namespace RestClientLibrary.ViewModel
 				this.OnPropertyChanged("Certificates");
 			}
 		}
-		public ObservableCollection<string> Workspaces
+
+		public string DefaultCertificate
 		{
 			get
 			{
-				return this.workspaces;
+				return this.defaultDertificate;
 			}
 
 			set
 			{
-				this.workspaces = value;
-				this.OnPropertyChanged("Workspaces");
-			}
-		}
-
-		public string Workspace
-		{
-			get
-			{
-				return this.workspace;
-			}
-
-			set
-			{
-				this.workspace = value;
-				this.OnPropertyChanged("Workspace");
+				this.defaultDertificate = value;
+				this.OnPropertyChanged("DefaultCertificate");
 			}
 		}
 
@@ -198,57 +175,6 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
-		/// Gets or sets the Variables
-		/// </summary>
-		public ObservableCollection<KeyValueViewModel> Variables
-		{
-			get
-			{
-				return this.variables;
-			}
-
-			set
-			{
-				this.variables = value;
-				this.OnPropertyChanged("Variables");
-			}
-		}
-
-		#region Commands
-
-		/// <summary>
-		/// Gets the AddNewCertificateCommand
-		/// </summary>
-		public RelayCommand AddNewCertificateCommand
-		{
-			get
-			{
-				if (this.addNewCertificateCommand == null)
-				{
-					this.addNewCertificateCommand = new RelayCommand(command => this.ExecuteAddNewCertificate());
-				}
-
-				return this.addNewCertificateCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets the AddNewVariableCommand
-		/// </summary>
-		public RelayCommand AddNewVariableCommand
-		{
-			get
-			{
-				if (this.addNewVariableCommand == null)
-				{
-					this.addNewVariableCommand = new RelayCommand(command => this.ExecuteAddNewVariable());
-				}
-
-				return this.addNewVariableCommand;
-			}
-		}
-
-		/// <summary>
 		/// Gets the RemoveCertificateCommand
 		/// </summary>
 		public RelayCommand<CertificateViewModel> RemoveCertificateCommand
@@ -280,13 +206,50 @@ namespace RestClientLibrary.ViewModel
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Gets or sets the Variables
+		/// </summary>
+		public ObservableCollection<KeyValueViewModel> Variables
+		{
+			get
+			{
+				return this.variables;
+			}
 
-		#endregion
+			set
+			{
+				this.variables = value;
+				this.OnPropertyChanged("Variables");
+			}
+		}
 
-		#region Methods
+		public string Workspace
+		{
+			get
+			{
+				return this.workspace;
+			}
 
-		#region Public Methods
+			set
+			{
+				this.workspace = value;
+				this.OnPropertyChanged("Workspace");
+			}
+		}
+
+		public ObservableCollection<string> Workspaces
+		{
+			get
+			{
+				return this.workspaces;
+			}
+
+			set
+			{
+				this.workspaces = value;
+				this.OnPropertyChanged("Workspaces");
+			}
+		}
 
 		/// <summary>
 		/// The Parse
@@ -335,6 +298,26 @@ namespace RestClientLibrary.ViewModel
 			return !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.Workspace);
 		}
 
+		public void LoadData(GlobalSetupViewModel globalVariables)
+		{
+			var settings = AppDataHelper.LoadSettingsData(null);
+			this.Workspaces = globalVariables.Workspaces;
+			if (string.IsNullOrEmpty(this.Workspace))
+			{
+				this.Workspace = Constants.DefaultWorkspace;
+			}
+
+			if (settings.Certificates != null)
+			{
+				this.Certificates = new ObservableCollection<CertificateViewModel>(settings.Certificates);
+			}
+
+			if (this.DefaultCertificate != null)
+			{
+				this.DefaultCertificate = this.Certificates.FirstOrDefault(x => x.Name == this.DefaultCertificate)?.Name;
+			}
+		}
+
 		/// <summary>
 		/// The ToModel
 		/// </summary>
@@ -350,10 +333,6 @@ namespace RestClientLibrary.ViewModel
 				Workspace = this.Workspace
 			};
 		}
-
-		#endregion
-
-		#region Private Methods
 
 		/// <summary>
 		/// Executes AddNewCertificate
@@ -403,9 +382,5 @@ namespace RestClientLibrary.ViewModel
 		{
 			this.Variables.Remove(variable);
 		}
-
-		#endregion
-
-		#endregion
 	}
 }

@@ -46,7 +46,7 @@
 						<ComboBox
 							DisplayMemberPath="Name"
 							ItemsSource="{Binding Certificates}"
-							SelectedItem="{Binding DefaultCertificate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							SelectedValue="{Binding DefaultCertificate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 							SelectedValuePath="Name" />
 					</StackPanel>
 				</Grid>
