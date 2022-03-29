@@ -24,19 +24,7 @@ namespace RestClientLibrary.ViewModel
 
         public KeyValueViewModel()
         {
-            if (string.IsNullOrEmpty(GUID))
-            {
-                GUID = Guid.NewGuid().ToString();
-            }
         }
-
-        private string _guid;
-        public string GUID
-        {
-            get { return _guid; }
-            private set { _guid = value; }
-        }
-        
 
         private string _key;
         public string Key
@@ -89,7 +77,6 @@ namespace RestClientLibrary.ViewModel
 
             return new KeyValueViewModel()
             {
-                GUID = input.GUID,
                 Key = input.Key,
                 Value = input.Value
             };
@@ -116,7 +103,6 @@ namespace RestClientLibrary.ViewModel
         {
             return new Model.KeyValueModel()
             {
-                GUID = this.GUID,
                 Key = this.Key,
                 Value = this.Value
             };

@@ -202,7 +202,7 @@
 			</WrapPanel>
 			<WrapPanel Margin="0,-3,0,3.2" HorizontalAlignment="Right">
 				<Button
-					Width="50"
+					Width="100"
 					Height="25"
 					Margin="5,0"
 					HorizontalAlignment="Right"
@@ -210,10 +210,10 @@
 					Content="{Binding SendButtonText}" />
 				<base:DropDownButton
 					Name="btnSave"
-					Width="50"
+					Width="100"
 					Margin="5,0"
 					HorizontalAlignment="Right"
-					Content="Options">
+					Content="Save Options">
 					<base:DropDownButton.Menu>
 						<ContextMenu>
 							<MenuItem
@@ -227,7 +227,8 @@
 							<MenuItem
 								Command="{Binding Source={StaticResource MainProxy}, Path=Data.SendEmailCommand}"
 								CommandParameter="{Binding}"
-								Header="Send Email" />
+								Header="Send Email"
+								Visibility="Collapsed" />
 						</ContextMenu>
 					</base:DropDownButton.Menu>
 				</base:DropDownButton>
@@ -249,7 +250,18 @@
 		<Grid Grid.Row="3">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="5" />
+				<ColumnDefinition>
+					<ColumnDefinition.Style>
+						<Style TargetType="{x:Type ColumnDefinition}">
+							<Setter Property="Width" Value="3" />
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding IsResponseVisible}" Value="false">
+									<Setter Property="Width" Value="0" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</ColumnDefinition.Style>
+				</ColumnDefinition>
 				<ColumnDefinition>
 					<ColumnDefinition.Style>
 						<Style TargetType="{x:Type ColumnDefinition}">
@@ -514,7 +526,6 @@
 
 				</Grid>
 			</Grid>
-
 			<Grid Grid.Column="2">
 				<Grid x:Name="grdResponse" Visibility="{Binding IsResponseVisible, Converter={StaticResource BoolToVisibilityConverter}}">
 					<Grid.RowDefinitions>

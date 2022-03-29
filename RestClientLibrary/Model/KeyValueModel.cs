@@ -18,11 +18,6 @@ namespace RestClientLibrary.Model
         #region Properties
 
         /// <summary>
-        /// Gets or sets the GUID
-        /// </summary>
-        public string GUID { get; set; }
-
-        /// <summary>
         /// Gets or sets the Key
         /// </summary>
         public string Key { get; set; }

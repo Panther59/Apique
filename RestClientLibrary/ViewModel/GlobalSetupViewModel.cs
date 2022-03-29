@@ -428,7 +428,7 @@ namespace RestClientLibrary.ViewModel
 				{
 					this.allEnvironments.Add(environment);
 				}
-				else if(inputName != environment.Name)
+				else if (inputName != environment.Name)
 				{
 					this.view.MessageShow("Environment", $"Environment with name {environment.Name} already exists, please use different name");
 					return;
@@ -436,6 +436,7 @@ namespace RestClientLibrary.ViewModel
 
 				this.SelectedEnvironment = environment;
 				this.Environments = new ObservableCollection<EnvironmentViewModel>(this.allEnvironments?.Where(x => x.Workspace == this.SelectedWorkspace) ?? new List<EnvironmentViewModel>());
+				this.SyncUpVariables(this.Environments, environment);
 				//if (environment != null)
 				//{
 				//	this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Name == this.SelectedEnvironment?.Name);
@@ -446,6 +447,27 @@ namespace RestClientLibrary.ViewModel
 			else
 			{
 				//this.SelectedEnvironment = this.Environments.First();
+			}
+		}
+
+		private void SyncUpVariables(ObservableCollection<EnvironmentViewModel> environments, EnvironmentViewModel environment)
+		{
+			var allVariables = environment.Variables.Select(x => x.Key).Distinct();
+			foreach (var env in environments)
+			{
+				foreach (var variable in allVariables)
+				{
+					if (!env.Variables.Any(x => x.Key == variable))
+					{
+						env.Variables.Add(new KeyValueViewModel() { Key = variable });
+					}
+				}
+
+				var toBeRemoved = env.Variables.Where(x => !allVariables.Any(v => v == x.Key)).ToList();
+				foreach (var r in toBeRemoved)
+				{
+					env.Variables.Remove(r);
+				}
 			}
 		}
 
@@ -550,6 +572,7 @@ namespace RestClientLibrary.ViewModel
 		private void ExecuteDeleteEnvironment(EnvironmentViewModel vm)
 		{
 			this.Environments.Remove(vm);
+			this.allEnvironments.Remove(vm);
 
 			SaveData();
 			//this.SelectedEnvironment = this.Environments.FirstOrDefault();
@@ -597,13 +620,11 @@ namespace RestClientLibrary.ViewModel
 				return null;
 			}
 
-			return new EnvironmentViewModel
-			{
-				Name = input.Name + " - clone",
-				Variables = new ObservableCollection<KeyValueViewModel>(input.Variables ?? new ObservableCollection<KeyValueViewModel>()),
-				DefaultCertificate = input.DefaultCertificate,
-				Workspace = input.Workspace
-			};
+			var txt = JSONHelper.SerializeToJson(input);
+			var output = JSONHelper.DeserializeFromJson<EnvironmentViewModel>(txt);
+			output.Guid = System.Guid.NewGuid().ToString();
+			output.Name = input.Name + " - clone";
+			return output;
 		}
 
 		/// <summary>
@@ -677,6 +698,7 @@ namespace RestClientLibrary.ViewModel
 		{
 			var ws = this.SelectedWorkspace;
 			this.Workspaces.Remove(ws);
+			this.AllWorkspaces.Remove(ws);
 			this.SelectedWorkspace = Constants.DefaultWorkspace;
 
 			SaveData();

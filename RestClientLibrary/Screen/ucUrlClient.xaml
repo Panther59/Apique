@@ -80,7 +80,7 @@
 			Width="20"
 			Margin="13,2,0,3"
 			HorizontalAlignment="Left"
-			Visibility="Collapsed"
+			Visibility="Collapsed"	
 			Command="{Binding UrlExpandedCommand}"
 			IsChecked="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			Style="{StaticResource ExpandCollapseToggleStyle}" />
