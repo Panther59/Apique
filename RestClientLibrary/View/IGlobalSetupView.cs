@@ -29,7 +29,7 @@ namespace RestClientLibrary.View
         /// </summary>
         /// <param name="environment">The <see cref="EnvironmentViewModel"/></param>
         /// <returns>The <see cref="EnvironmentViewModel"/></returns>
-        EnvironmentViewModel AddNewEnvironment(EnvironmentViewModel environment);
+        EnvironmentViewModel AddNewEnvironment(GlobalSetupViewModel globalSetupViewModel, EnvironmentViewModel environment);
 		
         string AddNewWorkspace();
 

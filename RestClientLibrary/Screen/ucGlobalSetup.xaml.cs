@@ -29,11 +29,12 @@
             return window.Certificate;
         }
 
-        public EnvironmentViewModel AddNewEnvironment(EnvironmentViewModel environment)
+        public EnvironmentViewModel AddNewEnvironment(GlobalSetupViewModel globalSetupViewModel, EnvironmentViewModel environment)
         {
             AddEnvironmentWindow window = new AddEnvironmentWindow();
             window.Resources = (System.Windows.Window.GetWindow(this)).Resources;
             window.Environment = environment;
+            window.GlobalSetup = globalSetupViewModel;
             window.ShowDialog(this);
 
             return window.Environment;

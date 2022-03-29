@@ -6,6 +6,9 @@
 
 namespace RestClientLibrary.ViewModel
 {
+	using DataLibrary;
+	using RestClientLibrary.Common;
+	using RestClientLibrary.Model;
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
@@ -13,18 +16,12 @@ namespace RestClientLibrary.ViewModel
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows.Input;
-	using DataLibrary;
-	using RestClientLibrary.Common;
-	using RestClientLibrary.Model;
-	//using Outlook = Microsoft.Office.Interop.Outlook;
 
 	/// <summary>
 	/// Defines the <see cref="WorkspaceViewModel" />
 	/// </summary>
 	public class WorkspaceViewModel : BaseViewModel
 	{
-		#region Fields
-
 		/// <summary>
 		/// Defines the 
 		/// </summary>
@@ -43,7 +40,17 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Defines the 
 		/// </summary>
+		private RelayCommand<RestClientViewModel> _saveRequestCommand;
+
+		/// <summary>
+		/// Defines the 
+		/// </summary>
 		private int _selectedMainTab;
+
+		/// <summary>
+		/// Defines the 
+		/// </summary>
+		private RelayCommand<RestClientViewModel> _sendEmailCommand;
 
 		/// <summary>
 		/// Defines the 
@@ -53,12 +60,32 @@ namespace RestClientLibrary.ViewModel
 		/// <summary>
 		/// Defines the 
 		/// </summary>
+		private RelayCommand _tabChangedCommand;
+
+		/// <summary>
+		/// Defines the 
+		/// </summary>
 		private View.IWorkspaceView _view;
+
+		/// <summary>
+		/// The closeRestClientCommand field
+		/// </summary>
+		private RelayCommand<RestClientViewModel> closeRestClientCommand;
 
 		/// <summary>
 		/// Defines the 
 		/// </summary>
 		private int counter = 0;
+
+		/// <summary>
+		/// The environmentChangedCommand field
+		/// </summary>
+		private RelayCommand<EnvironmentViewModel> environmentChangedCommand;
+
+		/// <summary>
+		/// The environmentManageCommand field
+		/// </summary>
+		private RelayCommand environmentManageCommand;
 
 		/// <summary>
 		/// The environments field
@@ -76,9 +103,19 @@ namespace RestClientLibrary.ViewModel
 		private GlobalSetupViewModel globalVariables;
 
 		/// <summary>
+		/// The newRestClientCommand field
+		/// </summary>
+		private RelayCommand newRestClientCommand;
+
+		/// <summary>
 		/// The restClients field
 		/// </summary>
 		private ObservableCollection<RestClientViewModel> restClients;
+
+		/// <summary>
+		/// The saveAsRequestCommand field
+		/// </summary>
+		private RelayCommand<RestClientViewModel> saveAsRequestCommand;
 
 		/// <summary>
 		/// The selectedEnvironment field
@@ -90,10 +127,17 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private RestClientViewModel selectedRestClient;
 
+		private string selectedWorkspace;
+
 		/// <summary>
 		/// The setMenus field
 		/// </summary>
 		private ObservableCollection<CustomContextMenuViewModel> setMenus;
+
+		/// <summary>
+		/// The testCommand field
+		/// </summary>
+		private RelayCommand<string> testCommand;
 
 		/// <summary>
 		/// The useVariableMenus field
@@ -104,58 +148,6 @@ namespace RestClientLibrary.ViewModel
 		/// Defines the 
 		/// </summary>
 		private List<KeyValueViewModel> variables;
-
-		///// <summary>
-		///// Defines the certificates
-		///// </summary>
-		//private ObservableCollection<CertificateModel> certificates;
-
-		#region Commands
-
-		/// <summary>
-		/// Defines the 
-		/// </summary>
-		private RelayCommand<RestClientViewModel> _saveRequestCommand;
-
-		/// <summary>
-		/// Defines the 
-		/// </summary>
-		private RelayCommand<RestClientViewModel> _sendEmailCommand;
-
-		/// <summary>
-		/// Defines the 
-		/// </summary>
-		private RelayCommand _tabChangedCommand;
-
-		/// <summary>
-		/// The closeRestClientCommand field
-		/// </summary>
-		private RelayCommand<RestClientViewModel> closeRestClientCommand;
-
-		/// <summary>
-		/// The environmentChangedCommand field
-		/// </summary>
-		private RelayCommand<EnvironmentViewModel> environmentChangedCommand;
-
-		/// <summary>
-		/// The environmentManageCommand field
-		/// </summary>
-		private RelayCommand environmentManageCommand;
-
-		/// <summary>
-		/// The newRestClientCommand field
-		/// </summary>
-		private RelayCommand newRestClientCommand;
-
-		/// <summary>
-		/// The saveAsRequestCommand field
-		/// </summary>
-		private RelayCommand<RestClientViewModel> saveAsRequestCommand;
-
-		/// <summary>
-		/// The testCommand field
-		/// </summary>
-		private RelayCommand<string> testCommand;
 
 		/// <summary>
 		/// The viewAppSettingsCommand field
@@ -171,14 +163,8 @@ namespace RestClientLibrary.ViewModel
 		/// The viewTestRunnerCommand field
 		/// </summary>
 		private RelayCommand viewTestRunnerCommand;
-		private string selectedWorkspace;
+
 		private RelayCommand<string> workspaceChangedCommand;
-
-		#endregion
-
-		#endregion
-
-		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="WorkspaceViewModel"/> class.
@@ -203,11 +189,74 @@ namespace RestClientLibrary.ViewModel
 			LoadData();
 		}
 
+		///// <summary>
+		///// Gets the Certificates
+		///// </summary>
+		//public ObservableCollection<CertificateModel> Certificates
+		//{
+		//	get
+		//	{
+		//		return this.certificates;
+		//	}
+		//	set
+		//	{
+		//		this.certificates = value;
+		//		this.OnPropertyChanged("Certificates");
+		//	}
+		//}
+
+
+		/// <summary>
+		/// Gets the CloseRestClientCommand
+		/// </summary>
+		public RelayCommand<RestClientViewModel> CloseRestClientCommand
+		{
+			get
+			{
+				if (this.closeRestClientCommand == null)
+				{
+					this.closeRestClientCommand = new RelayCommand<RestClientViewModel>(command => this.ExecuteCloseRestClient(command), can => this.CanCloseRestClientExecute(can));
+				}
+
+				return this.closeRestClientCommand;
+			}
+		}
+
+		/// <summary>
+		/// Gets the EnvironmentChangedCommand
+		/// </summary>
+		public RelayCommand<EnvironmentViewModel> EnvironmentChangedCommand
+		{
+			get
+			{
+				if (this.environmentChangedCommand == null)
+				{
+					this.environmentChangedCommand = new RelayCommand<EnvironmentViewModel>(command => this.ExecuteEnvironmentChanged(command));
+				}
+
+				return this.environmentChangedCommand;
+			}
+		}
+
+		/// <summary>
+		/// Gets the EnvironmentManageCommand
+		/// </summary>
+		public RelayCommand EnvironmentManageCommand
+		{
+			get
+			{
+				if (this.environmentManageCommand == null)
+				{
+					this.environmentManageCommand = new RelayCommand(command => this.ExecuteEnvironmentManage());
+				}
+
+				return this.environmentManageCommand;
+			}
+		}
+
 		//private List<EnvironmentViewModel> allEnvironments;
 
-		#endregion
 
-		#region Properties
 
 		/// <summary>
 		/// Gets or sets the Environments
@@ -223,20 +272,6 @@ namespace RestClientLibrary.ViewModel
 			{
 				this.environments = value;
 				this.OnPropertyChanged("Environments");
-			}
-		}
-
-		public string SelectedWorkspace
-		{
-			get
-			{
-				return this.selectedWorkspace;
-			}
-
-			set
-			{
-				this.selectedWorkspace = value;
-				this.OnPropertyChanged("SelectedWorkspace");
 			}
 		}
 
@@ -288,6 +323,22 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
+		/// Gets the NewRestClientCommand
+		/// </summary>
+		public RelayCommand NewRestClientCommand
+		{
+			get
+			{
+				if (this.newRestClientCommand == null)
+				{
+					this.newRestClientCommand = new RelayCommand(command => this.ExecuteNewRestClient());
+				}
+
+				return this.newRestClientCommand;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the RestClients
 		/// </summary>
 		public ObservableCollection<RestClientViewModel> RestClients
@@ -305,6 +356,22 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
+		/// Gets the SaveAsRequestCommand
+		/// </summary>
+		public RelayCommand<RestClientViewModel> SaveAsRequestCommand
+		{
+			get
+			{
+				if (this.saveAsRequestCommand == null)
+				{
+					this.saveAsRequestCommand = new RelayCommand<RestClientViewModel>(command => this.ExecuteSaveAsRequest(command), can => this.CanSaveAsRequestExecute(can));
+				}
+
+				return this.saveAsRequestCommand;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the SaveRequest
 		/// </summary>
 		public SaveRequestViewModel SaveRequest
@@ -315,6 +382,22 @@ namespace RestClientLibrary.ViewModel
 				_saveRequest = value;
 				OnPropertyChanged("SaveRequest");
 			}
+		}
+
+		/// <summary>
+		/// Gets or sets the SaveRequestCommand
+		/// </summary>
+		public RelayCommand<RestClientViewModel> SaveRequestCommand
+		{
+			get
+			{
+				if (_saveRequestCommand == null)
+				{
+					_saveRequestCommand = new RelayCommand<RestClientViewModel>(command => SaveRequestClicked(command), can => IsRestClientDataComplete(can));
+				}
+				return _saveRequestCommand;
+			}
+			set { _saveRequestCommand = value; }
 		}
 
 		/// <summary>
@@ -368,6 +451,36 @@ namespace RestClientLibrary.ViewModel
 			}
 		}
 
+		public string SelectedWorkspace
+		{
+			get
+			{
+				return this.selectedWorkspace;
+			}
+
+			set
+			{
+				this.selectedWorkspace = value;
+				this.OnPropertyChanged("SelectedWorkspace");
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the SendEmailCommand
+		/// </summary>
+		public RelayCommand<RestClientViewModel> SendEmailCommand
+		{
+			get
+			{
+				if (_sendEmailCommand == null)
+				{
+					_sendEmailCommand = new RelayCommand<RestClientViewModel>(command => this.SendEmail(command), can => IsRestClientDataComplete(can));
+				}
+				return _sendEmailCommand;
+			}
+			set { _sendEmailCommand = value; }
+		}
+
 		/// <summary>
 		/// Gets or sets the SetMenus
 		/// </summary>
@@ -399,181 +512,6 @@ namespace RestClientLibrary.ViewModel
 		}
 
 		/// <summary>
-		/// Gets or sets the UseVariableMenus
-		/// </summary>
-		public ObservableCollection<CustomContextMenuViewModel> UseVariableMenus
-		{
-			get
-			{
-				return this.useVariableMenus;
-			}
-
-			set
-			{
-				this.useVariableMenus = value;
-				this.OnPropertyChanged("UseVariableMenus");
-			}
-		}
-
-		/// <summary>
-		/// Gets the Variables
-		/// </summary>
-		public List<KeyValueViewModel> Variables
-		{
-			get
-			{
-				return this.variables;
-			}
-		}
-
-		///// <summary>
-		///// Gets the Certificates
-		///// </summary>
-		//public ObservableCollection<CertificateModel> Certificates
-		//{
-		//	get
-		//	{
-		//		return this.certificates;
-		//	}
-		//	set
-		//	{
-		//		this.certificates = value;
-		//		this.OnPropertyChanged("Certificates");
-		//	}
-		//}
-
-		#region Commands
-
-		/// <summary>
-		/// Gets the CloseRestClientCommand
-		/// </summary>
-		public RelayCommand<RestClientViewModel> CloseRestClientCommand
-		{
-			get
-			{
-				if (this.closeRestClientCommand == null)
-				{
-					this.closeRestClientCommand = new RelayCommand<RestClientViewModel>(command => this.ExecuteCloseRestClient(command), can => this.CanCloseRestClientExecute(can));
-				}
-
-				return this.closeRestClientCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets the EnvironmentChangedCommand
-		/// </summary>
-		public RelayCommand<EnvironmentViewModel> EnvironmentChangedCommand
-		{
-			get
-			{
-				if (this.environmentChangedCommand == null)
-				{
-					this.environmentChangedCommand = new RelayCommand<EnvironmentViewModel>(command => this.ExecuteEnvironmentChanged(command));
-				}
-
-				return this.environmentChangedCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets the EnvironmentChangedCommand
-		/// </summary>
-		public RelayCommand<string> WorkspaceChangedCommand
-		{
-			get
-			{
-				if (this.workspaceChangedCommand == null)
-				{
-					this.workspaceChangedCommand = new RelayCommand<string>(command => this.ExecuteWorkspaceChanged(command));
-				}
-
-				return this.workspaceChangedCommand;
-			}
-		}
-
-
-		/// <summary>
-		/// Gets the EnvironmentManageCommand
-		/// </summary>
-		public RelayCommand EnvironmentManageCommand
-		{
-			get
-			{
-				if (this.environmentManageCommand == null)
-				{
-					this.environmentManageCommand = new RelayCommand(command => this.ExecuteEnvironmentManage());
-				}
-
-				return this.environmentManageCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets the NewRestClientCommand
-		/// </summary>
-		public RelayCommand NewRestClientCommand
-		{
-			get
-			{
-				if (this.newRestClientCommand == null)
-				{
-					this.newRestClientCommand = new RelayCommand(command => this.ExecuteNewRestClient());
-				}
-
-				return this.newRestClientCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets the SaveAsRequestCommand
-		/// </summary>
-		public RelayCommand<RestClientViewModel> SaveAsRequestCommand
-		{
-			get
-			{
-				if (this.saveAsRequestCommand == null)
-				{
-					this.saveAsRequestCommand = new RelayCommand<RestClientViewModel>(command => this.ExecuteSaveAsRequest(command), can => this.CanSaveAsRequestExecute(can));
-				}
-
-				return this.saveAsRequestCommand;
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the SaveRequestCommand
-		/// </summary>
-		public RelayCommand<RestClientViewModel> SaveRequestCommand
-		{
-			get
-			{
-				if (_saveRequestCommand == null)
-				{
-					_saveRequestCommand = new RelayCommand<RestClientViewModel>(command => SaveRequestClicked(command), can => IsRestClientDataComplete(can));
-				}
-				return _saveRequestCommand;
-			}
-			set { _saveRequestCommand = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the SendEmailCommand
-		/// </summary>
-		public RelayCommand<RestClientViewModel> SendEmailCommand
-		{
-			get
-			{
-				if (_sendEmailCommand == null)
-				{
-					_sendEmailCommand = new RelayCommand<RestClientViewModel>(command => this.SendEmail(command), can => IsRestClientDataComplete(can));
-				}
-				return _sendEmailCommand;
-			}
-			set { _sendEmailCommand = value; }
-		}
-
-		/// <summary>
 		/// Gets or sets the TabChangedCommand
 		/// </summary>
 		public RelayCommand TabChangedCommand
@@ -602,6 +540,34 @@ namespace RestClientLibrary.ViewModel
 				}
 
 				return this.testCommand;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the UseVariableMenus
+		/// </summary>
+		public ObservableCollection<CustomContextMenuViewModel> UseVariableMenus
+		{
+			get
+			{
+				return this.useVariableMenus;
+			}
+
+			set
+			{
+				this.useVariableMenus = value;
+				this.OnPropertyChanged("UseVariableMenus");
+			}
+		}
+
+		/// <summary>
+		/// Gets the Variables
+		/// </summary>
+		public List<KeyValueViewModel> Variables
+		{
+			get
+			{
+				return this.variables;
 			}
 		}
 
@@ -653,13 +619,21 @@ namespace RestClientLibrary.ViewModel
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Gets the EnvironmentChangedCommand
+		/// </summary>
+		public RelayCommand<string> WorkspaceChangedCommand
+		{
+			get
+			{
+				if (this.workspaceChangedCommand == null)
+				{
+					this.workspaceChangedCommand = new RelayCommand<string>(command => this.ExecuteWorkspaceChanged(command));
+				}
 
-		#endregion
-
-		#region Methods
-
-		#region Public Methods
+				return this.workspaceChangedCommand;
+			}
+		}
 
 		/// <summary>
 		/// The BringRestClientToFocus
@@ -848,13 +822,7 @@ namespace RestClientLibrary.ViewModel
 		{
 			var selectedEnv = this.SelectedEnvironment;
 			this.BuildVariables(this.GlobalVariables);
-			//this.LoadFromGlobalData();
-			//this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Guid == selectedEnv.Guid);
 		}
-
-		#endregion
-
-		#region Private Methods
 
 		/// <summary>
 		/// The AddNewRestClient
@@ -865,7 +833,7 @@ namespace RestClientLibrary.ViewModel
 			var blankRC = new RestClientViewModel() { Title = "Request " + ++counter };
 			blankRC.ParentViewModel = this;
 			blankRC.IsDefaultRestClient = true;
-			blankRC.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate?.Name);
+			blankRC.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate);
 			if (this.History.SessionHistory != null)
 			{
 				var listUrl = this.History.SessionHistory
@@ -1127,19 +1095,8 @@ namespace RestClientLibrary.ViewModel
 			this.BuildVariables(this.GlobalVariables);
 			foreach (var item in this.RestClients)
 			{
-				item.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate?.Name);
+				item.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate);
 			}
-		}
-
-		private void ExecuteWorkspaceChanged(string command)
-		{
-			var finalEnvs = this.GlobalVariables.allEnvironments.Where(x => x.Workspace == this.SelectedWorkspace).ToList();
-			finalEnvs.Insert(0, new EnvironmentViewModel() { Name = Constants.Select });
-
-			var oldEnvGuid = this.SelectedEnvironment?.Guid;
-			this.Environments = new ObservableCollection<EnvironmentViewModel>(finalEnvs);
-			this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Guid == oldEnvGuid) ?? this.Environments.FirstOrDefault();
-			this.BuildVariables(this.GlobalVariables);
 		}
 
 		/// <summary>
@@ -1222,6 +1179,17 @@ namespace RestClientLibrary.ViewModel
 			this._view.OpenTestRunner();
 		}
 
+		private void ExecuteWorkspaceChanged(string command)
+		{
+			var finalEnvs = this.GlobalVariables.allEnvironments.Where(x => x.Workspace == this.SelectedWorkspace).ToList();
+			finalEnvs.Insert(0, new EnvironmentViewModel() { Name = Constants.Select });
+
+			var oldEnvGuid = this.SelectedEnvironment?.Guid;
+			this.Environments = new ObservableCollection<EnvironmentViewModel>(finalEnvs);
+			this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Guid == oldEnvGuid) ?? this.Environments.FirstOrDefault();
+			this.BuildVariables(this.GlobalVariables);
+		}
+
 		/// <summary>
 		/// The IsRestClientDataComplete
 		/// </summary>
@@ -1242,9 +1210,9 @@ namespace RestClientLibrary.ViewModel
 
 			Settings = AppDataHelper.LoadSettingsData();
 			Settings.ParentViewModel = this;
-			
+
 			this.GlobalVariables = GlobalSetupViewModel.Parse(AppDataHelper.LoadGlobalData());
-			
+
 			this.LoadEnvironmentData();
 			this.SelectedEnvironment = this.Environments.First();
 
@@ -1295,7 +1263,7 @@ namespace RestClientLibrary.ViewModel
 				else
 				{
 					this.SelectedWorkspace = this.GlobalVariables.Workspaces.FirstOrDefault();
-				}				
+				}
 			}
 
 			//this.allEnvironments = envs;
@@ -1476,9 +1444,5 @@ namespace RestClientLibrary.ViewModel
 
 			this.BuildVariables(this.GlobalVariables);
 		}
-
-		#endregion
-
-		#endregion
 	}
 }

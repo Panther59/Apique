@@ -50,10 +50,10 @@ namespace RestClientLibrary.ViewModel
 		private ObservableCollection<KeyValueViewModel> variables;
 		private ObservableCollection<string> workspaces;
 		private string workspace;
-		private CertificateViewModel defaultDertificate;
+		private string defaultDertificate;
 		
 
-		public CertificateViewModel DefaultCertificate
+		public string DefaultCertificate
 		{
 			get
 			{
@@ -71,21 +71,10 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private IEnvironmentView view;
 
-		public void LoadData()
+		public void LoadData(GlobalSetupViewModel globalVariables)
 		{
 			var settings = AppDataHelper.LoadSettingsData();
-			var globalVariables = AppDataHelper.LoadGlobalData();
-			if (globalVariables.Workspaces == null)
-			{
-				globalVariables.Workspaces = new System.Collections.Generic.List<string>();
-			}
-
-			if (!globalVariables.Workspaces.Any(x => x == Constants.DefaultWorkspace))
-			{
-				globalVariables.Workspaces.Insert(0, Constants.DefaultWorkspace);
-			}
-			var ws = globalVariables.Workspaces.ToList();
-			this.Workspaces = new ObservableCollection<string>(ws);
+			this.Workspaces = globalVariables.Workspaces;
 			if (string.IsNullOrEmpty(this.Workspace))
 			{
 				this.Workspace = Constants.DefaultWorkspace;
@@ -98,7 +87,7 @@ namespace RestClientLibrary.ViewModel
 
 			if (this.DefaultCertificate != null)
 			{
-				this.DefaultCertificate = this.Certificates.FirstOrDefault(x => x.Name == this.DefaultCertificate.Name);
+				this.DefaultCertificate = this.Certificates.FirstOrDefault(x => x.Name == this.DefaultCertificate)?.Name;
 			}
 		}
 
@@ -322,7 +311,7 @@ namespace RestClientLibrary.ViewModel
 
 			if (input.DefaultCertificate != null)
 			{
-				output.DefaultCertificate = CertificateViewModel.Parse(input.DefaultCertificate);
+				output.DefaultCertificate = input.DefaultCertificate;
 			}
 
 			return output;
@@ -356,7 +345,7 @@ namespace RestClientLibrary.ViewModel
 			{
 				Guid = this.Guid,
 				Name = this.Name,
-				DefaultCertificate = this.DefaultCertificate?.ToModel(),
+				DefaultCertificate = this.DefaultCertificate,
 				Variables = this.Variables?.Select(x => x.ToModel()).ToList(),
 				Workspace = this.Workspace
 			};

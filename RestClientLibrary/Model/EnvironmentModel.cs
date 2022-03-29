@@ -30,7 +30,7 @@ namespace RestClientLibrary.Model
         /// <summary>
         /// Gets or sets Certificates
         /// </summary>
-        public CertificateModel DefaultCertificate { get; set; }
+        public string DefaultCertificate { get; set; }
 
         /// <summary>
         /// Gets or sets the Guid

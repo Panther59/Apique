@@ -31,13 +31,14 @@
             get;
             set;
         }
+		public GlobalSetupViewModel GlobalSetup { get; set; }
 
-        /// <summary>
-        /// The AddEnvironmentWindow_Loaded
-        /// </summary>
-        /// <param name="sender">The <see cref="object"/></param>
-        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/></param>
-        private void AddEnvironmentWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
+		/// <summary>
+		/// The AddEnvironmentWindow_Loaded
+		/// </summary>
+		/// <param name="sender">The <see cref="object"/></param>
+		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/></param>
+		private void AddEnvironmentWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             if (this.Environment != null)
             {
@@ -48,7 +49,7 @@
                 this.viewModel = new EnvironmentViewModel();
             }
 
-            viewModel.LoadData();
+            viewModel.LoadData(GlobalSetup);
             this.ucEnvironment.DataContext = viewModel;
         }
 

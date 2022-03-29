@@ -50,6 +50,11 @@ namespace RestClientLibrary.Model
             get; set;
         }
 
+        public List<CertificateModel> Certificates
+        {
+            get; set;
+        }
+
         #endregion
     }
 }

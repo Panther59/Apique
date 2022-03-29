@@ -423,7 +423,7 @@ namespace RestClientLibrary.ViewModel
 		/// <param name="input">The <see cref="EnvironmentViewModel"/></param>
 		private void AddNewEnvironment(EnvironmentViewModel input)
 		{
-			var environment = this.view.AddNewEnvironment(input);
+			var environment = this.view.AddNewEnvironment(this, input);
 			if (environment != null)
 			{
 				if (!this.allEnvironments.Any(x => x.Guid == environment.Guid))
@@ -634,22 +634,17 @@ namespace RestClientLibrary.ViewModel
 		public static GlobalSetupViewModel Parse(GlobalVariableModel model)
 		{
 			GlobalSetupViewModel output = new GlobalSetupViewModel();
-			if (model.Variables != null)
-			{
-				output.Variables = new ObservableCollection<KeyValueViewModel>( model.Variables?.Select(x => KeyValueViewModel.Parse(x)) ?? new ObservableCollection<KeyValueViewModel>());
-			}
+			output.Variables = new ObservableCollection<KeyValueViewModel>(model.Variables?.Select(x => KeyValueViewModel.Parse(x)) ?? new ObservableCollection<KeyValueViewModel>());
+			output.Certificates = new ObservableCollection<CertificateViewModel>(model.Certificates?.Select(x => CertificateViewModel.Parse(x)) ?? new ObservableCollection<CertificateViewModel>());
 
-			if (model.Certificates != null)
-			{
-				output.Certificates = new ObservableCollection<CertificateViewModel>(model.Certificates?.Select(x => CertificateViewModel.Parse(x)) ?? new ObservableCollection<CertificateViewModel>());
-			}
-
-			var envs = model.Environments?.Select(x => EnvironmentViewModel.Parse(x)).ToList() ?? new List<EnvironmentViewModel>();
-			envs.Insert(0, new EnvironmentViewModel() { Name = Constants.Select });
-			envs.Add(new EnvironmentViewModel() { Name = Constants.AddNew });
-			output.allEnvironments = (envs);
+			output.allEnvironments = model.Environments?.Select(x => EnvironmentViewModel.Parse(x)).ToList() ?? new List<EnvironmentViewModel>();
 
 			var ws = model.Workspaces?.ToList() ?? new List<string>();
+			if (ws.Count == 0)
+			{
+				ws.Add(Constants.DefaultWorkspace);
+			}
+
 			output.Workspaces = new ObservableCollection<string>(ws);
 			ws.Add(Constants.AddNew);
 			output.AllWorkspaces = new ObservableCollection<string>(ws);
