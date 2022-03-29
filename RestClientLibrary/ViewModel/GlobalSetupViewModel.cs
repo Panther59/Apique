@@ -423,12 +423,18 @@ namespace RestClientLibrary.ViewModel
 		/// <param name="input">The <see cref="EnvironmentViewModel"/></param>
 		private void AddNewEnvironment(EnvironmentViewModel input)
 		{
+			var inputName = input?.Name;
 			var environment = this.view.AddNewEnvironment(this, input);
 			if (environment != null)
 			{
-				if (!this.allEnvironments.Any(x => x.Guid == environment.Guid))
+				if (!this.allEnvironments.Any(x => x.Name == environment.Name))
 				{
 					this.allEnvironments.Add(environment);
+				}
+				else if(inputName != environment.Name)
+				{
+					this.view.MessageShow("Environment", $"Environment with name {environment.Name} already exists, please use different name");
+					return;
 				}
 
 				this.SelectedEnvironment = environment;

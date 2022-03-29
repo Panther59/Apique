@@ -450,9 +450,13 @@ namespace RestClientLibrary.ViewModel
 			var cert = this._view.AddNewCertificate(false);
 			if (cert != null)
 			{
-				if (!this.Certificates.Any(x => x.Thumbprint == cert.Thumbprint))
+				if (!this.Certificates.Any(x => x.Name == cert.Name))
 				{
 					this.Certificates.Add(cert);
+				}
+				else
+				{
+					this._view.MessageShow("Certificate", $"Certificate with name {cert.Name} already exists, please use different alias");
 				}
 			}
 
@@ -464,9 +468,13 @@ namespace RestClientLibrary.ViewModel
 			var cert = this._view.AddNewCertificate(true);
 			if (cert != null)
 			{
-				if (!this.Certificates.Any(x => x.FilePath == cert.FilePath))
+				if (!this.Certificates.Any(x => x.Name == cert.Name))
 				{
 					this.Certificates.Add(cert);
+				}
+				else
+				{
+					this._view.MessageShow("Certificate", $"Certificate with name {cert.Name} already exists, please use different alias");
 				}
 			}
 
