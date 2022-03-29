@@ -50,7 +50,7 @@ namespace RestClientLibrary.Model
             get; set;
         }
 
-        public List<CertificateModel> Certificates
+        public List<CertificateViewModel> Certificates
         {
             get; set;
         }

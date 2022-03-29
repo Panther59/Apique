@@ -225,6 +225,12 @@ namespace RestClientLibrary.ViewModel
 					}
 				}
 
+				if (importData.Certificates != null && importData.Certificates.Count > 0)
+				{
+					List<ExportItemViewModel> catItems = importData.Certificates.Select(x => new ExportItemViewModel { Name = x.Name, ShouldExport = true }).ToList();
+					exportData.Add(new ExportCategoryViewModel { Name = "Certificates", ShouldExport = true, Items = catItems });
+				}
+
 				if (importData.Categories != null && importData.Categories.Count > 0)
 				{
 					List<ExportItemViewModel> catItems = importData.Categories.Select(x => new ExportItemViewModel { Name = x.Name, ShouldExport = true }).ToList();
@@ -255,7 +261,7 @@ namespace RestClientLibrary.ViewModel
 			{
 				var exportData = new List<ExportCategoryViewModel>();
 				var environments = AppDataHelper.LoadGlobalData();
-				var settings = AppDataHelper.LoadSettingsData();
+				var settings = AppDataHelper.LoadSettingsData(null);
 				List<ExportItemViewModel> envItems = new List<ExportItemViewModel>();
 				if (environments.Variables != null)
 				{
@@ -356,8 +362,8 @@ namespace RestClientLibrary.ViewModel
 				var certs = this.ExportData?.FirstOrDefault(x => ((x.ShouldExport.HasValue && x.ShouldExport.Value) || x.ShouldExport.HasValue == false) && x.Name == "Certificates")?.Items.Where(x => x.ShouldExport).ToList();
 				if (certs != null)
 				{
-					var settings = AppDataHelper.LoadSettingsData();
-					var certData = settings?.Certificates?.Where(x => certs.Any(y => y.Name.Equals(x.Name)))?.Select(x => x.ToModel())?.ToList();
+					var settings = AppDataHelper.LoadSettingsData(null);
+					var certData = settings?.Certificates?.Where(x => certs.Any(y => y.Name.Equals(x.Name)))?.ToList();
 
 					if (certData != null)
 					{
@@ -413,6 +419,7 @@ namespace RestClientLibrary.ViewModel
 			try
 			{
 				this.ImportSelectedEnvironments();
+				this.ImportSelectedCertificates();
 				this.ImportSelectedSavedRequests();
 				this.ImportSelectedTestRuns();
 				this.ImportSelectedHistory();
@@ -475,9 +482,44 @@ namespace RestClientLibrary.ViewModel
 							environments.Environments.Add(item);
 						}
 					}
+
+					var workspaces = environments.Environments.Select(x => x.Workspace).Distinct().ToList();
+					if (!workspaces.Any(x => x == Constants.DefaultWorkspace))
+					{
+						workspaces.Insert(0, Constants.DefaultWorkspace);
+					}
+
+					environments.Workspaces = workspaces;
 				}
 
 				AppDataHelper.SaveGlobalVariablesData(environments);
+			}
+		}
+
+		/// <summary>
+		/// The ImportSelectedHistory
+		/// </summary>
+		private void ImportSelectedCertificates()
+		{
+			var hasCerts = this.ExportData.Any(x => ((x.ShouldExport.HasValue && x.ShouldExport.Value) || x.ShouldExport.HasValue == false) && x.Name == "Certificates");
+
+			if (hasCerts)
+			{
+				var settings = AppDataHelper.LoadSettingsData(null);
+				if (settings.Certificates == null)
+				{
+					settings.Certificates = new System.Collections.ObjectModel.ObservableCollection<CertificateViewModel>();
+				}
+
+				foreach (var cert in this.importedData.Certificates)
+				{
+					if (!settings.Certificates.Any(x => x.Name == cert.Name))
+					{
+						settings.Certificates.Add(cert);
+					}
+				}
+
+				AppDataHelper.SaveSettingsData(settings);
 			}
 		}
 

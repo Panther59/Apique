@@ -698,27 +698,83 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		public void ReloadAfterImport()
 		{
+			//SaveRequest.ParentViewModel = this;
 			SaveRequest.LoadData(AppDataHelper.LoadSavedRequestData());
 
-			var tempEnv = this.SelectedEnvironment;
-			this.LoadEnvironmentData();
-			this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Guid == tempEnv?.Guid);
+			//Settings = AppDataHelper.LoadSettingsData(this.Settings);
+			//Settings.ParentViewModel = this;
 
+			this.GlobalVariables = GlobalSetupViewModel.Parse(this.GlobalVariables, AppDataHelper.LoadGlobalData());
+
+			this.LoadEnvironmentData();
+			this.SelectedEnvironment = this.Environments.First();
+
+			History = new HistoryViewModel(_view.HistoryView);
+			History.ParentViewModel = this;
 			var sessionData = AppDataHelper.LoadSessionHistoryData();
 			sessionData = sessionData.Where(x => x.Time > DateTime.Now.AddDays(-1 * Settings.MaxHistoryDays)).ToList();
 			var basicData = sessionData != null ? sessionData.Select(x => new BasicHistoryViewModel(x)) : null;
 			History.LoadData(basicData != null ? basicData : null);
-			if (History.SessionHistory != null)
-			{
-				var listUrl = History.SessionHistory
-					.Select(s => new { Time = s.Time, Url = s.PreUrl ?? s.Url })
-					.GroupBy(g => g.Url)
-					.Select(x => new { Url = x.Key, Time = x.Max(a => a.Time) })
-					.OrderByDescending(z => z.Time)
-					.Select(u => new TextType { Text = u.Url });
 
-				SelectedRestClient.UrlBase.Urls = new ObservableCollection<TextType>(listUrl);
+			var appStatus = AppDataHelper.LoadAppState();
+			this.RestClients = new ObservableCollection<RestClientViewModel>(appStatus.RestClients ?? new ObservableCollection<RestClientViewModel>());
+			if (!string.IsNullOrEmpty(appStatus.SelectedRestClient))
+			{
+				this.SelectedRestClient = this.RestClients.FirstOrDefault(x => x.GUID == appStatus.SelectedRestClient);
 			}
+
+			if (this.RestClients.Count == 0)
+			{
+				var blank = this.AddNewRestClient();
+				this.SelectedRestClient = blank;
+			}
+			else
+			{
+				foreach (var rc in this.RestClients)
+				{
+					rc.ParentViewModel = this;
+				}
+			}
+
+			if (!string.IsNullOrEmpty(appStatus.SelectedWorkspace))
+			{
+				this.SelectedWorkspace = this.GlobalVariables.Workspaces.FirstOrDefault(x => x == appStatus.SelectedWorkspace);
+				var finalEnvs = this.GlobalVariables.allEnvironments.Where(x => x.Workspace == this.SelectedWorkspace).ToList();
+				finalEnvs.Insert(0, new EnvironmentViewModel() { Name = Constants.Select });
+
+				this.Environments = new ObservableCollection<EnvironmentViewModel>(finalEnvs);
+			}
+
+			if (!string.IsNullOrEmpty(appStatus.SelectedEnvironment))
+			{
+				this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Name == appStatus.SelectedEnvironment);
+				if (this.SelectedEnvironment != null)
+				{
+					ExecuteEnvironmentChanged(this.SelectedEnvironment);
+				}
+			}
+
+			//SaveRequest.LoadData(AppDataHelper.LoadSavedRequestData());
+
+			//var tempEnv = this.SelectedEnvironment;
+			//this.LoadEnvironmentData();
+			//this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Guid == tempEnv?.Guid);
+
+			//var sessionData = AppDataHelper.LoadSessionHistoryData();
+			//sessionData = sessionData.Where(x => x.Time > DateTime.Now.AddDays(-1 * Settings.MaxHistoryDays)).ToList();
+			//var basicData = sessionData != null ? sessionData.Select(x => new BasicHistoryViewModel(x)) : null;
+			//History.LoadData(basicData != null ? basicData : null);
+			//if (History.SessionHistory != null)
+			//{
+			//	var listUrl = History.SessionHistory
+			//		.Select(s => new { Time = s.Time, Url = s.PreUrl ?? s.Url })
+			//		.GroupBy(g => g.Url)
+			//		.Select(x => new { Url = x.Key, Time = x.Max(a => a.Time) })
+			//		.OrderByDescending(z => z.Time)
+			//		.Select(u => new TextType { Text = u.Url });
+
+			//	SelectedRestClient.UrlBase.Urls = new ObservableCollection<TextType>(listUrl);
+			//}
 		}
 
 		/// <summary>
@@ -1219,10 +1275,10 @@ namespace RestClientLibrary.ViewModel
 			SaveRequest.ParentViewModel = this;
 			SaveRequest.LoadData(AppDataHelper.LoadSavedRequestData());
 
-			Settings = AppDataHelper.LoadSettingsData();
+			Settings = AppDataHelper.LoadSettingsData(this.Settings);
 			Settings.ParentViewModel = this;
 
-			this.GlobalVariables = GlobalSetupViewModel.Parse(AppDataHelper.LoadGlobalData());
+			this.GlobalVariables = GlobalSetupViewModel.Parse(this.GlobalVariables, AppDataHelper.LoadGlobalData());
 
 			this.LoadEnvironmentData();
 			this.SelectedEnvironment = this.Environments.First();

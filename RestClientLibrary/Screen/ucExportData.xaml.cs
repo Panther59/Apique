@@ -54,6 +54,7 @@ namespace RestClientLibrary.Screen
         public string SaveFileDialog()
         {
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = "APIqueData.Backup.json";
             dialog.Filter = Constants.ExportImportFilter;
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value)

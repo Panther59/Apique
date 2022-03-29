@@ -385,9 +385,6 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		public void LoadData(EnvironmentModel selectedEnvironment, string workspace)
 		{
-			var settings = AppDataHelper.LoadSettingsData();
-
-
 			if (selectedEnvironment != null && selectedEnvironment.Workspace == null)
 			{
 				selectedEnvironment.Workspace = Constants.DefaultWorkspace;
@@ -637,9 +634,13 @@ namespace RestClientLibrary.ViewModel
 			return output;
 		}
 
-		public static GlobalSetupViewModel Parse(GlobalVariableModel model)
+		public static GlobalSetupViewModel Parse(GlobalSetupViewModel output, GlobalVariableModel model)
 		{
-			GlobalSetupViewModel output = new GlobalSetupViewModel();
+			if (output == null)
+			{
+				output = new GlobalSetupViewModel();
+			}
+
 			output.Variables = new ObservableCollection<KeyValueViewModel>(model.Variables?.Select(x => KeyValueViewModel.Parse(x)) ?? new ObservableCollection<KeyValueViewModel>());
 			output.Certificates = new ObservableCollection<CertificateViewModel>(model.Certificates?.Select(x => CertificateViewModel.Parse(x)) ?? new ObservableCollection<CertificateViewModel>());
 

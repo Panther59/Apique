@@ -591,7 +591,7 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private void LoadEnvironmentData()
 		{
-			this.globalData = GlobalSetupViewModel.Parse(AppDataHelper.LoadGlobalData());
+			this.globalData = GlobalSetupViewModel.Parse(this.globalData, AppDataHelper.LoadGlobalData());
 
 			List<EnvironmentViewModel> envs = new List<EnvironmentViewModel>();
 

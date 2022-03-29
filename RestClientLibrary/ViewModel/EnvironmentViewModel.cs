@@ -73,7 +73,7 @@ namespace RestClientLibrary.ViewModel
 
 		public void LoadData(GlobalSetupViewModel globalVariables)
 		{
-			var settings = AppDataHelper.LoadSettingsData();
+			var settings = AppDataHelper.LoadSettingsData(null);
 			this.Workspaces = globalVariables.Workspaces;
 			if (string.IsNullOrEmpty(this.Workspace))
 			{

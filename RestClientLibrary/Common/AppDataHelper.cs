@@ -182,11 +182,11 @@ namespace RestClientLibrary.Common
 		/// The LoadSettingsData
 		/// </summary>
 		/// <returns>The <see cref = "SettingsViewModel"/></returns>
-		public static SettingsViewModel LoadSettingsData()
+		public static SettingsViewModel LoadSettingsData(SettingsViewModel vm)
 		{
 			var setting = ReadSettingFile<SettingsModel>(SettingFilePath);
 
-			var vm = SettingsViewModel.Parse(setting);
+			vm = SettingsViewModel.Parse(vm, setting);
 			return vm;
 		}
 

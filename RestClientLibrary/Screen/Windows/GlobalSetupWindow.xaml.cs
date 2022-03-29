@@ -97,7 +97,7 @@ namespace RestClientLibrary.Screen
         /// <param name="e">The <see cref="RoutedEventArgs"/></param>
         private void GlobalSetupWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            this.viewModel = this.GlobalData ?? GlobalSetupViewModel.Parse(AppDataHelper.LoadGlobalData());
+            this.viewModel = this.GlobalData ?? GlobalSetupViewModel.Parse(null, AppDataHelper.LoadGlobalData());
             this.viewModel.AttachView(this.ucGlobalSetup);
             viewModel.LoadData(this.Environment, this.Workspace);
 

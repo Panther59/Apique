@@ -363,9 +363,13 @@ namespace RestClientLibrary.ViewModel
 			_view = view;
 		}
 
-		public static SettingsViewModel Parse(SettingsModel model)
+		public static SettingsViewModel Parse(SettingsViewModel vm, SettingsModel model)
 		{
-			SettingsViewModel vm = new SettingsViewModel();
+			if (vm == null)
+			{
+				vm = new SettingsViewModel();
+			}
+
 			vm.ShowRequestContentInHistory = model.ShowRequestContentInHistory ?? false;
 			vm.SearchInStatus = model.SearchInStatus ?? true;
 			vm.MaxHistoryDays = model.MaxHistoryDays ?? 90;
@@ -415,6 +419,7 @@ namespace RestClientLibrary.ViewModel
 				bool imported = this._view.OpenImportWindow(path);
 				if (imported)
 				{
+					AppDataHelper.LoadSettingsData(this);
 					this.ParentViewModel?.ReloadAfterImport();
 				}
 			}
