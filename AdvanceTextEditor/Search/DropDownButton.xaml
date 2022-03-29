@@ -7,7 +7,7 @@
 
 	<!-- Style and Template for DropDownButton -->
 	<Style TargetType="{x:Type local:DropDownButton}">
-		<Setter Property="TextElement.Foreground" Value = "{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+		<Setter Property="TextElement.Foreground" Value="{DynamicResource PrimaryForeBrush}"  />
 		<Setter Property="Control.Padding" Value="2,2,2,2"/>
 		<Setter Property="Border.BorderThickness" Value="1,1,1,1"/>
 		<Setter Property="Panel.Background" Value="Transparent"/>

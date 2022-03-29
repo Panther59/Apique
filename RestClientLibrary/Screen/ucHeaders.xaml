@@ -24,7 +24,6 @@
 				<ava:TextEditor
 					Name="txtRawHeaders"
 					Grid.Row="1"
-					MaxHeight="250"
 					Margin="0,2,2,2"
 					Background="{DynamicResource PrimaryBackBrush}"
 					BindableText="{Binding Headers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

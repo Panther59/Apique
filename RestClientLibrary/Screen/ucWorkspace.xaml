@@ -15,7 +15,12 @@
 	d:DesignWidth="600"
 	Foreground="{DynamicResource PrimaryForeBrush}"
 	mc:Ignorable="d">
-
+	<UserControl.InputBindings>
+		<KeyBinding
+			Key="N"
+			Command="{Binding NewRestClientCommand}"
+			Modifiers="Ctrl" />
+	</UserControl.InputBindings>
 	<Grid>
 		<Grid.Resources>
 			<Style x:Key="CloseableTabItemButtonStyle" TargetType="{x:Type Button}">

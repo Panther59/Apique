@@ -20,9 +20,10 @@
 	</UserControl.Resources>
 	<UserControl.InputBindings>
 		<KeyBinding
-			Key="F11"
+			Key="Return"
 			Command="{Binding SendButtonClickedCommand}"
-			Modifiers="Shift" />
+			Modifiers="Ctrl" />
+		<KeyBinding Key="F5" Command="{Binding SendButtonClickedCommand}" />
 	</UserControl.InputBindings>
 	<Grid Margin="0,5,0,0">
 		<Grid.RowDefinitions>
@@ -159,14 +160,21 @@
 		<Grid x:Name="grdOperation" Grid.Row="1">
 			<WrapPanel Margin="0,0,130,0" VerticalAlignment="Center">
 				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
 					<TextBlock
 						Margin="5,1"
 						HorizontalAlignment="Left"
 						VerticalAlignment="Center"
 						Text="Operation:" />
 					<ComboBox
+						Grid.Column="1"
 						Width="100"
-						Margin="70,0,0,5"
+						Margin="5,1"
 						HorizontalAlignment="Left"
 						VerticalAlignment="Center"
 						DisplayMemberPath="Text"
@@ -178,15 +186,18 @@
 							</i:EventTrigger>
 						</i:Interaction.Triggers>
 					</ComboBox>
-				</Grid>
-				<Grid>
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="Certificate: " />
-						<ComboBox
-							DisplayMemberPath="Name"
-							ItemsSource="{Binding ParentViewModel.Settings.Certificates}"
-							SelectedItem="{Binding Certificate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-					</StackPanel>
+					<TextBlock
+						Grid.Column="2"
+						Margin="15,1,0,1"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Center"
+						Text="Certificate: " />
+					<ComboBox
+						Grid.Column="3"
+						Margin="5,1"
+						DisplayMemberPath="Name"
+						ItemsSource="{Binding ParentViewModel.Settings.Certificates}"
+						SelectedItem="{Binding Certificate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 				</Grid>
 			</WrapPanel>
 			<WrapPanel Margin="0,-3,0,3.2" HorizontalAlignment="Right">
@@ -235,18 +246,40 @@
                  DisplayMemberPath="Text"  />-->
 			<local:ucUrlClient Margin="0,5,0,0" DataContext="{Binding UrlBase}" />
 		</Border>
-		<ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+		<Grid Grid.Row="3">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition>
+					<ColumnDefinition.Style>
+						<Style TargetType="{x:Type ColumnDefinition}">
+							<Setter Property="Width" Value="*" />
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding IsResponseVisible}" Value="false">
+									<Setter Property="Width" Value="0" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</ColumnDefinition.Style>
+				</ColumnDefinition>
+			</Grid.ColumnDefinitions>
 			<Grid>
 				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
 					<RowDefinition Height="*" />
-					<RowDefinition Height="Auto" />
+					<RowDefinition>
+						<RowDefinition.Style>
+							<Style TargetType="{x:Type RowDefinition}">
+								<Setter Property="Height" Value="*" />
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding IsRequestContentVisible}" Value="false">
+										<Setter Property="Height" Value="0" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</RowDefinition.Style>
+					</RowDefinition>
 				</Grid.RowDefinitions>
-				<Grid Grid.Row="2" MinHeight="150">
+				<Grid MinHeight="150">
 					<TabControl>
 						<TabItem Header="Header">
 							<Grid x:Name="grdHeaders" Margin="0,-6,0,0">
@@ -378,12 +411,12 @@
 				</Grid>
 				<Grid
 					x:Name="grdRequestContent"
-					Grid.Row="3"
+					Grid.Row="1"
 					MinHeight="80"
 					Visibility="{Binding IsRequestContentVisible, Converter={StaticResource BoolToVisibilityConverter}}">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
 						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
 					<WrapPanel Margin="0,5,0,0">
@@ -435,10 +468,11 @@
 							ContextMenu="{DynamicResource CustomVariableContextMenus}"
 							EditorTheme="{DynamicResource EditorThemeKey}"
 							Foreground="{DynamicResource PrimaryForeBrush}"
-							ScrollViewer.HorizontalScrollBarVisibility="Auto"
-							ScrollViewer.VerticalScrollBarVisibility="Auto"
+							ScrollViewer.HorizontalScrollBarVisibility="Visible"
+							ScrollViewer.VerticalScrollBarVisibility="Visible"
 							ShowLineNumbers="False"
 							SyntaxHighlightingKey="{Binding RequestHighlightType}"
+							VerticalScrollBarVisibility="Visible"
 							Visibility="{Binding IsRawContentType, Converter={StaticResource BoolToVisibilityConverter}}"
 							WordWrap="True">
 							<ava:TextEditor.Style>
@@ -479,14 +513,25 @@
 					</Border>
 
 				</Grid>
-				<Grid
-					x:Name="grdResponse"
-					Grid.Row="4"
-					Visibility="{Binding IsResponseVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+			</Grid>
+
+			<Grid Grid.Column="2">
+				<Grid x:Name="grdResponse" Visibility="{Binding IsResponseVisible, Converter={StaticResource BoolToVisibilityConverter}}">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />
 						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
+						<RowDefinition>
+							<RowDefinition.Style>
+								<Style TargetType="{x:Type RowDefinition}">
+									<Setter Property="Height" Value="Auto" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding SelectedResponseTab}" Value="0">
+											<Setter Property="Height" Value="*" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</RowDefinition.Style>
+						</RowDefinition>
 					</Grid.RowDefinitions>
 					<Grid x:Name="grdResponseMessage" Grid.Row="1">
 						<Grid.RowDefinitions>
@@ -542,6 +587,7 @@
 									IsReadOnly="True"
 									ScrollViewer.HorizontalScrollBarVisibility="Auto"
 									ScrollViewer.VerticalScrollBarVisibility="Auto"
+									SearchEnabled="True"
 									ShowLineNumbers="True"
 									SyntaxHighlightingKey="Json"
 									WordWrap="True">
@@ -560,6 +606,7 @@
 									LineNumbersBackground="White"
 									ScrollViewer.HorizontalScrollBarVisibility="Auto"
 									ScrollViewer.VerticalScrollBarVisibility="Auto"
+									SearchEnabled="True"
 									SyntaxHighlightingKey="XML">
 									<i:Interaction.Behaviors>
 										<comm:ExpandCollapseBehavior CollapseAllFolding="{Binding CollapseAllFoldings, Mode=TwoWay}" ExpandAllFolding="{Binding ExpandAllFoldings, Mode=TwoWay}" />
@@ -682,7 +729,7 @@
 					</Grid>
 				</Grid>
 			</Grid>
-		</ScrollViewer>
+		</Grid>
 		<base:FluidProgressBar
 			Grid.Row="4"
 			Height="10"

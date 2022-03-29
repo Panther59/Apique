@@ -42,7 +42,7 @@ namespace AdvanceTextEditor.Search
 
 		public SearchResultBackgroundRenderer()
 		{
-			MarkerBrush = Brushes.LightGreen;
+			MarkerBrush = Brushes.White;
 			MarkerPen = null;
 			MarkerCornerRadius = 3.0;
 		}
@@ -68,7 +68,8 @@ namespace AdvanceTextEditor.Search
 			int viewStart = visualLines.First().FirstDocumentLine.Offset;
 			int viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
 
-			Brush markerBrush = MarkerBrush;
+			var converter = new System.Windows.Media.BrushConverter();
+			Brush markerBrush = (Brush)converter.ConvertFromString("#60FF0000"); 
 			Pen markerPen = MarkerPen;
 			double markerCornerRadius = MarkerCornerRadius;
 			double markerPenThickness = markerPen != null ? markerPen.Thickness : 0;

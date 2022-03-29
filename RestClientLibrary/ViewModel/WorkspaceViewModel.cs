@@ -897,7 +897,13 @@ namespace RestClientLibrary.ViewModel
 		/// <returns>The <see cref="RestClientViewModel"/></returns>
 		private RestClientViewModel AddNewRestClient()
 		{
-			var blankRC = new RestClientViewModel() { Title = "Request " + ++counter };
+			var title = "Request " + ++counter;
+			while (this.RestClients.Any(x => x.Title == title))
+			{
+				title = "Request " + ++counter;
+			}
+
+			var blankRC = new RestClientViewModel() { Title = title };
 			blankRC.ParentViewModel = this;
 			blankRC.IsDefaultRestClient = true;
 			blankRC.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate, this.Settings.DefaultCertificate?.Name);

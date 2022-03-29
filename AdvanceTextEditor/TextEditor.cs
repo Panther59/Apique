@@ -35,6 +35,7 @@ using AdvanceTextEditor.Editing;
 using AdvanceTextEditor.Folding;
 using AdvanceTextEditor.Highlighting;
 using AdvanceTextEditor.Rendering;
+using AdvanceTextEditor.Search;
 using AdvanceTextEditor.Utils;
 
 namespace AdvanceTextEditor
@@ -510,6 +511,7 @@ namespace AdvanceTextEditor
 		}
 
 		IVisualLineTransformer colorizer;
+		private SearchPanel searchPanel;
 
 		static void OnSyntaxHighlightingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
@@ -1432,6 +1434,37 @@ namespace AdvanceTextEditor
 				}
 			}
 		}
+
+		#region SearchEnabled
+
+		public static readonly DependencyProperty SearchEnabledProperty =
+		   DependencyProperty.Register("SearchEnabled", typeof(bool), typeof(TextEditor), new PropertyMetadata(new PropertyChangedCallback(OnSearchEnabledChecked)));
+		/// <summary>
+		/// Enable Search feature
+		/// </summary>
+		public bool SearchEnabled
+		{
+			get { return (bool)GetValue(SearchEnabledProperty); }
+			set { SetValue(SearchEnabledProperty, value); }
+		}
+
+		private static void OnSearchEnabledChecked(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			TextEditor editor = d as TextEditor;
+			if ((bool)e.NewValue)
+			{
+				editor.searchPanel = Search.SearchPanel.Install(editor.textArea);
+			}
+			else
+			{
+				if (editor.searchPanel != null)
+				{
+					editor.searchPanel.Uninstall();
+				}
+			}
+		}
+
+		#endregion
 
 		#region SpellCheckEnabled
 
