@@ -9,9 +9,9 @@
     Title="Test Runner"
     Width="800"
     Height="600"
+	Icon="/RestClientLibrary;component/Images/Apique.png"
     Background="{DynamicResource PrimaryBackgroundBrush}"
     Foreground="{DynamicResource PrimaryForeBrush}"
-    Icon="/RestClientLibrary;component/Images/RestService.png"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
     <Grid>

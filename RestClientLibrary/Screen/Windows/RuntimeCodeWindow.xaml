@@ -11,6 +11,7 @@
 	Title="Code"
 	Width="800"
 	Height="600"
+	Icon="/RestClientLibrary;component/Images/Apique.png"
 	Background="{DynamicResource AlternateBackgroundBrush}"
 	Foreground="{DynamicResource PrimaryForeBrush}"
 	ShowInTaskbar="False"

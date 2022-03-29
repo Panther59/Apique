@@ -54,7 +54,7 @@
 						</Grid.InputBindings>
 						<Grid.ContextMenu>
 							<ContextMenu>
-								<MenuItem Command="{Binding SessionSelectedCommand}" Header="View in Rest Client" />
+								<MenuItem Command="{Binding SessionSelectedCommand}" Header="View in Apique" />
 								<MenuItem Header="Select Request">
 									<MenuItem Command="{Binding SessionSelectedCommand}" Header="All" />
 									<MenuItem

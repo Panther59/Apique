@@ -6,10 +6,11 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86</Platforms>
+    <ApplicationIcon />
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="RestService.png" />
+    <None Remove="Apique.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="RestService.png">
+    <Resource Include="Apique.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

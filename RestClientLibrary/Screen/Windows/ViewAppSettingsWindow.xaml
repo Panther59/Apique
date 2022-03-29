@@ -10,6 +10,7 @@
 	Title="Application Settings"
 	MinHeight="200"
 	MinWidth="350"
+	Icon="/RestClientLibrary;component/Images/Apique.png"
 	Background="{DynamicResource AlternateBackgroundBrush}"
 	Foreground="{DynamicResource PrimaryForeBrush}"
 	ResizeMode="NoResize"

@@ -1,16 +1,16 @@
 ﻿<Window
-    x:Class="Apique.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:rc="clr-namespace:RestClientLibrary.Screen;assembly=RestClientLibrary"
+	x:Class="Apique.MainWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:ava="clr-namespace:AdvanceTextEditor;assembly=AdvanceTextEditor"
-    Title="Rest Client"
-    Width="800"
-    Height="700"
-    HorizontalContentAlignment="Stretch"
-    Background="{DynamicResource PrimaryBackgroundBrush}"
-    Foreground="{DynamicResource PrimaryForeBrush}"
-    Icon="RestService.png">
+	xmlns:rc="clr-namespace:RestClientLibrary.Screen;assembly=RestClientLibrary"
+	Title="APIque"
+	Width="800"
+	Height="700"
+	HorizontalContentAlignment="Stretch"
+	Background="{DynamicResource PrimaryBackgroundBrush}"
+	Foreground="{DynamicResource PrimaryForeBrush}"
+	Icon="Apique.png">
 	<Window.Resources />
 	<Grid>
 		<!--<ava:TextEditor

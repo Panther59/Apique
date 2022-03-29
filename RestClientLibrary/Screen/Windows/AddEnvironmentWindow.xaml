@@ -11,6 +11,7 @@
 	Height="400"
 	Background="{DynamicResource AlternateBackgroundBrush}"
 	Foreground="{DynamicResource PrimaryForeBrush}"
+	Icon="/RestClientLibrary;component/Images/Apique.png"
 	WindowStartupLocation="CenterOwner"
 	WindowStyle="ToolWindow"
 	mc:Ignorable="d">

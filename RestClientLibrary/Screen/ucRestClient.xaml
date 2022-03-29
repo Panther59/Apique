@@ -184,8 +184,8 @@
 						<TextBlock Text="Certificate: " />
 						<ComboBox
 							DisplayMemberPath="Name"
-							SelectedItem="{Binding Certificate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-							ItemsSource="{Binding ParentViewModel.Settings.Certificates}" />
+							ItemsSource="{Binding ParentViewModel.Settings.Certificates}"
+							SelectedItem="{Binding Certificate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 					</StackPanel>
 				</Grid>
 			</WrapPanel>

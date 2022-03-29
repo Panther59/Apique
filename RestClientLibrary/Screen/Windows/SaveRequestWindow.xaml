@@ -9,6 +9,7 @@
 	Height="192"
 	Background="{DynamicResource AlternateBackgroundBrush}"
 	Foreground="{DynamicResource PrimaryForeBrush}"
+	Icon="/RestClientLibrary;component/Images/Apique.png"
 	ResizeMode="NoResize"
 	ShowInTaskbar="False"
 	SizeToContent="Height"
