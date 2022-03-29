@@ -900,7 +900,7 @@ namespace RestClientLibrary.ViewModel
 			var blankRC = new RestClientViewModel() { Title = "Request " + ++counter };
 			blankRC.ParentViewModel = this;
 			blankRC.IsDefaultRestClient = true;
-			blankRC.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate ?? this.Settings.DefaultCertificate?.Name);
+			blankRC.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate, this.Settings.DefaultCertificate?.Name);
 			if (this.History.SessionHistory != null)
 			{
 				var listUrl = this.History.SessionHistory
@@ -1162,7 +1162,7 @@ namespace RestClientLibrary.ViewModel
 			this.BuildVariables(this.GlobalVariables);
 			foreach (var item in this.RestClients)
 			{
-				item.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate ?? this.Settings.DefaultCertificate?.Name);
+				item.SelectCertificate(this.SelectedEnvironment?.DefaultCertificate, this.Settings.DefaultCertificate?.Name);
 			}
 		}
 

@@ -1650,9 +1650,13 @@ namespace RestClientLibrary.ViewModel
 			return result;
 		}
 
-		public void SelectCertificate(string certName)
+		public void SelectCertificate(string certName, string? fallbackCert)
 		{
 			this.Certificate = this.ParentViewModel.Settings.Certificates.FirstOrDefault(x => x.Name == certName);
+			if (this.Certificate == null)
+			{
+				this.Certificate = this.ParentViewModel.Settings.Certificates.FirstOrDefault(x => x.Name == fallbackCert);
+			}
 		}
 
 		/// <summary>
