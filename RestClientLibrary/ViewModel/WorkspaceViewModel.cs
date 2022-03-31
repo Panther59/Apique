@@ -1020,7 +1020,7 @@ namespace RestClientLibrary.ViewModel
 		{
 			var menuList = new List<CustomContextMenuViewModel>();
 
-			if (this.GlobalVariables.Variables != null)
+			if (this.GlobalVariables.Variables != null && this.GlobalVariables.Variables.Count > 0)
 			{
 				var globVarMenu = new CustomContextMenuViewModel(action + ": Global", null, null);
 				foreach (var variable in this.GlobalVariables.Variables)
@@ -1519,7 +1519,7 @@ namespace RestClientLibrary.ViewModel
 			this.EnvironmentsViewData.Variables = this.GlobalVariables?.Variables?.ToList();
 			if (this.SelectedEnvironment != null)
 			{
-				this.EnvironmentsViewData.Environment = this.GlobalVariables?.Environments?.FirstOrDefault(x => x.Guid == this.SelectedEnvironment.Guid);
+				this.EnvironmentsViewData.Environment = this.GlobalVariables?.allEnvironments?.FirstOrDefault(x => x.Guid == this.SelectedEnvironment.Guid);
 			}
 		}
 
