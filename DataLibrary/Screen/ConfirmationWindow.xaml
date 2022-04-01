@@ -1,52 +1,113 @@
-﻿<ena:BaseWindow x:Class="DataLibrary.ConfirmationWindow"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        
-                xmlns:ena="clr-namespace:DataLibrary"        
-                WindowStyle="None"
-                ResizeMode="NoResize"
-                AllowsTransparency="True"
-                Height="200"
-                Width="370"
-                ShowInTaskbar="False"
-                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                WindowStartupLocation="CenterOwner" Foreground="White"  Background="Transparent">
-    <Window.Resources>
-        <LinearGradientBrush x:Key="WindowBackGround" EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="Black" Offset="2" />
-            <GradientStop Color="White" Offset="-2" />
-        </LinearGradientBrush>
-    </Window.Resources>
-    <Border Margin="10" Background="Transparent" BorderBrush="White" BorderThickness="1">
-        <Border.Effect>
-            <DropShadowEffect Color="Black" 
-                              Direction="270"
-                              BlurRadius="10"
-                              ShadowDepth="3" />
-        </Border.Effect>
-        <Grid Background="{StaticResource WindowBackGround}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
-                <RowDefinition Height="*" MinHeight="50"/>
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
-            <Rectangle Grid.Row="2" Height="31" HorizontalAlignment="Stretch" Name="rectangle2" Stroke="Transparent" VerticalAlignment="Top" Fill="White" Opacity="0.20" />
-            <Rectangle Grid.Row="0" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Name="rectangle1" Fill="White" Opacity="0.20" />
-            <TextBlock Name="txtTitle" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent"   
-                       Foreground="White" Height="Auto" Width="Auto" />
-            <TextBlock Name="txtMessage" Grid.Row="1" Margin="5,0,5,0" Background="Transparent"
-                        Foreground="White" TextWrapping="WrapWithOverflow" />
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="  Yes  " FontSize="12"  Height="Auto" HorizontalAlignment="Right" Margin="0,0,5,0" Name="btnYes" Foreground="Black" VerticalAlignment="Center" Width="Auto"  Click="btnYes_Click" IsDefault="True" KeyboardNavigation.TabIndex="0" />
-                <Button Grid.Column="1" Content="  No  " FontSize="12"  Height="Auto" HorizontalAlignment="Left" Margin="5,0,0,0" Name="btnNo" Foreground="Black" VerticalAlignment="Center" Width="Auto" Click="btnNo_Click" IsCancel="True" KeyboardNavigation.TabIndex="1"/>
+﻿<ena:BaseWindow
+	x:Class="DataLibrary.ConfirmationWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:ena="clr-namespace:DataLibrary"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	Width="370"
+	Height="200"
+	AllowsTransparency="True"
+	Background="Transparent"
+	Foreground="White"
+	ResizeMode="NoResize"
+	ShowInTaskbar="False"
+	WindowStartupLocation="CenterOwner"
+	WindowStyle="None">
+	<Window.Resources>
+		<LinearGradientBrush x:Key="WindowBackGround" StartPoint="0.5,0" EndPoint="0.5,1">
+			<GradientStop Offset="2" Color="Black" />
+			<GradientStop Offset="-2" Color="White" />
+		</LinearGradientBrush>
+	</Window.Resources>
+	<Border
+		Margin="10"
+		Background="Transparent"
+		BorderBrush="White"
+		BorderThickness="1">
+		<Border.Effect>
+			<DropShadowEffect
+				BlurRadius="10"
+				Direction="270"
+				ShadowDepth="3"
+				Color="Black" />
+		</Border.Effect>
+		<Grid Background="{StaticResource WindowBackGround}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="30" />
+				<RowDefinition Height="*" MinHeight="50" />
+				<RowDefinition Height="30" />
+			</Grid.RowDefinitions>
+			<Rectangle
+				Name="rectangle2"
+				Grid.Row="2"
+				Height="31"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Top"
+				Fill="White"
+				Opacity="0.20"
+				Stroke="Transparent" />
+			<Rectangle
+				Name="rectangle1"
+				Grid.Row="0"
+				Height="Auto"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Stretch"
+				Fill="White"
+				Opacity="0.20" />
+			<TextBlock
+				Name="txtTitle"
+				Grid.Row="0"
+				Width="Auto"
+				Height="Auto"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				Background="Transparent"
+				Foreground="White" />
+			<TextBlock
+				Name="txtMessage"
+				Grid.Row="1"
+				Margin="5,0,5,0"
+				Background="Transparent"
+				Foreground="White"
+				TextWrapping="WrapWithOverflow" />
+			<Grid Grid.Row="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Button
+					Name="btnYes"
+					Grid.Column="0"
+					Width="Auto"
+					Height="Auto"
+					Margin="0,0,5,0"
+					HorizontalAlignment="Right"
+					VerticalAlignment="Center"
+					Click="btnYes_Click"
+					Content="  Yes  "
+					FontSize="12"
+					Foreground="White"
+					IsDefault="True"
+					KeyboardNavigation.TabIndex="0" />
+				<Button
+					Name="btnNo"
+					Grid.Column="1"
+					Width="Auto"
+					Height="Auto"
+					Margin="5,0,0,0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					Click="btnNo_Click"
+					Content="  No  "
+					FontSize="12"
+					Foreground="White"
+					IsCancel="True"
+					KeyboardNavigation.TabIndex="1" />
 
-            </Grid>
+			</Grid>
 
-        </Grid>
-    </Border>
+		</Grid>
+	</Border>
 </ena:BaseWindow>
 

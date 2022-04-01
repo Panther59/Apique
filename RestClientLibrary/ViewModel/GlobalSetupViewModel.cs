@@ -418,25 +418,28 @@ namespace RestClientLibrary.ViewModel
 		/// The AddNewEnvironment
 		/// </summary>
 		/// <param name="input">The <see cref="EnvironmentViewModel"/></param>
-		private void AddNewEnvironment(EnvironmentViewModel input)
+		private void AddNewEnvironment(EnvironmentViewModel input, bool isNew)
 		{
 			var inputName = input?.Name;
 			var environment = this.view.AddNewEnvironment(this, input);
 			if (environment != null)
 			{
-				if (!this.allEnvironments.Any(x => x.Name == environment.Name))
+				if (isNew || (!string.IsNullOrEmpty(inputName) && inputName != environment.Name))
 				{
-					this.allEnvironments.Add(environment);
-				}
-				else if (inputName != environment.Name)
-				{
-					this.view.MessageShow("Environment", $"Environment with name {environment.Name} already exists, please use different name");
-					return;
+					if (!this.allEnvironments.Where(x => x.Workspace == environment.Workspace).Any(x => x.Name == environment.Name))
+					{
+						this.allEnvironments.Add(environment);
+					}
+					else if (inputName != environment.Name)
+					{
+						this.view.MessageShow("Environment", $"Environment with name {environment.Name} already exists, please use different name");
+						return;
+					}
 				}
 
 				this.SelectedEnvironment = environment;
 				this.Environments = new ObservableCollection<EnvironmentViewModel>(this.allEnvironments?.Where(x => x.Workspace == this.SelectedWorkspace) ?? new List<EnvironmentViewModel>());
-				this.SyncUpVariables(this.Environments, environment);
+				this.SyncUpVariables(this.Environments, environment, isNew);
 				//if (environment != null)
 				//{
 				//	this.SelectedEnvironment = this.Environments.FirstOrDefault(x => x.Name == this.SelectedEnvironment?.Name);
@@ -450,13 +453,28 @@ namespace RestClientLibrary.ViewModel
 			}
 		}
 
-		private void SyncUpVariables(ObservableCollection<EnvironmentViewModel> environments, EnvironmentViewModel environment)
+		private void SyncUpVariables(ObservableCollection<EnvironmentViewModel> environments, EnvironmentViewModel environment, bool isNew)
 		{
-			var allVariables = environment.Variables.Select(x => x.Key).Distinct();
+			IEnumerable<string> allVariables = null;
+			if (isNew)
+			{
+				allVariables = environments.SelectMany(x => x.Variables ?? new ObservableCollection<KeyValueViewModel>()).Select(x => x.Key).Distinct();
+
+			}
+			else
+			{
+				allVariables = (environment.Variables ?? new ObservableCollection<KeyValueViewModel>()).Select(x => x.Key).Distinct();
+			}
+
 			foreach (var env in environments)
 			{
 				foreach (var variable in allVariables)
 				{
+					if (env.Variables == null)
+					{
+						env.Variables = new ObservableCollection<KeyValueViewModel>();
+					}
+
 					if (!env.Variables.Any(x => x.Key == variable))
 					{
 						env.Variables.Add(new KeyValueViewModel() { Key = variable });
@@ -473,7 +491,7 @@ namespace RestClientLibrary.ViewModel
 
 		private void ExecuteViewEnvironment(EnvironmentViewModel command)
 		{
-			this.AddNewEnvironment(command);
+			this.AddNewEnvironment(command, false);
 		}
 
 		/// <summary>
@@ -563,7 +581,7 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private void ExecuteCloneEnvironment(EnvironmentViewModel vm)
 		{
-			this.AddNewEnvironment(this.GetClonedObject(vm));
+			this.AddNewEnvironment(this.GetClonedObject(vm), true);
 		}
 
 		/// <summary>
@@ -583,7 +601,7 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private void ExecuteAddEnvironmentCommand()
 		{
-			this.AddNewEnvironment(new EnvironmentViewModel() { Workspace = this.SelectedWorkspace });
+			this.AddNewEnvironment(new EnvironmentViewModel() { Workspace = this.SelectedWorkspace }, true);
 		}
 
 		/// <summary>

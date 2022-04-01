@@ -380,7 +380,11 @@ namespace RestClientLibrary.ViewModel
 		/// </summary>
 		private void ExecuteRemoveVariable(KeyValueViewModel variable)
 		{
-			this.Variables.Remove(variable);
+			var result = this.view.ConfirmationBox("Remove", $"Removing {variable.Key} variable will remove it across all the environments of {this.Workspace}, are you sure you want to delete it?");
+			if (result)
+			{
+				this.Variables.Remove(variable);
+			}
 		}
 	}
 }
