@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86</Platforms>
-    <ApplicationIcon />
+    <ApplicationIcon>Apique.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
